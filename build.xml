@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="compile" name="PDB - projekt 2013">
+	
+	<property environment="env"/>
+	<property name="debuglevel" value="source,lines,vars"/>
+	<property name="target" value="1.6"/>
+	<property name="source" value="1.6"/>
+	
+	<path id="pdb.classpath">
+		<pathelement location="bin"/>
+		<pathelement location="lib/ojdbc6.jar"/>
+		<pathelement location="lib/sdoapi.jar"/>
+		<pathelement location="lib/ordim.jar"/>
+
+	</path>
+
+	<target name="init">
+		<mkdir dir="bin"/>
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.launch"/>
+				<exclude name="**/*.java"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean">
+			<delete dir="bin" />
+			<delete dir="test" />
+			<delete dir="javadoc" /> 
+			<delete dir="jar" /> 
+	</target>
+
+	<target depends="clean,build-project, run" name="compile" />
+
+	<target name="doc">
+		<javadoc encoding="utf-8" access="private" author="true" classpath="ojdbc6.jar" destdir="javadoc" doctitle="PDB projekt - Zoo" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="cz.vutbr.fit.pdb.view,cz.vutbr.fit.pdb.control,cz.vutbr.fit.pdb.model,cz.vutbr.fit.pdb, vutbr.fit.pdb.db" source="1.6" sourcepath="src" splitindex="true" use="true" version="true" />
+	</target>
+
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}"/>
+		<javac debug="false" debuglevel="${debuglevel}" destdir="bin" source="${source}" encoding="utf-8" target="${target}" includeantruntime="false">
+			<src path="src"/>
+			<classpath refid="pdb.classpath"/>
+		</javac>
+		<mkdir dir="jar"/>
+		<jar destfile="jar/Garden.jar" basedir="bin/" >
+			<manifest>
+				<attribute name="Main-Class" value="cz/vutbr/fit/pdb/Core"/>
+			</manifest>
+		</jar>
+
+
+	</target>
+
+	<target name="run">
+		<java classname="cz.vutbr.fit.pdb.Core" failonerror="true" fork="yes">
+			<classpath refid="pdb.classpath"/>
+		</java>
+	</target>
+</project>
