@@ -4,10 +4,16 @@
  */
 package cz.vutbr.fit.pdb.view;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author casey
  */
-public class MapPanel {
+public class MapPanel extends JPanel{
+    
+    public MapPanel(){
+        super();
+    }
     
 }
