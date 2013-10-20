@@ -4,6 +4,7 @@
  */
 package cz.vutbr.fit.pdb;
 
+import cz.vutbr.fit.pdb.view.MainMenu;
 import cz.vutbr.fit.pdb.view.RootPanel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -17,11 +18,14 @@ public class Core {
     
     private JFrame mainWindow;
     private RootPanel rootPanel;
+    private MainMenu mainMenu;
     
     
     public Core(){
         mainWindow = new JFrame("PDB 2013");
         rootPanel = new RootPanel();
+        mainMenu = new MainMenu();
+        mainWindow.setJMenuBar(mainMenu);
         mainWindow.add(rootPanel);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setSize(800, 600);
