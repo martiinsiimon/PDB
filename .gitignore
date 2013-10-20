@@ -6,5 +6,5 @@
 *.ear
 
 # Lib required
-!lib/
+!lib/*
 

@@ -4,6 +4,8 @@
  */
 package cz.vutbr.fit.pdb;
 
+import com.sun.imageio.plugins.jpeg.JPEG;
+import cz.vutbr.fit.pdb.view.RootPanel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
@@ -15,10 +17,13 @@ import javax.swing.JFrame;
 public class Core {
     
     private JFrame mainWindow;
+    private RootPanel rootPanel;
     
     
     public Core(){
         mainWindow = new JFrame("PDB 2013");
+        rootPanel = new RootPanel();
+        mainWindow.add(rootPanel);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setSize(800, 600);
         mainWindow.setVisible(true);
