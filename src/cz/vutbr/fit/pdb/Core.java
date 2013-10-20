@@ -20,6 +20,9 @@ public class Core {
     public Core(){
         mainWindow = new JFrame("PDB 2013");
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow.setSize(800, 600);
+        mainWindow.setVisible(true);
+        mainWindow.setExtendedState(mainWindow.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         
     
     }
@@ -32,7 +35,7 @@ public class Core {
     }
     
     
-    public static void maina(String[] args){
+    public static void main(String[] args){
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
             @Override

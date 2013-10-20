@@ -4,3 +4,7 @@
 *.jar
 *.war
 *.ear
+
+# Lib required
+!lib/
+

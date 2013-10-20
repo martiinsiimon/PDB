@@ -4,10 +4,12 @@
  */
 package cz.vutbr.fit.pdb.view;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author casey
  */
-public class InfoPanel {
+public class InfoPanel extends JPanel{
     
 }
