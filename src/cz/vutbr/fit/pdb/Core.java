@@ -4,7 +4,6 @@
  */
 package cz.vutbr.fit.pdb;
 
-import com.sun.imageio.plugins.jpeg.JPEG;
 import cz.vutbr.fit.pdb.view.RootPanel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
