@@ -9,3 +9,8 @@
 # Lib required
 !lib/*
 
+/nbproject/
+/build/
+lib/nblibraries.properties
+nbbuild.xml
+manifest.mf
