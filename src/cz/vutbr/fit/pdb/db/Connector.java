@@ -1,9 +1,9 @@
 package cz.vutbr.fit.pdb.db;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+//import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.pool.OracleDataSource;
@@ -14,50 +14,44 @@ import oracle.jdbc.pool.OracleDataSource;
  */
 public class Connector {
 
-    private static String dbUrl = "jdbc:oracle:thin:@berta.fit.vutbr.cz:1522:dbfit";
+    private static String url = "jdbc:oracle:thin:@berta.fit.vutbr.cz:1522:dbfit";
+    private String login;
+    private String password;
+    //TODO define internal stack to handle all queries in queue
 
-    public Connector() {
+    public Connector(String login, String password) {
+        this.login = login;
+        this.password = password;
+        //TODO initialize the internal stack to be free
     }
 
-    public static void addCommit() {
+    public void addCommit(String query) {
         /* Add a commit to internal stack */
+        //TODO add query into stack
+        System.out.print(query);
     }
 
-    public static void executeQuery() {
+    public void executeQuery() {
         /* Execute all commits in internal stack in one connection */
 
         try {
             // create a OracleDataSource instance
             OracleDataSource ods = new OracleDataSource();
-            ods.setURL(dbUrl);
-            ods.setUser(System.getProperty("login")); // command line: ... -Dlogin=xnovak99 ...
-            ods.setPassword(System.getProperty("password")); // command line: ... -Dpassword=tajneheslo ...
+            ods.setURL(Connector.url);
+            ods.setUser(this.login); // command line: ... -Dlogin=xnovak99 ...
+            ods.setPassword(this.password); // command line: ... -Dpassword=tajneheslo ...
             // connect to the database
             Connection conn = ods.getConnection();
             try {
-                // create a Statement
-                Statement stmt = conn.createStatement();
-                try {
-                    // select something from the system's dual table
-                    ResultSet rset = stmt.executeQuery(
-                            "select 1+2 as col1, 3-4 as col2 from dual");
-                    try {
-                        // iterate through the result and print the values
-                        while (rset.next()) {
-                            System.out.println("col1: '" + rset.getString(1)
-                                    + "'\tcol2: '" + rset.getString(2) + "'");
-                        }
-                    } finally {
-                        rset.close(); // close the ResultSet
-                    }
-                } finally {
-                    stmt.close(); // close the Statement
-                }
+                //TODO execute all queries in internal stack
+                //TODO commit
             } finally {
                 conn.close(); // close the connection
             }
         } catch (SQLException ex) {
             Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        //TODO clear internal stack
     }
 }
