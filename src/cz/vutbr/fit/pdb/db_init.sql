@@ -25,7 +25,7 @@ CREATE TABLE layers (
 DROP SEQUENCE id_layers_seq;
 CREATE SEQUENCE id_layers_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -36,14 +36,14 @@ COMMIT;
 CREATE TABLE soil_type (
 
     id INT PRIMARY KEY,
-    name VARCHAR(16)
+    name VARCHAR2(16)
 
 );
 
 DROP SEQUENCE id_soil_type_seq;
 CREATE SEQUENCE id_soil_type_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -65,7 +65,7 @@ CREATE TABLE soil (
 DROP SEQUENCE id_soil_seq;
 CREATE SEQUENCE id_soil_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -85,7 +85,7 @@ CREATE TABLE paths (
 DROP SEQUENCE id_paths_seq;
 CREATE SEQUENCE id_paths_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -105,7 +105,7 @@ CREATE TABLE water (
 DROP SEQUENCE id_water_seq;
 CREATE SEQUENCE id_water_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -127,7 +127,7 @@ CREATE TABLE fences (
 DROP SEQUENCE id_fences_seq;
 CREATE SEQUENCE id_fences_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -138,7 +138,7 @@ COMMIT;
 CREATE TABLE plants(
 
     id INT PRIMARY KEY,
-    name VARCHAR(16),
+    name VARCHAR2(16),
     photo ORDSYS.ORDIMAGE,
     photo_sig ORDSYS.ORDIMAGESIGNATURE
 
@@ -147,7 +147,7 @@ CREATE TABLE plants(
 DROP SEQUENCE id_plants_seq;
 CREATE SEQUENCE id_plants_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -160,7 +160,7 @@ CREATE TABLE signs (
     id INT PRIMARY KEY,
     layer INT,
     geometry SDO_GEOMETRY,
-    description VARCHAR(128),
+    description VARCHAR2(128),
     plant INT,
     date_from DATE,
     date_to DATE,
@@ -172,7 +172,7 @@ CREATE TABLE signs (
 DROP SEQUENCE id_signs_seq;
 CREATE SEQUENCE id_signs_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -183,14 +183,14 @@ COMMIT;
 CREATE TABLE bed_type (
 
     id INT PRIMARY KEY,
-    name VARCHAR(16)
+    name VARCHAR2(16)
 
 );
 
 DROP SEQUENCE id_bed_type_seq;
 CREATE SEQUENCE id_bed_type_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
@@ -216,7 +216,7 @@ CREATE TABLE beds (
 DROP SEQUENCE id_beds_seq;
 CREATE SEQUENCE id_beds_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+
 
 -- Data: --
 
