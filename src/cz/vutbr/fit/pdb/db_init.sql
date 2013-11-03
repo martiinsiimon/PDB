@@ -1,15 +1,15 @@
 
 
-DROP TABLE layers;
-DROP TABLE soil;
-DROP TABLE soil_type;
-DROP TABLE paths;
-DROP TABLE water;
-DROP TABLE fences;
-DROP TABLE signs;
-DROP TABLE beds;
-DROP TABLE bed_type;
-DROP TABLE plants;
+DROP TABLE soil_type CASCADE CONSTRAINTS;
+DROP TABLE soil CASCADE CONSTRAINTS;
+DROP TABLE paths CASCADE CONSTRAINTS;
+DROP TABLE water CASCADE CONSTRAINTS;
+DROP TABLE fences CASCADE CONSTRAINTS;
+DROP TABLE signs CASCADE CONSTRAINTS;
+DROP TABLE bed_type CASCADE CONSTRAINTS;
+DROP TABLE beds CASCADE CONSTRAINTS;
+DROP TABLE plants CASCADE CONSTRAINTS;
+DROP TABLE layers CASCADE CONSTRAINTS;
 
 --------------------------------------------------------------------------------
 -- LAYERS --
@@ -18,16 +18,65 @@ DROP TABLE plants;
 CREATE TABLE layers (
 
     id INT PRIMARY KEY,
-    name VARCHAR(16)
+    name VARCHAR2(16)
 
 );
 
 DROP SEQUENCE id_layers_seq;
-CREATE SEQUENCE id_layers_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
+CREATE SEQUENCE id_layers_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
+
+INSERT INTO layers VALUES (
+    id_layers_seq.NEXTVAL, 'soil'
+);
+
+INSERT INTO layers VALUES (
+    id_layers_seq.NEXTVAL, 'water'
+);
+
+INSERT INTO layers VALUES (
+    id_layers_seq.NEXTVAL, 'paths'
+);
+
+INSERT INTO layers VALUES (
+    id_layers_seq.NEXTVAL, 'beds'
+);
+
+INSERT INTO layers VALUES (
+    id_layers_seq.NEXTVAL, 'fences'
+);
+
+INSERT INTO layers VALUES (
+    id_layers_seq.NEXTVAL, 'signs'
+);
+--------------------------------------------------------------------------------
+-- SOIL_TYPE --
+--------------------------------------------------------------------------------
+
+CREATE TABLE soil_type (
+
+    id INT PRIMARY KEY,
+    name VARCHAR2(16)
+
+);
+
+DROP SEQUENCE id_soil_type_seq;
+CREATE SEQUENCE id_soil_type_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+
+-- Data: --
+
+INSERT INTO soil_type VALUES (
+    id_soil_type_seq.NEXTVAL, 'black soil'
+);
+
+INSERT INTO soil_type VALUES (
+    id_soil_type_seq.NEXTVAL, 'brown soil'
+);
+
+INSERT INTO soil_type VALUES (
+    id_soil_type_seq.NEXTVAL, 'sand'
+);
 
 --------------------------------------------------------------------------------
 -- SOIL --
@@ -45,27 +94,7 @@ CREATE TABLE soil (
 );
 
 DROP SEQUENCE id_soil_seq;
-CREATE SEQUENCE id_soil_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
-
--- Data: --
-
---------------------------------------------------------------------------------
--- SOIL_TYPE --
---------------------------------------------------------------------------------
-
-CREATE TABLE soil_type (
-
-    id INT PRIMARY KEY,
-    name VARCHAR(16)
-
-);
-
-DROP SEQUENCE id_soil_type_seq;
-CREATE SEQUENCE id_soil_type_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
+CREATE SEQUENCE id_soil_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
@@ -83,9 +112,7 @@ CREATE TABLE paths (
 );
 
 DROP SEQUENCE id_paths_seq;
-CREATE SEQUENCE id_paths_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
+CREATE SEQUENCE id_paths_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
@@ -103,9 +130,7 @@ CREATE TABLE water (
 );
 
 DROP SEQUENCE id_water_seq;
-CREATE SEQUENCE id_water_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
+CREATE SEQUENCE id_water_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
@@ -125,9 +150,25 @@ CREATE TABLE fences (
 );
 
 DROP SEQUENCE id_fences_seq;
-CREATE SEQUENCE id_fences_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
+CREATE SEQUENCE id_fences_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
-COMMIT;
+-- Data: --
+
+--------------------------------------------------------------------------------
+-- PLANTS --
+--------------------------------------------------------------------------------
+
+CREATE TABLE plants(
+
+    id INT PRIMARY KEY,
+    name VARCHAR2(16),
+    photo ORDSYS.ORDIMAGE,
+    photo_sig ORDSYS.ORDIMAGESIGNATURE
+
+);
+
+DROP SEQUENCE id_plants_seq;
+CREATE SEQUENCE id_plants_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
@@ -140,7 +181,7 @@ CREATE TABLE signs (
     id INT PRIMARY KEY,
     layer INT,
     geometry SDO_GEOMETRY,
-    description VARCHAR(128),
+    description VARCHAR2(128),
     plant INT,
     date_from DATE,
     date_to DATE,
@@ -150,11 +191,37 @@ CREATE TABLE signs (
 );
 
 DROP SEQUENCE id_signs_seq;
-CREATE SEQUENCE id_signs_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
+CREATE SEQUENCE id_signs_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
+
+--------------------------------------------------------------------------------
+-- BED_TYPE --
+--------------------------------------------------------------------------------
+
+CREATE TABLE bed_type (
+
+    id INT PRIMARY KEY,
+    name VARCHAR2(16)
+
+);
+
+DROP SEQUENCE id_bed_type_seq;
+CREATE SEQUENCE id_bed_type_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+
+-- Data: --
+
+INSERT INTO bed_type VALUES (
+    id_bed_type_seq.NEXTVAL, 'flower'
+);
+
+INSERT INTO bed_type VALUES (
+    id_bed_type_seq.NEXTVAL, 'tree'
+);
+
+INSERT INTO bed_type VALUES (
+    id_bed_type_seq.NEXTVAL, 'bush'
+);
 
 --------------------------------------------------------------------------------
 -- BEDS --
@@ -176,48 +243,8 @@ CREATE TABLE beds (
 );
 
 DROP SEQUENCE id_beds_seq;
-CREATE SEQUENCE id_beds_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
+CREATE SEQUENCE id_beds_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
---------------------------------------------------------------------------------
--- BED_TYPE --
---------------------------------------------------------------------------------
-
-CREATE TABLE bed_type (
-
-    id INT PRIMARY KEY,
-    name VARCHAR(16)
-
-);
-
-DROP SEQUENCE id_bed_type_seq;
-CREATE SEQUENCE id_bed_type_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
-
--- Data: --
-
---------------------------------------------------------------------------------
--- PLANTS --
---------------------------------------------------------------------------------
-
-CREATE TABLE plants(
-
-    id INT PRIMARY KEY,
-    name VARCHAR(16),
-    photo ORDSYS.ORDIMAGE,
-    photo_sig ORDSYS.ORDIMAGESIGNATURE
-
-);
-
-DROP SEQUENCE id_plant_seq;
-CREATE SEQUENCE id_plants_seq START WITH 0 INCREMENT BY 1 NOMAXVALUE;
-
-COMMIT;
-
--- Data: --
-
-
+//
