@@ -1,6 +1,5 @@
 package cz.vutbr.fit.pdb.model;
 
-import java.sql.SQLException;
 import oracle.jdbc.OracleResultSet;
 import oracle.spatial.geometry.JGeometry;
 /**
@@ -10,7 +9,6 @@ import oracle.spatial.geometry.JGeometry;
 public class SignObject {
 
     private int id;
-    private int layer;
     private JGeometry geometry;
     private String description;
     private int plant;
@@ -19,10 +17,9 @@ public class SignObject {
         this.id = -1;
     }
 
-    public SignObject(OracleResultSet rset) throws SQLException, Exception {
+    public SignObject(OracleResultSet rset) throws Exception {
 
         this.id = rset.getInt("id");
-        this.layer = rset.getInt("layer");
         this.geometry = JGeometry.load(rset.getBytes("geometry"));
         this.description = rset.getString("description");
         this.plant = rset.getInt("plant");
@@ -34,14 +31,6 @@ public class SignObject {
 
     public int getId() {
         return this.id;
-    }
-
-    public void setLayer(int _layer) {
-        this.layer = _layer;
-    }
-
-    public int getLayer() {
-        return this.layer;
     }
 
     public void setGeometry(JGeometry _geometry) {

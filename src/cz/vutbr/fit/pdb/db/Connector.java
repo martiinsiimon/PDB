@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import oracle.jdbc.pool.OracleDataSource;
 
 /**
+ * TODO: edit class to run in separate thread
  *
  * @author Martin Simon
  */

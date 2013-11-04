@@ -3,6 +3,9 @@ package cz.vutbr.fit.pdb.db;
 import cz.vutbr.fit.pdb.model.SignObject;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import oracle.jdbc.OracleResultSet;
 
 /**
  *
@@ -26,28 +29,27 @@ public class DatabaseAPI {
      * @param whereList List of expressions which must be met
      */
     private void selectQuery(String from, List<String> whatList, List<String> whereList) {
-        StringBuilder builder = new StringBuilder("select ");
+        String query = "SELECT ";
         for (Iterator<String> iterator = whatList.iterator(); iterator.hasNext();) {
             String what = iterator.next();
-            builder.append(what);
+            query += what;
             if (iterator.hasNext()) {
-                builder.append(", ");
+                query += ", ";
             }
         }
 
-        builder.append(" from ");
-        builder.append(from);
+        query += " FROM " + from
+                + " WHERE ";
 
         for (Iterator<String> iterator = whereList.iterator(); iterator.hasNext();) {
             String where = iterator.next();
-            builder.append(" ");
-            builder.append(where);
+            query += where;
             if (iterator.hasNext()) {
-                builder.append(",");
+                query += ", ";
             }
         }
 
-        this.addQuery(builder.toString());
+        this.addQuery(query);
     }
 
     /**
@@ -67,10 +69,16 @@ public class DatabaseAPI {
      * stack
      */
     public void addSign(SignObject obj) {
-        StringBuilder builder = new StringBuilder("insert ");
-
-
-        this.addQuery(builder.toString());
+        //TODO check inserted values, length and possible duplicity!
+        String query = "INSERT INTO signs VALUES ("
+                + "id_signs_seq.NEXTVAL" + ", "
+                + "(SELECT id FROM layers WHERE name = 'signs')" + ", "
+                + "'" + obj.getGeometry() + "'" + ", "
+                + "'" + obj.getDescription() + "'" + ", "
+                + obj.getPlant() + ", "
+                + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
+                + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
+        this.addQuery(query);
     }
 
     public void addFence(/*fence object in java representation*/) {
@@ -88,8 +96,14 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     /* Set of update queries                                                 */
     ///////////////////////////////////////////////////////////////////////////
-    public void updateSign() {
-        //TODO implement
+    public void updateSign(SignObject obj) {
+        //TODO check inserted values, length and possible duplicity!
+        String query = "UPDATE signs"
+                + " SET geometry = '" + obj.getGeometry() + "'"
+                + " SET description = '" + obj.getDescription() + "'"
+                + " SET plant = " + obj.getPlant()
+                + " WHERE id = " + obj.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        this.addQuery(query);
     }
 
     public void updateFence() {
@@ -107,8 +121,11 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     /* Set of delete queries                                                 */
     ///////////////////////////////////////////////////////////////////////////
-    public void delSign(/*sign object in java representation*/) {
-        //TODO implement
+    public void delSign(SignObject obj) {
+        String query = "UPDATE signs"
+                + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
+                + " WHERE id = " + obj.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        this.addQuery(query);
     }
 
     public void delFence(/*sign object in java representation*/) {
@@ -128,5 +145,19 @@ public class DatabaseAPI {
      */
     public void commit() {
         this.connector.executeQuery();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    /* Set of select queries                                                 */
+    ///////////////////////////////////////////////////////////////////////////
+    public SignObject getSign(int id) {
+        String query = "SELECT * FROM signs WHERE id = " + id; //TODO date missing
+        try {
+            return new SignObject((OracleResultSet) this.connector.executeQueryWithResults(query));
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            return new SignObject();
+        }
     }
 }
