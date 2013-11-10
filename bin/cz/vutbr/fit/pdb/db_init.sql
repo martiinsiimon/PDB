@@ -155,15 +155,13 @@ CREATE SEQUENCE id_paths_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
--- TODO: invalid data?
-
 INSERT INTO paths VALUES (
     id_paths_seq.nextval,
     (select id from layers where name = 'paths'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
-        SDO_ORDINATE_ARRAY(0,800, 800,490, 430,490, 430,140, 0,140, 0,160,
-            410,160, 410,490, 0,490, 0,510, 820,510, 820,0))
+        SDO_ORDINATE_ARRAY(800,0, 820,0, 820,510, 0,510, 0,490, 410,490, 410,160,
+            0,160, 0,140, 430,140, 430,490, 800,490, 800,0))
 );
 
 -- Validation: --
@@ -381,15 +379,13 @@ CREATE SEQUENCE id_beds_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
--- TODO: invalid data? --
-
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
     (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
-        SDO_ORDINATE_ARRAY(15,525, 210,525, 210,685, 15,685)),
+        SDO_ORDINATE_ARRAY(15,525, 210,525, 210,685, 15,685, 15,525)),
     (select id from plants where name = 'genericka kvetina'),
     TO_DATE('08-04-2011', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
@@ -401,7 +397,7 @@ INSERT INTO beds VALUES (
     (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
-        SDO_ORDINATE_ARRAY(95,410, 315,415, 260,475, 140,475)),
+        SDO_ORDINATE_ARRAY(95,410, 315,415, 260,475, 140,475, 95,410)),
     (select id from plants where name = 'genericka kvetina'),
     TO_DATE('08-04-2011', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
