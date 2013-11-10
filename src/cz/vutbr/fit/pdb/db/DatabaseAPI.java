@@ -1,6 +1,7 @@
 package cz.vutbr.fit.pdb.db;
 
 import cz.vutbr.fit.pdb.model.SignObject;
+import cz.vutbr.fit.pdb.containers.SpatialContainer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,26 +63,17 @@ public class DatabaseAPI {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    /* Set of insert queries                                                 */
+    /* Set of insert/update queries                                          */
     ///////////////////////////////////////////////////////////////////////////
     /**
-     * Generate query to add sign into DB and append it to the internal queries
-     * stack
+     * Generate query to add/update sign into DB and append it to the internal
+     * queries stack
      */
-    public void addSign(SignObject obj) {
-        //TODO check inserted values, length and possible duplicity!
-        String query = "INSERT INTO signs VALUES ("
-                + "id_signs_seq.NEXTVAL" + ", "
-                + "(SELECT id FROM layers WHERE name = 'signs')" + ", "
-                + "'" + obj.getGeometry() + "'" + ", "
-                + "'" + obj.getDescription() + "'" + ", "
-                + obj.getPlant() + ", "
-                + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
-                + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
-        this.addQuery(query);
+    public void storeSign(SignObject obj) {
+        this.addQuery(obj.getStoreSQL());
     }
 
-    public void addFence(/*fence object in java representation*/) {
+    public void storeFence(/*fence object in java representation*/) {
         //TODO implement
     }
 
@@ -94,38 +86,10 @@ public class DatabaseAPI {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    /* Set of update queries                                                 */
-    ///////////////////////////////////////////////////////////////////////////
-    public void updateSign(SignObject obj) {
-        //TODO check inserted values, length and possible duplicity!
-        String query = "UPDATE signs"
-                + " SET geometry = '" + obj.getGeometry() + "'"
-                + " SET description = '" + obj.getDescription() + "'"
-                + " SET plant = " + obj.getPlant()
-                + " WHERE id = " + obj.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
-        this.addQuery(query);
-    }
-
-    public void updateFence() {
-        //TODO implement
-    }
-
-    public void updateTree() {
-        //TODO implement
-    }
-
-    public void updateBush() {
-        //TODO implement
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
     /* Set of delete queries                                                 */
     ///////////////////////////////////////////////////////////////////////////
     public void delSign(SignObject obj) {
-        String query = "UPDATE signs"
-                + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
-                + " WHERE id = " + obj.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
-        this.addQuery(query);
+        this.addQuery(obj.getDeleteSQL());
     }
 
     public void delFence(/*sign object in java representation*/) {
@@ -151,13 +115,22 @@ public class DatabaseAPI {
     /* Set of select queries                                                 */
     ///////////////////////////////////////////////////////////////////////////
     public SignObject getSign(int id) {
-        String query = "SELECT * FROM signs WHERE id = " + id; //TODO date missing
         try {
-            return new SignObject((OracleResultSet) this.connector.executeQueryWithResults(query));
+            return new SignObject((OracleResultSet) this.connector.executeQueryWithResults(SignObject.getSelectSQL(id)));
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
         } finally {
             return new SignObject();
+        }
+    }
+
+    public SpatialContainer getSigns() {
+        try {
+            return new SpatialContainer((OracleResultSet) this.connector.executeQueryWithResults(SignObject.getAllSQL()));
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            return null;
         }
     }
 }

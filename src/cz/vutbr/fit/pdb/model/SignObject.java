@@ -1,45 +1,24 @@
 package cz.vutbr.fit.pdb.model;
 
 import oracle.jdbc.OracleResultSet;
-import oracle.spatial.geometry.JGeometry;
 /**
  *
  * @author Martin Simon
  */
-public class SignObject {
-
-    private int id;
-    private JGeometry geometry;
+public class SignObject extends SpatialObject {
     private String description;
     private int plant;
 
     public SignObject() {
-        this.id = -1;
+        super();
     }
 
     public SignObject(OracleResultSet rset) throws Exception {
-
-        this.id = rset.getInt("id");
-        this.geometry = JGeometry.load(rset.getBytes("geometry"));
+        super(rset);
         this.description = rset.getString("description");
         this.plant = rset.getInt("plant");
     }
 
-    public void setId(int _id) {
-        this.id = _id;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public void setGeometry(JGeometry _geometry) {
-        this.geometry = _geometry;
-    }
-
-    public JGeometry getGeometry() {
-        return this.geometry;
-    }
 
     public void setDescription(String _description) {
         this.description = _description;
@@ -55,5 +34,45 @@ public class SignObject {
 
     public int getPlant() {
         return this.plant;
+    }
+
+    public String getStoreSQL() {
+        String query;
+        if (this.getId() == -1) {
+            query = "INSERT INTO signs VALUES ("
+                    + "id_signs_seq.NEXTVAL" + ", "
+                    + "(SELECT id FROM layers WHERE name = 'signs')" + ", "
+                    + "'" + this.getGeometry() + "'" + ", "
+                    + "'" + this.getDescription() + "'" + ", "
+                    + this.getPlant() + ", "
+                    + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
+                    + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
+        } else {
+            query = "UPDATE signs"
+                    + " SET geometry = '" + this.getGeometry() + "'"
+                    + " SET description = '" + this.getDescription() + "'"
+                    + " SET plant = " + this.getPlant()
+                    + " WHERE id = " + this.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        }
+
+        return query;
+    }
+
+    public String getDeleteSQL() {
+        String query = "UPDATE signs"
+                + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
+                + " WHERE id = " + this.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        return query;
+    }
+
+    public static String getSelectSQL(int id) {
+        String query = "SELECT * FROM signs WHERE id = "
+                + id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        return query;
+    }
+
+    public static String getAllSQL() {
+        String query = ""; //TODO add SQL
+        return query;
     }
 }
