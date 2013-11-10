@@ -155,6 +155,21 @@ CREATE SEQUENCE id_paths_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
 
+-- TODO: invalid data?
+
+INSERT INTO paths VALUES (
+    id_paths_seq.nextval,
+    (select id from layers where name = 'paths'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(0,800, 800,490, 430,490, 430,140, 0,140, 0,160,
+            410,160, 410,490, 0,490, 0,510, 820,510, 820,0))
+);
+
+-- Validation: --
+
+SELECT p.id, p.geometry.ST_IsValid() FROM paths p;
+
 --------------------------------------------------------------------------------
 -- WATER --
 --------------------------------------------------------------------------------
@@ -172,6 +187,18 @@ DROP SEQUENCE id_water_seq;
 CREATE SEQUENCE id_water_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
+
+INSERT INTO water VALUES (
+    id_water_seq.nextval,
+    (select id from layers where name = 'water'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(210,444, 385,343, 210,244))
+);
+
+-- Validation: --
+
+SELECT w.id, w.geometry.ST_IsValid() FROM water w;
 
 --------------------------------------------------------------------------------
 -- FENCES --
@@ -192,6 +219,30 @@ DROP SEQUENCE id_fences_seq;
 CREATE SEQUENCE id_fences_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
+
+INSERT INTO fences VALUES (
+    id_fences_seq.nextval,
+    (select id from layers where name = 'fences'),
+    SDO_GEOMETRY(2002, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 2, 1),
+        SDO_ORDINATE_ARRAY(15,525, 210,525, 210,575)),
+    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO fences VALUES (
+    id_fences_seq.nextval,
+    (select id from layers where name = 'fences'),
+    SDO_GEOMETRY(2002, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 2, 1),
+        SDO_ORDINATE_ARRAY(105,425, 140,475, 260,475, 300,430)),
+    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+-- Validation: --
+
+SELECT f.id, f.geometry.ST_IsValid() FROM fences f;
 
 --------------------------------------------------------------------------------
 -- PLANTS --
@@ -329,5 +380,59 @@ DROP SEQUENCE id_beds_seq;
 CREATE SEQUENCE id_beds_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Data: --
+
+-- TODO: invalid data? --
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(15,525, 210,525, 210,685, 15,685)),
+    (select id from plants where name = 'genericka kvetina'),
+    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(95,410, 315,415, 260,475, 140,475)),
+    (select id from plants where name = 'genericka kvetina'),
+    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(268,550, 280,538, 268,525)),
+    (select id from plants where name = 'genericka kvetina'),
+    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'bush'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(355,212, 385,192, 355,172)),
+    (select id from plants where name = 'genericka kvetina'),
+    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+-- Validation: --
+
+SELECT b.id, b.geometry.ST_IsValid() FROM beds b;
 
 //
