@@ -5,8 +5,8 @@
 package cz.vutbr.fit.pdb.control;
 
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
+import cz.vutbr.fit.pdb.view.MapPanel;
 import java.awt.event.MouseEvent;
-import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
 /**
@@ -15,12 +15,12 @@ import javax.swing.event.MouseInputListener;
  */
 public class MapControl implements MouseInputListener{
     
-    private JPanel view;
+    private MapPanel view;
     private SpatialContainer model;
     
-    public MapControl(JPanel view, SpatialContainer model){
-        this.view = view;
-        this.model = model;
+    public MapControl(MapPanel mp, SpatialContainer sc){
+        this.view = mp;
+        this.model = sc;
     }
 
     @Override

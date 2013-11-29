@@ -4,9 +4,9 @@
  */
 package cz.vutbr.fit.pdb.containers;
 
-import oracle.jdbc.OracleResultSet;
+
 import cz.vutbr.fit.pdb.model.SpatialObject;
-import java.awt.Graphics2D;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +26,7 @@ public class SpatialContainer {
         spatialObjectList = new HashMap<Integer, ArrayList<SpatialObject>>();
 
     }
+    
 
     public void deselectAll() {
         Set<Integer> keys = spatialObjectList.keySet();
@@ -37,10 +38,6 @@ public class SpatialContainer {
         }
 
     }
-
-    public void drawLayerTo(Graphics2D g2, Integer layer){
-
-    }
-
-    public void drawAll(Graphics2D g2){}
 }
+
+    

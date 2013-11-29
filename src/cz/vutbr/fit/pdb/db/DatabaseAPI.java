@@ -126,7 +126,7 @@ public class DatabaseAPI {
 
     public SpatialContainer getSigns() {
         try {
-            return new SpatialContainer((OracleResultSet) this.connector.executeQueryWithResults(SignObject.getAllSQL()));
+            //return new SpatialContainer((OracleResultSet) this.connector.executeQueryWithResults(SignObject.getAllSQL()));
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
         } finally {
