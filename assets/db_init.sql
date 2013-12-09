@@ -14,7 +14,7 @@ DROP TABLE layers CASCADE CONSTRAINTS;
 DELETE FROM user_sdo_geom_metadata;
 
 --------------------------------------------------------------------------------
--- LAYERS --
+-- LAYERS -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE layers (
@@ -53,7 +53,7 @@ INSERT INTO layers VALUES (
     id_layers_seq.NEXTVAL, 'signs'
 );
 --------------------------------------------------------------------------------
--- SOIL_TYPE --
+-- SOIL_TYPE -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE soil_type (
@@ -81,7 +81,7 @@ INSERT INTO soil_type VALUES (
 );
 
 --------------------------------------------------------------------------------
--- SOIL --
+-- SOIL -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE soil (
@@ -138,7 +138,7 @@ INSERT INTO soil VALUES (
 SELECT s.id, s.geometry.ST_IsValid() FROM soil s;
 
 --------------------------------------------------------------------------------
--- PATHS --
+-- PATHS -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE paths (
@@ -169,7 +169,7 @@ INSERT INTO paths VALUES (
 SELECT p.id, p.geometry.ST_IsValid() FROM paths p;
 
 --------------------------------------------------------------------------------
--- WATER --
+-- WATER -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE water (
@@ -199,7 +199,7 @@ INSERT INTO water VALUES (
 SELECT w.id, w.geometry.ST_IsValid() FROM water w;
 
 --------------------------------------------------------------------------------
--- FENCES --
+-- FENCES -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE fences (
@@ -224,7 +224,7 @@ INSERT INTO fences VALUES (
     SDO_GEOMETRY(2002, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 2, 1),
         SDO_ORDINATE_ARRAY(15,525, 210,525, 210,575)),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('04-18-2013', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
 
@@ -234,7 +234,37 @@ INSERT INTO fences VALUES (
     SDO_GEOMETRY(2002, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 2, 1),
         SDO_ORDINATE_ARRAY(105,425, 140,475, 260,475, 300,430)),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    TO_DATE('05-08-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO fences VALUES (
+    id_fences_seq.nextval,
+    (select id from layers where name = 'fences'),
+    SDO_GEOMETRY(2002, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 2, 1),
+        SDO_ORDINATE_ARRAY(555,525, 800,525)),
+    TO_DATE('04-05-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO fences VALUES (
+    id_fences_seq.nextval,
+    (select id from layers where name = 'fences'),
+    SDO_GEOMETRY(2002, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 2, 1),
+        SDO_ORDINATE_ARRAY(835,685, 835,420, 985,475)),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO fences VALUES (
+    id_fences_seq.nextval,
+    (select id from layers where name = 'fences'),
+    SDO_GEOMETRY(2002, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 2, 1),
+        SDO_ORDINATE_ARRAY(985,460, 835,405, 835,315, 985,315)),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
 
@@ -243,7 +273,7 @@ INSERT INTO fences VALUES (
 SELECT f.id, f.geometry.ST_IsValid() FROM fences f;
 
 --------------------------------------------------------------------------------
--- PLANTS --
+-- PLANTS -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE plants(
@@ -261,11 +291,99 @@ CREATE SEQUENCE id_plants_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 -- Data: --
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'genericka kvetina', NULL, NULL
+    id_plants_seq.nextval, 'borovice lesní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'buk lesní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'chryzantéma zahradní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'dub letní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'gerbera zahradní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'kaktus pichlavý', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'kopretina bílá', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'krokus žlutý', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'leknín bílý', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'lilie zahradní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'lípa malolistá', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'narcis žlutý', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'rákos obecný', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'růže lesklá', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'sekvoj vždyzelená', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'smrk ztepilý', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'sněženka podsněžník', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'netřesk střešní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'puchýřka útlá', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'túje obecná', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'tulipán zahradní', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'réva vinná', NULL, NULL
+);
+
+INSERT INTO plants VALUES (
+    id_plants_seq.nextval, 'mák vlčí', NULL, NULL
 );
 
 --------------------------------------------------------------------------------
--- SIGNS --
+-- SIGNS -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE signs (
@@ -293,21 +411,9 @@ INSERT INTO signs VALUES (
     SDO_GEOMETRY(2001, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
         SDO_ORDINATE_ARRAY(158, 517)),
-    'Popis genericke kvetiny',
-    (select id from plants where name = 'genericka kvetina'),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
-    TO_DATE('12-31-9999', 'MM-DD-YYYY')
-);
-
-INSERT INTO signs VALUES (
-    id_signs_seq.nextval,
-    (select id from layers where name = 'signs'),
-    SDO_GEOMETRY(2001, NULL, NULL,
-        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
-        SDO_ORDINATE_ARRAY(197, 482)),
-    'Popis genericke kvetiny',
-    (select id from plants where name = 'genericka kvetina'),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    'Země původu: Česká republika',
+    (select id from plants where name = 'kopretina bílá'),
+    TO_DATE('04-08-2013', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
 
@@ -317,18 +423,199 @@ INSERT INTO signs VALUES (
     SDO_GEOMETRY(2001, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
         SDO_ORDINATE_ARRAY(302, 517)),
-    'Popis genericke kvetiny',
-    (select id from plants where name = 'genericka kvetina'),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    'Země původu: Česká repbulika',
+    (select id from plants where name = 'smrk ztepilý'),
+    TO_DATE('11-08-2011', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(483, 517)),
+    'Země původu: Slovenská republika',
+    (select id from plants where name = 'borovice lesní'),
+    TO_DATE('11-08-2010', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(702, 517)),
+    'Země původu: Itálie',
+    (select id from plants where name = 'tulipán zahradní'),
+    TO_DATE('07-15-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(828, 492)),
+    'Země původu: Řecko',
+    (select id from plants where name = 'kaktus pichlavý'),
+    TO_DATE('05-13-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(828, 357)),
+    'Země původu: Rakousko',
+    (select id from plants where name = 'netřesk střešní'),
+    TO_DATE('12-08-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(198, 482)),
+    'Země původu: Česká republika',
+    (select id from plants where name = 'rákos obecný'),
+    TO_DATE('02-22-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(512, 482)),
+    'Země původu: Slovenská republika',
+    (select id from plants where name = 'růže lesklá'),
+    TO_DATE('04-22-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(708, 482)),
+    'Země původu: Slovenská republika',
+    (select id from plants where name = 'sněženka podsněžník'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(827, 218)),
+    'Země původu: Španělsko',
+    (select id from plants where name = 'túje obecná'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(827, 116)),
+    'Země původu: Slovenská republika',
+    (select id from plants where name = 'buk lesní'),
+    TO_DATE('10-11-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(792, 42)),
+    'Země původu: Česká republika',
+    (select id from plants where name = 'lípa malolistá'),
+    TO_DATE('11-11-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(82, 132)),
+    'Země původu: Slovenská republika',
+    (select id from plants where name = 'gerbera zahradní'),
+    TO_DATE('05-11-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(248, 132)),
+    'Země původu: Slovenská republika',
+    (select id from plants where name = 'mák vlčí'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(318, 167)),
+    'Země původu: Česká republika',
+    (select id from plants where name = 'réva vinná'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(398, 132)),
+    'Země původu: Německo',
+    (select id from plants where name = 'dub letní'),
+    TO_DATE('07-01-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO signs VALUES (
+    id_signs_seq.nextval,
+    (select id from layers where name = 'signs'),
+    SDO_GEOMETRY(2001, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1 ,1 ,1),
+        SDO_ORDINATE_ARRAY(398, 286)),
+    'Země původu: Kanada',
+    (select id from plants where name = 'leknín bílý'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
 
 -- Validation: --
 
 SELECT s.id, s.geometry.ST_IsValid() FROM signs s;
 
 --------------------------------------------------------------------------------
--- BED_TYPE --
+-- BED_TYPE -- [done]
 --------------------------------------------------------------------------------
 
 CREATE TABLE bed_type (
@@ -356,7 +643,7 @@ INSERT INTO bed_type VALUES (
 );
 
 --------------------------------------------------------------------------------
--- BEDS --
+-- BEDS -- [data]
 --------------------------------------------------------------------------------
 
 CREATE TABLE beds (
@@ -386,8 +673,8 @@ INSERT INTO beds VALUES (
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(15,525, 210,525, 210,685, 15,685, 15,525)),
-    (select id from plants where name = 'genericka kvetina'),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    (select id from plants where name = 'kopretina bílá'),
+    TO_DATE('04-14-2013', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
 
@@ -398,8 +685,118 @@ INSERT INTO beds VALUES (
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(95,410, 315,415, 260,475, 140,475, 95,410)),
-    (select id from plants where name = 'genericka kvetina'),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+    (select id from plants where name = 'rákos obecný'),
+    TO_DATE('08-16-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(555,525, 800,525, 800,685, 470,685, 555,525)),
+    (select id from plants where name = 'tulipán zahradní'),
+    TO_DATE('04-19-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(835,420, 985,475, 985,685, 835,685, 835,420)),
+    (select id from plants where name = 'kaktus pichlavý'),
+    TO_DATE('12-12-2012', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(835,315, 985,315, 985,460, 835,405, 835,315)),
+    (select id from plants where name = 'netřesk střešní'),
+    TO_DATE('12-13-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(165,260, 280,260, 370,325, 160,325, 95,290, 165,260)),
+    (select id from plants where name = 'leknín bílý'),
+    TO_DATE('12-13-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(445,140, 600,140, 600,475, 445,475, 445,140)),
+    (select id from plants where name = 'růže lesklá'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(630,140, 785,140, 785,475, 630,475, 630,140)),
+    (select id from plants where name = 'sněženka podsněžník'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(15,15, 225,15, 185,125, 15,125, 15,15)),
+    (select id from plants where name = 'gerbera zahradní'),
+    TO_DATE('08-08-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'flower'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 1),
+        SDO_ORDINATE_ARRAY(240,15, 345,15, 345,125, 200,125, 240,15)),
+    (select id from plants where name = 'mák vlčí'),
+    TO_DATE('06-08-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+--------------------------------------------------------------------------------
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(268,550, 280,538, 268,525)),
+    (select id from plants where name = 'smrk ztepilý'),
+    TO_DATE('06-23-2013', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
 
@@ -409,9 +806,118 @@ INSERT INTO beds VALUES (
     (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
-        SDO_ORDINATE_ARRAY(268,550, 280,538, 268,525)),
-    (select id from plants where name = 'genericka kvetina'),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+        SDO_ORDINATE_ARRAY(335,560, 347,548, 335,536)),
+    (select id from plants where name = 'smrk ztepilý'),
+    TO_DATE('04-22-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(460,550, 472,538, 460,527)),
+    (select id from plants where name = 'borovice lesní'),
+    TO_DATE('01-21-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(505,555, 518,543, 505,532)),
+    (select id from plants where name = 'borovice lesní'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(378,125, 388,112, 378,100)),
+    (select id from plants where name = 'dub letní'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(415,120, 428,108, 415,96)),
+    (select id from plants where name = 'dub letní'),
+    TO_DATE('05-08-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(766,74, 778,62, 766,50)),
+    (select id from plants where name = 'lípa malolistá'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(767,35, 780,23, 767,10)),
+    (select id from plants where name = 'lípa malolistá'),
+    TO_DATE('04-08-2011', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(846,148, 858,136, 846,125)),
+    (select id from plants where name = 'buk lesní'),
+    TO_DATE('11-18-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'tree'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(856,119, 868,107, 856,95)),
+    (select id from plants where name = 'buk lesní'),
+    TO_DATE('11-08-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+--------------------------------------------------------------------------------
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'bush'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(354,212, 384,192, 354,172)),
+    (select id from plants where name = 'réva vinná'),
+    TO_DATE('03-11-2013', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
 
@@ -421,9 +927,21 @@ INSERT INTO beds VALUES (
     (select id from bed_type where name = 'bush'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
-        SDO_ORDINATE_ARRAY(355,212, 385,192, 355,172)),
-    (select id from plants where name = 'genericka kvetina'),
-    TO_DATE('08-04-2011', 'MM-DD-YYYY'),
+        SDO_ORDINATE_ARRAY(866,270, 896,250, 866,230)),
+    (select id from plants where name = 'túje obecná'),
+    TO_DATE('04-14-2013', 'MM-DD-YYYY'),
+    TO_DATE('12-31-9999', 'MM-DD-YYYY')
+);
+
+INSERT INTO beds VALUES (
+    id_beds_seq.nextval,
+    (select id from layers where name = 'beds'),
+    (select id from bed_type where name = 'bush'),
+    SDO_GEOMETRY(2003, NULL, NULL,
+        SDO_ELEM_INFO_ARRAY(1, 1003, 4),
+        SDO_ORDINATE_ARRAY(895,218, 925,198, 895,178)),
+    (select id from plants where name = 'túje obecná'),
+    TO_DATE('11-01-2013', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
 
