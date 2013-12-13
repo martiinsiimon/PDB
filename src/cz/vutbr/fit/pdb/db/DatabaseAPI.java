@@ -29,7 +29,7 @@ public class DatabaseAPI {
      * @param whatList List of columns to be returned
      * @param whereList List of expressions which must be met
      */
-    private void selectQuery(String from, List<String> whatList, List<String> whereList) {
+    public void selectQuery(String from, List<String> whatList, List<String> whereList) {
         String query = "SELECT ";
         for (Iterator<String> iterator = whatList.iterator(); iterator.hasNext();) {
             String what = iterator.next();

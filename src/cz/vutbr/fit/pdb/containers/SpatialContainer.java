@@ -19,25 +19,25 @@ import java.util.Set;
 public class SpatialContainer {
 
     private Map<Integer, ArrayList<SpatialObject>> spatialObjectList;
-    private SpatialObject selected = null;
-    private SpatialObject hovered = null;
+    private SpatialObject selected;
+    private SpatialObject hovered;
 
     public SpatialContainer(){
         spatialObjectList = new HashMap<Integer, ArrayList<SpatialObject>>();
-
+        selected = null;
+        hovered = null;
     }
-    
+
 
     public void deselectAll() {
         Set<Integer> keys = spatialObjectList.keySet();
         for (Integer i : keys) {
             ArrayList<SpatialObject> layerItems = spatialObjectList.get(i);
             for (SpatialObject so : layerItems) {
-                //so.setSelection(false);
+                so.setSelection(false);
             }
         }
 
     }
 }
 
-    
