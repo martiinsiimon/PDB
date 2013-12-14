@@ -6,11 +6,23 @@
 
 package cz.vutbr.fit.pdb.model;
 
+import oracle.jdbc.OracleResultSet;
+
 /**
  * Java object for bed type from DB
  *
  * @author martin
  */
-public class BedTypeObject {
+public class BedTypeObject extends DataObject {
+
+    public BedTypeObject() {
+        super();
+        this.tableName = "bed_type";
+    }
+
+    public BedTypeObject(OracleResultSet rset) throws Exception {
+        super(rset);
+        this.tableName = "bed_type";
+    }
 
 }

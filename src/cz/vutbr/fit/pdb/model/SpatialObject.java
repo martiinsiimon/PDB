@@ -11,11 +11,8 @@ import oracle.spatial.geometry.JGeometry;
  *
  * @author casey
  */
-public class SpatialObject extends Table {
-
-    protected int id;
+public abstract class SpatialObject extends Table {
     protected JGeometry geometry;
-    protected static String tableName = ""; //TODO- tablename
     protected boolean selected = false;
     protected boolean hovered = false;
 
@@ -26,14 +23,6 @@ public class SpatialObject extends Table {
     public SpatialObject(OracleResultSet rset) throws Exception {
         this.id = rset.getInt("id");
         this.geometry = JGeometry.load(rset.getBytes("geometry"));
-    }
-
-    public void setId(int _id) {
-        this.id = _id;
-    }
-
-    public int getId() {
-        return this.id;
     }
 
     public void setGeometry(JGeometry _geometry) {
@@ -61,4 +50,14 @@ public class SpatialObject extends Table {
     }
 
 //TODO add draw methods
+    abstract void draw();
+
+    @Override
+    abstract String getStoreSQL();
+
+    @Override
+    abstract String getDeleteSQL();
+
+    @Override
+    abstract String getSelectSQL(int id);
 }

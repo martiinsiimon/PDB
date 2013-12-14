@@ -5,16 +5,20 @@ import oracle.jdbc.OracleResultSet;
  *
  * @author Martin Simon
  */
+
 public class SignObject extends SpatialObject {
     private String description;
     private int plant;
 
     public SignObject() {
         super();
+        tableName = "signs";
     }
 
     public SignObject(OracleResultSet rset) throws Exception {
         super(rset);
+        this.tableName = "signs";
+
         this.description = rset.getString("description");
         this.plant = rset.getInt("plant");
     }
@@ -36,6 +40,7 @@ public class SignObject extends SpatialObject {
         return this.plant;
     }
 
+    @Override
     public String getStoreSQL() {
         String query;
         if (this.getId() == -1) {
@@ -58,6 +63,7 @@ public class SignObject extends SpatialObject {
         return query;
     }
 
+    @Override
     public String getDeleteSQL() {
         String query = "UPDATE signs"
                 + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
@@ -65,7 +71,8 @@ public class SignObject extends SpatialObject {
         return query;
     }
 
-    public static String getSelectSQL(int id) {
+    @Override
+    public String getSelectSQL(int id) {
         String query = "SELECT * FROM signs WHERE id = "
                 + id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
         return query;
@@ -74,5 +81,10 @@ public class SignObject extends SpatialObject {
     public static String getAllSQL() {
         String query = ""; //TODO add SQL
         return query;
+    }
+
+    @Override
+    void draw() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

@@ -6,11 +6,22 @@
 
 package cz.vutbr.fit.pdb.model;
 
+import oracle.jdbc.OracleResultSet;
+
 /**
  * Java object for soil types from DB
  *
  * @author martin
  */
-public class SoilTypeObject {
+public class SoilTypeObject extends DataObject {
 
+    public SoilTypeObject() {
+        super();
+        this.tableName = "soil_type";
+    }
+
+    public SoilTypeObject(OracleResultSet rset) throws Exception {
+        super(rset);
+        this.tableName = "soil_type";
+    }
 }

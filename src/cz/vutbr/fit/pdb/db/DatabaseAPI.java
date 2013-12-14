@@ -116,7 +116,7 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     public SignObject getSign(int id) {
         try {
-            return new SignObject((OracleResultSet) this.connector.executeQueryWithResults(SignObject.getSelectSQL(id)));
+            return new SignObject((OracleResultSet) this.connector.executeQueryWithResults(new SignObject().getSelectSQL(id)));
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
         } finally {

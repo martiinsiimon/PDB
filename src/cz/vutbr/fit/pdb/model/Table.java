@@ -8,30 +8,37 @@ package cz.vutbr.fit.pdb.model;
  *
  * @author casey
  */
-public class Table {
-    
-    protected static String tableName = "";
+public abstract class Table {
+
+    protected String tableName;
     protected int id = -1;
-    
-    public Table(){}
-    
+
+    public void setId(int _id) {
+        this.id = _id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setTableName(String _table) {
+        this.tableName = _table;
+    }
+
+    public String getTableName() {
+        return this.tableName;
+    }
+
     public static void findAll(){}
     public static void findByID(){}
-    
-    protected void update(){}
-    protected void insert(){}
-    
-    public void save(){
-        if(this.id == -1){
-            this.insert();
-        }else{
-            this.update();
-        }
-    }
-    
-    public void delete(){}
-    
-    
+
+    abstract String getStoreSQL();
+
+    abstract String getDeleteSQL();
+
+    abstract String getSelectSQL(int id);
+
+
 }
 
 

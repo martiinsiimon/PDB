@@ -6,11 +6,23 @@
 
 package cz.vutbr.fit.pdb.model;
 
+import oracle.jdbc.OracleResultSet;
+
 /**
  * Java object for layer from DB
  *
  * @author martin
  */
-public class LayersObject {
+public class LayersObject extends DataObject {
+
+    public LayersObject() {
+        super();
+        this.tableName = "layers";
+    }
+
+    public LayersObject(OracleResultSet rset) throws Exception {
+        super(rset);
+        this.tableName = "layers";
+    }
 
 }
