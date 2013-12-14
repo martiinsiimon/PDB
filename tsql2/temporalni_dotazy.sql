@@ -25,16 +25,16 @@ WHERE EXISTS(
 
 
 -- SELECT temporalne promenlivych dat nad spojenim vice tabulek (2):
--- Vyber informace o rostlinach na cedulich u vsech stromu
+-- Vyber informace o rostlinach na cedulich u vsech rostlin
 -- rostoucich v zahrade v 1. polovine roku 2012
 --
 -- ATSQL:
-SELECT sings.description FROM signs WHERE EXISTS(VALIDTIME PERIOD[2012/01-2012/07) SELECT 1 from beds WHERE beds.plant=signs.plant AND beds.bed_type=2);
+SELECT sings.description FROM signs WHERE EXISTS(VALIDTIME PERIOD[2012/01-2012/07) SELECT 1 from beds WHERE beds.plant=signs.plant);
 
 -- SQL:
 SELECT signs.description FROM signs
 WHERE EXISTS(
-    SELECT 1 FROM beds WHERE beds.plant=signs.plant AND beds.bed_type=2 AND
+    SELECT 1 FROM beds WHERE beds.plant=signs.plant AND
     date_to >= TO_DATE('06-30-2012', 'MM-DD-YYYY') AND
     date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY'));
 

@@ -6,9 +6,9 @@ DROP TABLE paths CASCADE CONSTRAINTS;
 DROP TABLE water CASCADE CONSTRAINTS;
 DROP TABLE fences CASCADE CONSTRAINTS;
 DROP TABLE signs CASCADE CONSTRAINTS;
-DROP TABLE bed_type CASCADE CONSTRAINTS;
 DROP TABLE beds CASCADE CONSTRAINTS;
 DROP TABLE plants CASCADE CONSTRAINTS;
+DROP TABLE plant_type CASCADE CONSTRAINTS;
 DROP TABLE layers CASCADE CONSTRAINTS;
 
 DELETE FROM user_sdo_geom_metadata;
@@ -273,6 +273,34 @@ INSERT INTO fences VALUES (
 SELECT f.id, f.geometry.ST_IsValid() FROM fences f;
 
 --------------------------------------------------------------------------------
+-- PLANT_TYPE -- [done]
+--------------------------------------------------------------------------------
+
+CREATE TABLE plant_type (
+
+    id INT PRIMARY KEY,
+    name VARCHAR2(16)
+
+);
+
+DROP SEQUENCE id_plant_type_seq;
+CREATE SEQUENCE id_plant_type_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+
+-- Data: --
+
+INSERT INTO plant_type VALUES (
+    id_plant_type_seq.NEXTVAL, 'flower'
+);
+
+INSERT INTO plant_type VALUES (
+    id_plant_type_seq.NEXTVAL, 'tree'
+);
+
+INSERT INTO plant_type VALUES (
+    id_plant_type_seq.NEXTVAL, 'bush'
+);
+
+--------------------------------------------------------------------------------
 -- PLANTS -- [done]
 --------------------------------------------------------------------------------
 
@@ -280,9 +308,10 @@ CREATE TABLE plants(
 
     id INT PRIMARY KEY,
     name VARCHAR2(64),
+    plant_type INT,
     photo ORDSYS.ORDIMAGE,
-    photo_sig ORDSYS.ORDIMAGESIGNATURE
-
+    photo_sig ORDSYS.ORDIMAGESIGNATURE,
+    FOREIGN KEY (plant_type) REFERENCES plant_type(id)
 );
 
 DROP SEQUENCE id_plants_seq;
@@ -291,95 +320,95 @@ CREATE SEQUENCE id_plants_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 -- Data: --
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'borovice lesní', NULL, NULL
+    id_plants_seq.nextval, 'borovice lesní', (select id from plant_type where name = 'tree'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'buk lesní', NULL, NULL
+    id_plants_seq.nextval, 'buk lesní', (select id from plant_type where name = 'tree'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'chryzantéma zahradní', NULL, NULL
+    id_plants_seq.nextval, 'chryzantéma zahradní', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'dub letní', NULL, NULL
+    id_plants_seq.nextval, 'dub letní', (select id from plant_type where name = 'tree'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'gerbera zahradní', NULL, NULL
+    id_plants_seq.nextval, 'gerbera zahradní', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'kaktus pichlavý', NULL, NULL
+    id_plants_seq.nextval, 'kaktus pichlavý', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'kopretina bílá', NULL, NULL
+    id_plants_seq.nextval, 'kopretina bílá', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'krokus žlutý', NULL, NULL
+    id_plants_seq.nextval, 'krokus žlutý', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'leknín bílý', NULL, NULL
+    id_plants_seq.nextval, 'leknín bílý', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'lilie zahradní', NULL, NULL
+    id_plants_seq.nextval, 'lilie zahradní', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'lípa malolistá', NULL, NULL
+    id_plants_seq.nextval, 'lípa malolistá', (select id from plant_type where name = 'tree'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'narcis žlutý', NULL, NULL
+    id_plants_seq.nextval, 'narcis žlutý', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'rákos obecný', NULL, NULL
+    id_plants_seq.nextval, 'rákos obecný', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'růže lesklá', NULL, NULL
+    id_plants_seq.nextval, 'růže lesklá', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'sekvoj vždyzelená', NULL, NULL
+    id_plants_seq.nextval, 'sekvoj vždyzelená', (select id from plant_type where name = 'tree'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'smrk ztepilý', NULL, NULL
+    id_plants_seq.nextval, 'smrk ztepilý', (select id from plant_type where name = 'tree'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'sněženka podsněžník', NULL, NULL
+    id_plants_seq.nextval, 'sněženka podsněžník', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'netřesk střešní', NULL, NULL
+    id_plants_seq.nextval, 'netřesk střešní', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'puchýřka útlá', NULL, NULL
+    id_plants_seq.nextval, 'puchýřka útlá', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'túje obecná', NULL, NULL
+    id_plants_seq.nextval, 'túje obecná', (select id from plant_type where name = 'bush'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'tulipán zahradní', NULL, NULL
+    id_plants_seq.nextval, 'tulipán zahradní', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'réva vinná', NULL, NULL
+    id_plants_seq.nextval, 'réva vinná', (select id from plant_type where name = 'bush'), NULL, NULL
 );
 
 INSERT INTO plants VALUES (
-    id_plants_seq.nextval, 'mák vlčí', NULL, NULL
+    id_plants_seq.nextval, 'mák vlčí', (select id from plant_type where name = 'flower'), NULL, NULL
 );
 
 --------------------------------------------------------------------------------
@@ -615,34 +644,6 @@ INSERT INTO signs VALUES (
 SELECT s.id, s.geometry.ST_IsValid() FROM signs s;
 
 --------------------------------------------------------------------------------
--- BED_TYPE -- [done]
---------------------------------------------------------------------------------
-
-CREATE TABLE bed_type (
-
-    id INT PRIMARY KEY,
-    name VARCHAR2(16)
-
-);
-
-DROP SEQUENCE id_bed_type_seq;
-CREATE SEQUENCE id_bed_type_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-
--- Data: --
-
-INSERT INTO bed_type VALUES (
-    id_bed_type_seq.NEXTVAL, 'flower'
-);
-
-INSERT INTO bed_type VALUES (
-    id_bed_type_seq.NEXTVAL, 'tree'
-);
-
-INSERT INTO bed_type VALUES (
-    id_bed_type_seq.NEXTVAL, 'bush'
-);
-
---------------------------------------------------------------------------------
 -- BEDS -- [data]
 --------------------------------------------------------------------------------
 
@@ -650,13 +651,11 @@ CREATE TABLE beds (
 
     id INT PRIMARY KEY,
     layer INT,
-    bed_type INT,
     geometry SDO_GEOMETRY,
     plant INT,
     date_from DATE,
     date_to DATE,
     FOREIGN KEY (layer) REFERENCES layers(id),
-    FOREIGN KEY (bed_type) REFERENCES bed_type(id),
     FOREIGN KEY (plant) REFERENCES plants(id)
 
 );
@@ -669,7 +668,6 @@ CREATE SEQUENCE id_beds_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(15,525, 210,525, 210,685, 15,685, 15,525)),
@@ -681,7 +679,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(95,410, 315,415, 260,475, 140,475, 95,410)),
@@ -693,7 +690,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(555,525, 800,525, 800,685, 470,685, 555,525)),
@@ -705,7 +701,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(835,420, 985,475, 985,685, 835,685, 835,420)),
@@ -717,7 +712,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(835,315, 985,315, 985,460, 835,405, 835,315)),
@@ -729,7 +723,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(165,260, 280,260, 370,325, 160,325, 95,290, 165,260)),
@@ -741,7 +734,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(445,140, 600,140, 600,475, 445,475, 445,140)),
@@ -753,7 +745,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(630,140, 785,140, 785,475, 630,475, 630,140)),
@@ -765,7 +756,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(15,15, 225,15, 185,125, 15,125, 15,15)),
@@ -777,7 +767,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'flower'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
         SDO_ORDINATE_ARRAY(240,15, 345,15, 345,125, 200,125, 240,15)),
@@ -791,7 +780,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(268,550, 280,538, 268,525)),
@@ -803,7 +791,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(335,560, 347,548, 335,536)),
@@ -815,7 +802,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(460,550, 472,538, 460,527)),
@@ -827,7 +813,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(505,555, 518,543, 505,532)),
@@ -839,7 +824,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(378,125, 388,112, 378,100)),
@@ -851,7 +835,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(415,120, 428,108, 415,96)),
@@ -863,7 +846,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(766,74, 778,62, 766,50)),
@@ -875,7 +857,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(767,35, 780,23, 767,10)),
@@ -887,7 +868,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(846,148, 858,136, 846,125)),
@@ -899,7 +879,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'tree'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(856,119, 868,107, 856,95)),
@@ -912,7 +891,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'bush'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(354,212, 384,192, 354,172)),
@@ -924,7 +902,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'bush'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(866,270, 896,250, 866,230)),
@@ -936,7 +913,6 @@ INSERT INTO beds VALUES (
 INSERT INTO beds VALUES (
     id_beds_seq.nextval,
     (select id from layers where name = 'beds'),
-    (select id from bed_type where name = 'bush'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
         SDO_ORDINATE_ARRAY(895,218, 925,198, 895,178)),
