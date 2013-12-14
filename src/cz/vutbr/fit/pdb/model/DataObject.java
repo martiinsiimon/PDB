@@ -9,6 +9,9 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
+ * Obecna trida pro datovy objekt. Obecnou tabulkovou tridu rozsiruje o nazev
+ * (datova polozka je tvorena dvojici id - nazev). Obsahuje i prislusne SQL
+ * dotazy, nebot datove objekty jsou vsechny stejne povahy (dvojice)
  *
  * @author martin
  */
@@ -41,7 +44,7 @@ public class DataObject extends Table {
 
     @Override
     String getDeleteSQL() {
-        String query = "DELETE * FROM signs WHERE id = " + this.id;
+        String query = "DELETE * FROM " + this.tableName + " WHERE id = " + this.id;
         return query;
     }
 

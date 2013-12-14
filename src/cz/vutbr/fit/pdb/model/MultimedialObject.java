@@ -5,9 +5,10 @@
 package cz.vutbr.fit.pdb.model;
 
 /**
+ * Multimedialni objekt. Drzi obrazek, jeho signatury a prislusne metody
  *
  * @author casey
  */
 public class MultimedialObject {
-    
+//TODO
 }

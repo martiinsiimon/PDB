@@ -9,7 +9,7 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for layer from DB
+ * Java object for layer from DB. Datovy Java objekt pro jednotlive vrstvy
  *
  * @author martin
  */

@@ -1,7 +1,10 @@
 package cz.vutbr.fit.pdb.model;
 
 import oracle.jdbc.OracleResultSet;
+
 /**
+ * Java object for signs from DB. Java objekt pro znacky na mape. Znacka ma
+ * popis a vaze se dane rostline.
  *
  * @author Martin Simon
  */
@@ -12,7 +15,10 @@ public class SignObject extends SpatialObject {
 
     public SignObject() {
         super();
-        tableName = "signs";
+        this.tableName = "signs";
+
+        this.description = "";
+        this.plant = -1;
     }
 
     public SignObject(OracleResultSet rset) throws Exception {
@@ -76,15 +82,5 @@ public class SignObject extends SpatialObject {
         String query = "SELECT * FROM signs WHERE id = "
                 + id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
         return query;
-    }
-
-    public static String getAllSQL() {
-        String query = ""; //TODO add SQL
-        return query;
-    }
-
-    @Override
-    void draw() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

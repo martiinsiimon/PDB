@@ -9,7 +9,7 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for soil types from DB
+ * Java object for soil types from DB. Datovy Java objekt pro typy zeminy.
  *
  * @author martin
  */

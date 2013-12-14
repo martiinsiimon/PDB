@@ -9,7 +9,8 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for bed type from DB
+ * Java object for bed type from DB. Datovy Java objekt pro jednotlive typy
+ * roslin (kvetina, ker, strom)
  *
  * @author martin
  */

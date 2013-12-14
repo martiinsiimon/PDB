@@ -6,31 +6,50 @@
 
 package cz.vutbr.fit.pdb.model;
 
+import oracle.jdbc.OracleResultSet;
+
 /**
- * Java object for patch from DB
+ * Java object for patch from DB. java objekt pro objekt cesty na mape.
  *
  * @author martin
  */
 public class PathObject extends SpatialObject {
+    public PathObject() {
+        super();
+        this.tableName = "path";
+    }
 
-    @Override
-    String getStoreSQL() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public PathObject(OracleResultSet rset) throws Exception {
+        super(rset);
+        this.tableName = "path";
     }
 
     @Override
-    String getDeleteSQL() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getStoreSQL() {
+        String query;
+        if (this.id == -1) {
+            query = "INSERT INTO path VALUES ("
+                    + "id_path_seq.NEXTVAL" + ", "
+                    + "(SELECT id FROM layers WHERE name = 'path')" + ", "
+                    + "'" + this.geometry + "')";
+        } else {
+            query = "UPDATE path"
+                    + " SET geometry = '" + this.geometry + "'"
+                    + " WHERE id = " + this.id;
+        }
+
+        return query;
     }
 
     @Override
-    String getSelectSQL(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getDeleteSQL() {
+        String query = "DELETE * FROM path WHERE id = " + this.id;
+        return query;
     }
 
     @Override
-    void draw() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getSelectSQL(int id) {
+        String query = "SELECT * FROM path WHERE id = " + id;
+        return query;
     }
-
 }

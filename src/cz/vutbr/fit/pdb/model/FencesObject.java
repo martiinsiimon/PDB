@@ -6,31 +6,56 @@
 
 package cz.vutbr.fit.pdb.model;
 
+import oracle.jdbc.OracleResultSet;
+
 /**
- * Java object for fences from DB
+ * Java object for fences from DB. Java objekt pro ploty na mape.
  *
  * @author martin
  */
 public class FencesObject extends SpatialObject {
+    public FencesObject() {
+        super();
+        this.tableName = "fences";
+    }
 
-    @Override
-    String getStoreSQL() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public FencesObject(OracleResultSet rset) throws Exception {
+        super(rset);
+        this.tableName = "fences";
     }
 
     @Override
-    String getDeleteSQL() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getStoreSQL() {
+        String query;
+        if (this.id == -1) {
+            query = "INSERT INTO fences VALUES ("
+                    + "id_fences_seq.NEXTVAL" + ", "
+                    + "(SELECT id FROM layers WHERE name = 'fences')" + ", "
+                    + "'" + this.getGeometry() + "'" + ", "
+                    + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
+                    + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
+        } else {
+            query = "UPDATE fences"
+                    + " SET geometry = '" + this.getGeometry() + "'"
+                    + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        }
+
+        return query;
     }
 
     @Override
-    String getSelectSQL(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getDeleteSQL() {
+        String query = "UPDATE fences"
+                + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
+                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        return query;
     }
 
     @Override
-    void draw() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getSelectSQL(int id) {
+        String query = "SELECT * FROM fences WHERE id = "
+                + id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        return query;
     }
 
 }

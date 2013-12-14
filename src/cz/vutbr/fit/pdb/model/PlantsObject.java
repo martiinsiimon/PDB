@@ -9,15 +9,18 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for plant from DB
+ * Java object for plant from DB. Datovy Java objekt pro jednotlive rostliny.
+ * Datovy objekt rozsiruje o grafickou informaci (TODO)
  *
  * @author martin
  */
 public class PlantsObject extends DataObject {
+    private MultimedialObject image;
 
     public PlantsObject() {
         super();
         this.tableName = "plants";
+        image = null;
     }
 
     public PlantsObject(OracleResultSet rset) throws Exception {
@@ -35,5 +38,11 @@ public class PlantsObject extends DataObject {
         return this.name;
     }
 
-    //TODO photo & photo_sig
+    //TODO SQL method to store has to be overriden due the multimedial context!
+    @Override
+    String getStoreSQL() {
+        String query = "";
+        return query;
+    }
+
 }

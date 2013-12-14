@@ -6,11 +6,50 @@
 
 package cz.vutbr.fit.pdb.model;
 
+import oracle.jdbc.OracleResultSet;
+
 /**
- * Java object for water from DB
+ * Java object for water from DB. Java objekt pro vodni plochy na mape.
  *
  * @author martin
  */
-public class WaterObject {
+public class WaterObject extends SpatialObject {
+    public WaterObject() {
+        super();
+        this.tableName = "water";
+    }
 
+    public WaterObject(OracleResultSet rset) throws Exception {
+        super(rset);
+        this.tableName = "water";
+    }
+
+    @Override
+    public String getStoreSQL() {
+        String query;
+        if (this.id == -1) {
+            query = "INSERT INTO water VALUES ("
+                    + "id_water_seq.NEXTVAL" + ", "
+                    + "(SELECT id FROM layers WHERE name = 'water')" + ", "
+                    + "'" + this.geometry + "')";
+        } else {
+            query = "UPDATE water"
+                    + " SET geometry = '" + this.geometry + "'"
+                    + " WHERE id = " + this.id;
+        }
+
+        return query;
+    }
+
+    @Override
+    public String getDeleteSQL() {
+        String query = "DELETE * FROM water WHERE id = " + this.id;
+        return query;
+    }
+
+    @Override
+    public String getSelectSQL(int id) {
+        String query = "SELECT * FROM water WHERE id = " + id;
+        return query;
+    }
 }

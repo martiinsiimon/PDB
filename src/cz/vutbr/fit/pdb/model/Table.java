@@ -5,6 +5,9 @@
 package cz.vutbr.fit.pdb.model;
 
 /**
+ * Abstraktni trida vsech objektu. Kazda Kazdy objekt je identifikovan nazvem
+ * tabulky a identifikatorem id. Trida navis deklaruje abstraktni metody pro SQL
+ * dotazy a definuje dotaz pro vyber vsech polozek z dane tabulky.
  *
  * @author casey
  */
@@ -29,16 +32,16 @@ public abstract class Table {
         return this.tableName;
     }
 
-    public static void findAll(){}
-    public static void findByID(){}
-
     abstract String getStoreSQL();
 
     abstract String getDeleteSQL();
 
     abstract String getSelectSQL(int id);
 
-
+    public String getAllSQL() {
+        String query = "SELECT * FROM " + this.tableName;
+        return query;
+    }
 }
 
 
