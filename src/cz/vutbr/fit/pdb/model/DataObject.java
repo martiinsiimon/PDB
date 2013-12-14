@@ -27,6 +27,14 @@ public class DataObject extends Table {
         this.id = rset.getInt("id");
     }
 
+    public void setName(String _name) {
+        this.name = _name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
     @Override
     String getStoreSQL() {
         String query;

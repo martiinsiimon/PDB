@@ -16,14 +16,12 @@ import oracle.jdbc.OracleResultSet;
  * @author martin
  */
 public class BedsObject extends SpatialObject {
-    private int bedType;
     private int plant;
 
     public BedsObject() {
         super();
         this.tableName = "beds";
 
-        this.bedType = -1;
         this.plant = -1;
     }
 
@@ -31,16 +29,7 @@ public class BedsObject extends SpatialObject {
         super(rset);
         this.tableName = "beds";
 
-        this.bedType = rset.getInt("bed_type");
         this.plant = rset.getInt("plant");
-    }
-
-    public void setBedType(int _bedType) {
-        this.bedType = _bedType;
-    }
-
-    public int getBedType() {
-        return this.bedType;
     }
 
     public void setPlant(int _plant) {
@@ -58,14 +47,12 @@ public class BedsObject extends SpatialObject {
             query = "INSERT INTO beds VALUES ("
                     + "id_beds_seq.NEXTVAL" + ", "
                     + "(SELECT id FROM layers WHERE name = 'beds')" + ", "
-                    + this.bedType + ", "
                     + "'" + this.getGeometry() + "'" + ", "
                     + this.plant + ", "
                     + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
                     + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
         } else {
             query = "UPDATE beds"
-                    + " SET bed_type = " + this.bedType
                     + " SET geometry = '" + this.geometry + "'"
                     + " SET plant = " + this.plant
                     + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";

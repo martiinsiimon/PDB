@@ -16,29 +16,32 @@ import oracle.jdbc.OracleResultSet;
  */
 public class PlantsObject extends DataObject {
     private MultimedialObject image;
+    private int plant_type;
 
     public PlantsObject() {
         super();
         this.tableName = "plants";
+        this.plant_type = -1;
         image = null;
     }
 
     public PlantsObject(OracleResultSet rset) throws Exception {
         super(rset);
         this.tableName = "plants";
+        this.plant_type = rset.getInt("plant_type");
 
         //TODO photo & photo_sig
     }
 
-    public void setName(String _name) {
-        this.name = _name;
+    public void setPlantType(int _plantType) {
+        this.plant_type = _plantType;
     }
 
-    public String getName() {
-        return this.name;
+    public int getPlantType() {
+        return this.plant_type;
     }
 
-    //TODO SQL method to store has to be overriden due the multimedial context!
+    //TODO SQL method to store has to be overriden due the multimedial and plant_type context!
     @Override
     String getStoreSQL() {
         String query = "";

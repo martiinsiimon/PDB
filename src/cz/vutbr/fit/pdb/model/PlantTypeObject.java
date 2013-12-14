@@ -9,21 +9,21 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for bed type from DB. Datovy Java objekt pro jednotlive typy
+ * Java object for plant type from DB. Datovy Java objekt pro jednotlive typy
  * roslin (kvetina, ker, strom)
  *
  * @author martin
  */
-public class BedTypeObject extends DataObject {
+public class PlantTypeObject extends DataObject {
 
-    public BedTypeObject() {
+    public PlantTypeObject() {
         super();
-        this.tableName = "bed_type";
+        this.tableName = "plant_type";
     }
 
-    public BedTypeObject(OracleResultSet rset) throws Exception {
+    public PlantTypeObject(OracleResultSet rset) throws Exception {
         super(rset);
-        this.tableName = "bed_type";
+        this.tableName = "plant_type";
     }
 
 }
