@@ -12,6 +12,7 @@ import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.model.WaterObject;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -285,13 +286,16 @@ public class DatabaseAPI {
     public BedsObject getBedsByID(int id) {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new BedsObject().getSelectSQL(id));
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return null;
             } else {
                 /* The ResultSet is not empty */
                 return new BedsObject(rs);
             }
+        } catch (java.sql.SQLSyntaxErrorException e) {
+            System.out.println("Table of beds does not exists");
+            return null;
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return null;
@@ -307,13 +311,16 @@ public class DatabaseAPI {
     public SoilObject getSoilByID(int id) {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SoilObject().getSelectSQL(id));
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return null;
             } else {
                 /* The ResultSet is not empty */
                 return new SoilObject(rs);
             }
+        } catch (SQLException e) {
+            System.out.println("Table of soils does not exists");
+            return null;
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return null;
@@ -329,13 +336,16 @@ public class DatabaseAPI {
     public PathObject getPathByID(int id) {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PathObject().getSelectSQL(id));
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return null;
             } else {
                 /* The ResultSet is not empty */
                 return new PathObject(rs);
             }
+        } catch (SQLException e) {
+            System.out.println("Table of pathes does not exists");
+            return null;
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return null;
@@ -351,13 +361,16 @@ public class DatabaseAPI {
     public WaterObject getWaterByID(int id) {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new WaterObject().getSelectSQL(id));
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return null;
             } else {
                 /* The ResultSet is not empty */
                 return new WaterObject(rs);
             }
+        } catch (SQLException e) {
+            System.out.println("Table of water objects does not exists");
+            return null;
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return null;
@@ -373,13 +386,16 @@ public class DatabaseAPI {
     public FencesObject getFencesByID(int id) {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new FencesObject().getSelectSQL(id));
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return null;
             } else {
                 /* The ResultSet is not empty */
                 return new FencesObject(rs);
             }
+        } catch (SQLException e) {
+            System.out.println("Table of fences does not exists");
+            return null;
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return null;
@@ -395,13 +411,16 @@ public class DatabaseAPI {
     public SignObject getSignByID(int id) {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SignObject().getSelectSQL(id));
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return null;
             } else {
                 /* The ResultSet is not empty */
                 return new SignObject(rs);
             }
+        } catch (SQLException e) {
+            System.out.println("Table of signs does not exists");
+            return null;
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return null;
@@ -420,7 +439,7 @@ public class DatabaseAPI {
     public ArrayList<SpatialObject> getBedsAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new BedsObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<SpatialObject>();
             } else {
@@ -438,6 +457,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of beds does not exists");
+            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<SpatialObject>();
@@ -453,7 +475,7 @@ public class DatabaseAPI {
     public ArrayList<SpatialObject> getSoilAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SoilObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<SpatialObject>();
             } else {
@@ -471,6 +493,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of soils does not exists");
+            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<SpatialObject>();
@@ -486,7 +511,7 @@ public class DatabaseAPI {
     public ArrayList<SpatialObject> getPathAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PathObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<SpatialObject>();
             } else {
@@ -504,6 +529,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of pathes does not exists");
+            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<SpatialObject>();
@@ -519,7 +547,7 @@ public class DatabaseAPI {
     public ArrayList<SpatialObject> getWaterAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new WaterObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<SpatialObject>();
             } else {
@@ -537,6 +565,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of water objects does not exists");
+            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<SpatialObject>();
@@ -552,7 +583,7 @@ public class DatabaseAPI {
     public ArrayList<SpatialObject> getFencesAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new FencesObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<SpatialObject>();
             } else {
@@ -570,6 +601,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of fences does not exists");
+            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<SpatialObject>();
@@ -585,7 +619,7 @@ public class DatabaseAPI {
     public ArrayList<SpatialObject> getSignAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SignObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<SpatialObject>();
             } else {
@@ -603,6 +637,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of signs does not exists");
+            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<SpatialObject>();
@@ -618,7 +655,7 @@ public class DatabaseAPI {
     public ArrayList<DataObject> getLayersAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new LayersObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<DataObject>();
             } else {
@@ -636,6 +673,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of layers does not exists");
+            return new ArrayList<DataObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<DataObject>();
@@ -651,7 +691,7 @@ public class DatabaseAPI {
     public ArrayList<DataObject> getSoilTypeAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SoilTypeObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<DataObject>();
             } else {
@@ -669,6 +709,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of soil type does not exists");
+            return new ArrayList<DataObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<DataObject>();
@@ -684,7 +727,7 @@ public class DatabaseAPI {
     public ArrayList<DataObject> getPlantTypeAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PlantTypeObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<DataObject>();
             } else {
@@ -702,6 +745,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of plant_type does not exists");
+            return new ArrayList<DataObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<DataObject>();
@@ -717,7 +763,7 @@ public class DatabaseAPI {
     public ArrayList<DataObject> getPlantsAll() {
         try {
             OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PlantsObject().getAllSQL());
-            if (!rs.next()) {
+            if (rs == null || !rs.next()) {
                 /* The ResultSet is empty */
                 return new ArrayList<DataObject>();
             } else {
@@ -735,6 +781,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
+        } catch (SQLException e) {
+            System.out.println("Table of plants does not exists");
+            return new ArrayList<DataObject>();
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
             return new ArrayList<DataObject>();

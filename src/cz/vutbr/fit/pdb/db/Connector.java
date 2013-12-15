@@ -27,7 +27,7 @@ public class Connector {
     public Connector(String login, String password) {
         this.login = login;
         this.password = password;
-        queries.clear();
+        this.queries = new Stack<String>();
     }
 
     /**
