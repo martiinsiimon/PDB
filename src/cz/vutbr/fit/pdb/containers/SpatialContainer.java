@@ -21,6 +21,8 @@ import java.util.Map;
 import oracle.spatial.geometry.JGeometry;
 
 /**
+ * Container of spatial objects (those who have geometry). For correct function
+ * it needs to be initialized together with DataContainer
  *
  * @author Martin Simon
  */
@@ -170,6 +172,12 @@ public class SpatialContainer {
         return this.selected;
     }
 
+    /**
+     * Invoke commit all the queries in query queue.
+     */
+    public void commitToDB() {
+        this.db.commit();
+    }
 
     /**
      * Add given object to appropriate container and add a record to SQL queue.
@@ -242,8 +250,6 @@ public class SpatialContainer {
             }
         }
     }
-
-    //TODO add actions to store data types
 
 
     /**
