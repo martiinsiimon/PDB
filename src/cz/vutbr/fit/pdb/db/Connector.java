@@ -20,8 +20,8 @@ import oracle.jdbc.pool.OracleDataSource;
 public class Connector {
 
     private static String url = "jdbc:oracle:thin:@berta.fit.vutbr.cz:1522:dbfit";
-    private String login;
-    private String password;
+    private final String login;
+    private final String password;
     private Stack<String> queries;
 
     public Connector(String login, String password) {
