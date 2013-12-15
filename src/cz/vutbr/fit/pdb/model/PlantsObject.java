@@ -43,9 +43,15 @@ public class PlantsObject extends DataObject {
 
     //TODO SQL method to store has to be overriden due the multimedial and plant_type context!
     @Override
-    String getStoreSQL() {
+    public String getUpdateSQL() {
         String query = "";
         return query;
     }
 
+    //TODO
+    @Override
+    public String getInsertSQL() {
+        String query = "";
+        return query;
+    }
 }

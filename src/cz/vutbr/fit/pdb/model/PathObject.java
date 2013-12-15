@@ -16,28 +16,29 @@ import oracle.jdbc.OracleResultSet;
 public class PathObject extends SpatialObject {
     public PathObject() {
         super();
-        this.tableName = "path";
+        this.tableName = "paths";
     }
 
     public PathObject(OracleResultSet rset) throws Exception {
         super(rset);
-        this.tableName = "path";
+        this.tableName = "paths";
     }
 
     @Override
-    public String getStoreSQL() {
-        String query;
-        if (this.id == -1) {
-            query = "INSERT INTO path VALUES ("
-                    + "id_path_seq.NEXTVAL" + ", "
-                    + "(SELECT id FROM layers WHERE name = 'path')" + ", "
-                    + "'" + this.geometry + "')";
-        } else {
-            query = "UPDATE path"
-                    + " SET geometry = '" + this.geometry + "'"
-                    + " WHERE id = " + this.id;
-        }
+    public String getUpdateSQL() {
+        String query = "UPDATE path"
+                + " SET geometry = '" + this.geometry + "'"
+                + " WHERE id = " + this.id;
 
+        return query;
+    }
+
+    @Override
+    public String getInsertSQL() {
+        String query = "INSERT INTO path VALUES ("
+                + this.id + ", "
+                + "(SELECT id FROM layers WHERE name = 'path')" + ", "
+                + "'" + this.geometry + "')";
         return query;
     }
 

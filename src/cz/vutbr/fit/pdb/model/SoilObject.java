@@ -41,21 +41,24 @@ public class SoilObject extends SpatialObject {
     }
 
     @Override
-    public String getStoreSQL() {
+    public String getUpdateSQL() {
         String query;
-        if (this.id == -1) {
-            query = "INSERT INTO soil VALUES ("
-                    + "id_soil_seq.NEXTVAL" + ", "
-                    + "(SELECT id FROM layers WHERE name = 'soil')" + ", "
-                    + this.soilType + ", "
-                    + "'" + this.geometry + "')";
-        } else {
-            query = "UPDATE soil"
-                    + " SET geometry = '" + this.geometry + "'"
-                    + " SET soil_type = " + this.soilType
-                    + " WHERE id = " + this.id;
-        }
+        query = "UPDATE soil"
+                + " SET geometry = '" + this.geometry + "'"
+                + " SET soil_type = " + this.soilType
+                + " WHERE id = " + this.id;
 
+        return query;
+    }
+
+    @Override
+    public String getInsertSQL() {
+        String query;
+        query = "INSERT INTO soil VALUES ("
+                + this.id + ", "
+                + "(SELECT id FROM layers WHERE name = 'soil')" + ", "
+                + this.soilType + ", "
+                + "'" + this.geometry + "')";
         return query;
     }
 

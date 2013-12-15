@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cz.vutbr.fit.pdb.model;
 
 import oracle.jdbc.OracleResultSet;
@@ -36,28 +35,31 @@ public class DataObject extends Table {
     }
 
     @Override
-    String getStoreSQL() {
+    public String getUpdateSQL() {
         String query;
-        if (this.id == -1) {
-            query = "INSERT INTO " + this.tableName + " VALUES ("
-                    + "id_" + this.tableName + "_seq.NEXTVAL" + ", "
-                    + this.name + ")";
-        } else {
-            query = "UPDATE signs"
-                    + " SET name = '" + this.tableName + "'"
-                    + " WHERE id = " + this.id;
-        }
+        query = "UPDATE signs"
+                + " SET name = '" + this.tableName + "'"
+                + " WHERE id = " + this.id;
         return query;
     }
 
     @Override
-    String getDeleteSQL() {
+    public String getInsertSQL() {
+        String query;
+        query = "INSERT INTO " + this.tableName + " VALUES ("
+                + this.id + ", "
+                + this.name + ")";
+        return query;
+    }
+
+    @Override
+    public String getDeleteSQL() {
         String query = "DELETE * FROM " + this.tableName + " WHERE id = " + this.id;
         return query;
     }
 
     @Override
-    String getSelectSQL(int id) {
+    public String getSelectSQL(int id) {
         String query = "SELECT * FROM " + this.tableName + " WHERE id = " + id;
         return query;
     }

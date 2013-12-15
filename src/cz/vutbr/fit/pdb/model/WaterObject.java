@@ -25,19 +25,20 @@ public class WaterObject extends SpatialObject {
     }
 
     @Override
-    public String getStoreSQL() {
-        String query;
-        if (this.id == -1) {
-            query = "INSERT INTO water VALUES ("
-                    + "id_water_seq.NEXTVAL" + ", "
-                    + "(SELECT id FROM layers WHERE name = 'water')" + ", "
-                    + "'" + this.geometry + "')";
-        } else {
-            query = "UPDATE water"
-                    + " SET geometry = '" + this.geometry + "'"
-                    + " WHERE id = " + this.id;
-        }
+    public String getUpdateSQL() {
+        String query = "UPDATE water"
+                + " SET geometry = '" + this.geometry + "'"
+                + " WHERE id = " + this.id;
 
+        return query;
+    }
+
+    @Override
+    public String getInsertSQL() {
+        String query = "INSERT INTO water VALUES ("
+                + this.id + ", "
+                + "(SELECT id FROM layers WHERE name = 'water')" + ", "
+                + "'" + this.geometry + "')";
         return query;
     }
 

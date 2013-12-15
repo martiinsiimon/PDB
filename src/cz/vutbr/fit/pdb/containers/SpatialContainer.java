@@ -9,7 +9,6 @@ import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.BedsObject;
 import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.FencesObject;
-import cz.vutbr.fit.pdb.model.LayersObject;
 import cz.vutbr.fit.pdb.model.PathObject;
 import cz.vutbr.fit.pdb.model.SignObject;
 import cz.vutbr.fit.pdb.model.SoilObject;
@@ -19,7 +18,6 @@ import cz.vutbr.fit.pdb.model.WaterObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import oracle.spatial.geometry.JGeometry;
 
 /**
@@ -27,7 +25,7 @@ import oracle.spatial.geometry.JGeometry;
  * @author Martin Simon
  */
 public class SpatialContainer {
-    private DatabaseAPI db;
+    private final DatabaseAPI db;
 
     private Map<Integer, ArrayList<SpatialObject>> spatialObjectList;
     private SpatialObject selected;
@@ -178,80 +176,75 @@ public class SpatialContainer {
      *
      * @param _obj Object to add
      */
-    public void store(SignObject _obj) {
-        //TODO add object to container and to SQL queue
-        //TODO the action (insert/update) is determined from id
+    public void store(SpatialObject _obj) {
+        if (_obj.getId() == -1) {
+            /* New object without ID */
+            ArrayList<SpatialObject> lst = this.spatialObjectList.get(_obj.getLayer());
+            Integer lastId = -1;
+            for (SpatialObject obj : lst) {
+                if (lastId < obj.getId()) {
+                    lastId = obj.getId();
+                }
+            }
+
+            /* Set the new ID */
+            _obj.setId(lastId++);
+
+            /* Store the object to the container */
+            this.spatialObjectList.get(_obj.getLayer()).add(_obj);
+
+            /* Append SQL query to DB queue */
+            if (_obj instanceof BedsObject) {
+                this.db.insert((BedsObject) _obj);
+            } else if (_obj instanceof FencesObject) {
+                this.db.insert((FencesObject) _obj);
+            } else if (_obj instanceof PathObject) {
+                this.db.insert((PathObject) _obj);
+            } else if (_obj instanceof SignObject) {
+                this.db.insert((SignObject) _obj);
+            } else if (_obj instanceof SoilObject) {
+                this.db.insert((SoilObject) _obj);
+            } else if (_obj instanceof WaterObject) {
+                this.db.insert((WaterObject) _obj);
+            }
+        } else {
+            ArrayList<SpatialObject> lst = this.spatialObjectList.get(_obj.getLayer());
+            for (SpatialObject obj : lst) {
+                /* Find the correct record */
+                if (obj.getId() == _obj.getId()) {
+                    /* Update the record - common part*/
+                    this.spatialObjectList.get(_obj.getLayer()).get(lst.indexOf(obj)).setGeometry(_obj.getGeometry());
+
+                    /* Update the record - type specific part */
+                    if (_obj instanceof BedsObject) {
+                        ((BedsObject) this.spatialObjectList.get(_obj.getLayer()).
+                                get(lst.indexOf(obj))).setPlant(((BedsObject) _obj).getPlant());
+                        this.db.update((BedsObject) _obj);
+                    } else if (_obj instanceof FencesObject) {
+                        this.db.update((FencesObject) _obj);
+                    } else if (_obj instanceof PathObject) {
+                        this.db.update((PathObject) _obj);
+                    } else if (_obj instanceof SignObject) {
+                        ((SignObject) this.spatialObjectList.get(_obj.getLayer()).
+                                get(lst.indexOf(obj))).setDescription(((SignObject) _obj).getDescription());
+                        ((SignObject) this.spatialObjectList.get(_obj.getLayer()).
+                                get(lst.indexOf(obj))).setPlant(((SignObject) _obj).getPlant());
+                        this.db.update((SignObject) _obj);
+                    } else if (_obj instanceof SoilObject) {
+                        ((SoilObject) this.spatialObjectList.get(_obj.getLayer()).
+                                get(lst.indexOf(obj))).setSoilType(((SoilObject) _obj).getSoilType());
+                        this.db.update((SoilObject) _obj);
+                    } else if (_obj instanceof WaterObject) {
+                        this.db.update((WaterObject) _obj);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
-    /**
-     * Add given object to appropriate container and add a record to SQL queue.
-     *
-     * @param _obj Object to add
-     */
-    public void store(FencesObject _obj) {
-        //TODO add object to container and to SQL queue
-        //TODO the action (insert/update) is determined from id
-    }
+    //TODO add actions to store data types
 
-    /**
-     * Add given object to appropriate container and add a record to SQL queue.
-     *
-     * @param _obj Object to add
-     */
-    public void store(BedsObject _obj) {
-        //TODO add object to container and to SQL queue
-        //TODO the action (insert/update) is determined from id
-    }
-
-    /**
-     * Add given object to appropriate container and add a record to SQL queue.
-     *
-     * @param _obj Object to add
-     */
-    public void store(SoilObject _obj) {
-        //TODO add object to container and to SQL queue
-        //TODO the action (insert/update) is determined from id
-    }
-
-    /**
-     * Add given object to appropriate container and add a record to SQL queue.
-     *
-     * @param _obj Object to add
-     */
-    public void store(PathObject _obj) {
-        //TODO add object to container and to SQL queue
-        //TODO the action (insert/update) is determined from id
-    }
-
-    /**
-     * Add given object to appropriate container and add a record to SQL queue.
-     *
-     * @param _obj Object to add
-     */
-    public void store(WaterObject _obj) {
-        //TODO add object to container and to SQL queue
-        //TODO the action (insert/update) is determined from id
-    }
-
-    /**
-     * Remove given object from appropriate container and add a record to SQL
-     * queue.
-     *
-     * @param _obj Object to remove
-     */
-    public void remove(SignObject _obj) {
-        //TODO remove object from container and add a record to SQL queue
-    }
-
-    /**
-     * Remove given object from appropriate container and add a record to SQL
-     * queue.
-     *
-     * @param _obj Object to remove
-     */
-    public void remove(FencesObject _obj) {
-        //TODO remove object from container and add a record to SQL queue
-    }
 
     /**
      * Remove given object from appropriate container and add a record to SQL
@@ -259,38 +252,31 @@ public class SpatialContainer {
      *
      * @param _obj Object to remove
      */
-    public void remove(BedsObject _obj) {
-        //TODO remove object from container and add a record to SQL queue
-    }
+    public void delete(SpatialObject _obj) {
+        ArrayList<SpatialObject> lst = this.spatialObjectList.get(_obj.getLayer());
+        for (SpatialObject obj : lst) {
+            /* Find the correct record */
+            if (obj.getId() == _obj.getId()) {
+                /* Remove the record */
+                this.spatialObjectList.get(_obj.getLayer()).remove(obj);
 
-    /**
-     * Remove given object from appropriate container and add a record to SQL
-     * queue.
-     *
-     * @param _obj Object to remove
-     */
-    public void remove(SoilObject _obj) {
-        //TODO remove object from container and add a record to SQL queue
-    }
-
-    /**
-     * Remove given object from appropriate container and add a record to SQL
-     * queue.
-     *
-     * @param _obj Object to remove
-     */
-    public void remove(PathObject _obj) {
-        //TODO remove object from container and add a record to SQL queue
-    }
-
-    /**
-     * Remove given object from appropriate container and add a record to SQL
-     * queue.
-     *
-     * @param _obj Object to remove
-     */
-    public void remove(WaterObject _obj) {
-        //TODO remove object from container and add a record to SQL queue
+                /* Append SQL query by type to DB queue */
+                if (_obj instanceof BedsObject) {
+                    this.db.delete((BedsObject) _obj);
+                } else if (_obj instanceof FencesObject) {
+                    this.db.delete((FencesObject) _obj);
+                } else if (_obj instanceof PathObject) {
+                    this.db.delete((PathObject) _obj);
+                } else if (_obj instanceof SignObject) {
+                    this.db.delete((SignObject) _obj);
+                } else if (_obj instanceof SoilObject) {
+                    this.db.delete((SoilObject) _obj);
+                } else if (_obj instanceof WaterObject) {
+                    this.db.delete((WaterObject) _obj);
+                }
+                break;
+            }
+        }
     }
 
     /**
@@ -300,8 +286,23 @@ public class SpatialContainer {
      * @param _type Type of object
      * @param _id Id of object
      */
-    public void remove(int _type, int _id) {
-        //TODO remove object from container and add a record to SQL queue
+    public void delete(int _type, int _id) {
+        SpatialObject _obj = this.spatialObjectList.get(_type).get(_id);
+        this.spatialObjectList.get(_obj.getLayer()).remove(_obj);
+        if (_obj instanceof BedsObject) {
+            this.db.delete((BedsObject) _obj);
+        } else if (_obj instanceof FencesObject) {
+            this.db.delete((FencesObject) _obj);
+        } else if (_obj instanceof PathObject) {
+            this.db.delete((PathObject) _obj);
+        } else if (_obj instanceof SignObject) {
+            this.db.delete((SignObject) _obj);
+        } else if (_obj instanceof SoilObject) {
+            this.db.delete((SoilObject) _obj);
+        } else if (_obj instanceof WaterObject) {
+            this.db.delete((WaterObject) _obj);
+        }
+
     }
 }
 

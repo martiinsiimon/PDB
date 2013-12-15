@@ -63,13 +63,4 @@ public abstract class SpatialObject extends Table {
         this.hovered = hb;
     }
 
-
-    @Override
-    abstract String getStoreSQL();
-
-    @Override
-    abstract String getDeleteSQL();
-
-    @Override
-    abstract String getSelectSQL(int id);
 }

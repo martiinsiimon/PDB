@@ -48,45 +48,222 @@ public class DatabaseAPI {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    /* Set of insert/update queries                                          */
+    /* Set of update queries                                                 */
     ///////////////////////////////////////////////////////////////////////////
     /**
-     * Generate query to add/update sign into DB and append it to the internal
+     * Generate query to update object in DB and append it to the internal
      * queries stack
+     *
+     * @param _obj Object to update
      */
-    public void storeSign(SignObject obj) {
-        this.addQuery(obj.getStoreSQL());
+    public void update(BedsObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
     }
 
-    public void storeFence(/*fence object in java representation*/) {
-        //TODO implement
+    /**
+     * Generate query to update object in DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to update
+     */
+    public void update(SoilObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
     }
 
-    public void addTree(/*tree object in java representation*/) {
-        //TODO implement
+    /**
+     * Generate query to update object in DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to update
+     */
+    public void update(PathObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
     }
 
-    public void addBush(/*bush object in java representation*/) {
-        //TODO implement
+    /**
+     * Generate query to update object in DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to update
+     */
+    public void update(WaterObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
+    }
+
+    /**
+     * Generate query to update object in DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to update
+     */
+    public void update(FencesObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
+    }
+
+    /**
+     * Generate query to update object in DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to update
+     */
+    public void update(SignObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
+    }
+
+    /**
+     * Generate query to update object in DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to update
+     */
+    public void update(DataObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    /* Set of insert queries                                                 */
+    ///////////////////////////////////////////////////////////////////////////
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(BedsObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
+    }
+
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(SoilObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
+    }
+
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(PathObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
+    }
+
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(WaterObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
+    }
+
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(FencesObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
+    }
+
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(SignObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
+    }
+
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(DataObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
     }
 
     ///////////////////////////////////////////////////////////////////////////
     /* Set of delete queries                                                 */
     ///////////////////////////////////////////////////////////////////////////
-    public void delSign(SignObject obj) {
-        this.addQuery(obj.getDeleteSQL());
+    /**
+     * Generate query to delete object from DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to delete
+     */
+    public void delete(BedsObject _obj) {
+        this.addQuery(_obj.getDeleteSQL());
     }
 
-    public void delFence(/*sign object in java representation*/) {
-        //TODO implement
+    /**
+     * Generate query to delete object from DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to delete
+     */
+    public void delete(SoilObject _obj) {
+        this.addQuery(_obj.getDeleteSQL());
     }
 
-    public void delTree(/*tree object in java representation*/) {
-        //TODO implement
+    /**
+     * Generate query to delete object from DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to delete
+     */
+    public void delete(PathObject _obj) {
+        this.addQuery(_obj.getDeleteSQL());
     }
 
-    public void delBush(/*bush object in java representation*/) {
-        //TODO implement
+    /**
+     * Generate query to delete object from DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to delete
+     */
+    public void delete(WaterObject _obj) {
+        this.addQuery(_obj.getDeleteSQL());
+    }
+
+    /**
+     * Generate query to delete object from DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to delete
+     */
+    public void delete(FencesObject _obj) {
+        this.addQuery(_obj.getDeleteSQL());
+    }
+
+    /**
+     * Generate query to delete object from DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to delete
+     */
+    public void delete(SignObject _obj) {
+        this.addQuery(_obj.getDeleteSQL());
+    }
+
+    /**
+     * Generate query to delete object from DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to delete
+     */
+    public void delete(DataObject _obj) {
+        this.addQuery(_obj.getDeleteSQL());
     }
 
     /**

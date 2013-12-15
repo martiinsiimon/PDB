@@ -25,21 +25,22 @@ public class FencesObject extends SpatialObject {
     }
 
     @Override
-    public String getStoreSQL() {
-        String query;
-        if (this.id == -1) {
-            query = "INSERT INTO fences VALUES ("
-                    + "id_fences_seq.NEXTVAL" + ", "
-                    + "(SELECT id FROM layers WHERE name = 'fences')" + ", "
-                    + "'" + this.getGeometry() + "'" + ", "
-                    + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
-                    + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
-        } else {
-            query = "UPDATE fences"
-                    + " SET geometry = '" + this.getGeometry() + "'"
-                    + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
-        }
+    public String getUpdateSQL() {
+        String query = "UPDATE fences"
+                + " SET geometry = '" + this.geometry + "'"
+                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
 
+        return query;
+    }
+
+    @Override
+    public String getInsertSQL() {
+        String query = "INSERT INTO fences VALUES ("
+                + this.id + ", "
+                + "(SELECT id FROM layers WHERE name = 'fences')" + ", "
+                + "'" + this.geometry + "'" + ", "
+                + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
+                + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
         return query;
     }
 

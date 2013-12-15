@@ -47,25 +47,26 @@ public class SignObject extends SpatialObject {
     }
 
     @Override
-    public String getStoreSQL() {
-        String query;
-        if (this.getId() == -1) {
-            query = "INSERT INTO signs VALUES ("
-                    + "id_signs_seq.NEXTVAL" + ", "
-                    + "(SELECT id FROM layers WHERE name = 'signs')" + ", "
-                    + "'" + this.getGeometry() + "'" + ", "
-                    + "'" + this.getDescription() + "'" + ", "
-                    + this.getPlant() + ", "
-                    + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
-                    + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
-        } else {
-            query = "UPDATE signs"
-                    + " SET geometry = '" + this.getGeometry() + "'"
-                    + " SET description = '" + this.getDescription() + "'"
-                    + " SET plant = " + this.getPlant()
-                    + " WHERE id = " + this.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
-        }
+    public String getUpdateSQL() {
+        String query = "UPDATE signs"
+                + " SET geometry = '" + this.geometry + "'"
+                + " SET description = '" + this.description + "'"
+                + " SET plant = " + this.plant
+                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+        return query;
+    }
 
+    @Override
+    public String getInsertSQL() {
+        String query;
+        query = "INSERT INTO signs VALUES ("
+                + this.id + ", "
+                + "(SELECT id FROM layers WHERE name = 'signs')" + ", "
+                + "'" + this.geometry + "'" + ", "
+                + "'" + this.description + "'" + ", "
+                + this.plant + ", "
+                + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
+                + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
         return query;
     }
 
@@ -73,7 +74,7 @@ public class SignObject extends SpatialObject {
     public String getDeleteSQL() {
         String query = "UPDATE signs"
                 + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
-                + " WHERE id = " + this.getId() + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
         return query;
     }
 

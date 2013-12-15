@@ -32,7 +32,9 @@ public abstract class Table {
         return this.tableName;
     }
 
-    abstract String getStoreSQL();
+    abstract String getUpdateSQL();
+
+    abstract String getInsertSQL();
 
     abstract String getDeleteSQL();
 

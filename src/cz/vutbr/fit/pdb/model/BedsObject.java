@@ -41,23 +41,24 @@ public class BedsObject extends SpatialObject {
     }
 
     @Override
-    public String getStoreSQL() {
-        String query;
-        if (this.getId() == -1) {
-            query = "INSERT INTO beds VALUES ("
-                    + "id_beds_seq.NEXTVAL" + ", "
-                    + "(SELECT id FROM layers WHERE name = 'beds')" + ", "
-                    + "'" + this.getGeometry() + "'" + ", "
-                    + this.plant + ", "
-                    + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
-                    + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
-        } else {
-            query = "UPDATE beds"
-                    + " SET geometry = '" + this.geometry + "'"
-                    + " SET plant = " + this.plant
-                    + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
-        }
+    public String getUpdateSQL() {
+        String query = "UPDATE beds"
+                + " SET geometry = '" + this.geometry + "'"
+                + " SET plant = " + this.plant
+                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
 
+        return query;
+    }
+
+    @Override
+    public String getInsertSQL() {
+        String query = "INSERT INTO beds VALUES ("
+                + this.id + ", "
+                + "(SELECT id FROM layers WHERE name = 'beds')" + ", "
+                + "'" + this.geometry + "'" + ", "
+                + this.plant + ", "
+                + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
+                + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
         return query;
     }
 
