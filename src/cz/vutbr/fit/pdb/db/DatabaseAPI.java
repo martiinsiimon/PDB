@@ -1,9 +1,18 @@
 package cz.vutbr.fit.pdb.db;
 
 import cz.vutbr.fit.pdb.model.SignObject;
-import cz.vutbr.fit.pdb.containers.SpatialContainer;
-import java.util.Iterator;
-import java.util.List;
+import cz.vutbr.fit.pdb.model.BedsObject;
+import cz.vutbr.fit.pdb.model.DataObject;
+import cz.vutbr.fit.pdb.model.FencesObject;
+import cz.vutbr.fit.pdb.model.LayersObject;
+import cz.vutbr.fit.pdb.model.PathObject;
+import cz.vutbr.fit.pdb.model.PlantTypeObject;
+import cz.vutbr.fit.pdb.model.PlantsObject;
+import cz.vutbr.fit.pdb.model.SoilObject;
+import cz.vutbr.fit.pdb.model.SoilTypeObject;
+import cz.vutbr.fit.pdb.model.SpatialObject;
+import cz.vutbr.fit.pdb.model.WaterObject;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleResultSet;
@@ -23,43 +32,19 @@ public class DatabaseAPI {
     }
 
     /**
-     * Build generic select query and add it to query queue
-     *
-     * @param from Table to select from
-     * @param whatList List of columns to be returned
-     * @param whereList List of expressions which must be met
-     */
-    public void selectQuery(String from, List<String> whatList, List<String> whereList) {
-        String query = "SELECT ";
-        for (Iterator<String> iterator = whatList.iterator(); iterator.hasNext();) {
-            String what = iterator.next();
-            query += what;
-            if (iterator.hasNext()) {
-                query += ", ";
-            }
-        }
-
-        query += " FROM " + from
-                + " WHERE ";
-
-        for (Iterator<String> iterator = whereList.iterator(); iterator.hasNext();) {
-            String where = iterator.next();
-            query += where;
-            if (iterator.hasNext()) {
-                query += ", ";
-            }
-        }
-
-        this.addQuery(query);
-    }
-
-    /**
      * Add query given in parameter to query queue
      *
      * @param query SQL query
      */
     private void addQuery(String query) {
         this.connector.addQuery(query);
+    }
+
+    /**
+     * Delete last query in query queue - step back
+     */
+    public void deleteLastQuery() {
+        this.connector.delCommit();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -112,25 +97,470 @@ public class DatabaseAPI {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    /* Set of select queries                                                 */
+    /* Set of select by id queries                                           */
     ///////////////////////////////////////////////////////////////////////////
-    public SignObject getSign(int id) {
+    /**
+     * Get a beds object determined by id from database
+     *
+     * @param id Identificator of the object
+     * @return Java object or null if
+     */
+    public BedsObject getBedsByID(int id) {
         try {
-            return new SignObject((OracleResultSet) this.connector.executeQueryWithResults(new SignObject().getSelectSQL(id)));
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new BedsObject().getSelectSQL(id));
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return null;
+            } else {
+                /* The ResultSet is not empty */
+                return new BedsObject(rs);
+            }
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
-            return new SignObject();
+            return null;
         }
     }
 
-    public SpatialContainer getSigns() {
+    /**
+     * Get a soil object determined by id from database
+     *
+     * @param id Identificator of the object
+     * @return Java object or null if
+     */
+    public SoilObject getSoilByID(int id) {
         try {
-            //return new SpatialContainer((OracleResultSet) this.connector.executeQueryWithResults(SignObject.getAllSQL()));
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SoilObject().getSelectSQL(id));
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return null;
+            } else {
+                /* The ResultSet is not empty */
+                return new SoilObject(rs);
+            }
         } catch (Exception e) {
             Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
-        } finally {
             return null;
+        }
+    }
+
+    /**
+     * Get a path object determined by id from database
+     *
+     * @param id Identificator of the object
+     * @return Java object or null if
+     */
+    public PathObject getPathByID(int id) {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PathObject().getSelectSQL(id));
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return null;
+            } else {
+                /* The ResultSet is not empty */
+                return new PathObject(rs);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
+    }
+
+    /**
+     * Get a water object determined by id from database
+     *
+     * @param id Identificator of the object
+     * @return Java object or null if
+     */
+    public WaterObject getWaterByID(int id) {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new WaterObject().getSelectSQL(id));
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return null;
+            } else {
+                /* The ResultSet is not empty */
+                return new WaterObject(rs);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
+    }
+
+    /**
+     * Get a fences object determined by id from database
+     *
+     * @param id Identificator of the object
+     * @return Java object or null if
+     */
+    public FencesObject getFencesByID(int id) {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new FencesObject().getSelectSQL(id));
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return null;
+            } else {
+                /* The ResultSet is not empty */
+                return new FencesObject(rs);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
+    }
+
+    /**
+     * Get a sign object determined by id from database
+     *
+     * @param id Identificator of the object
+     * @return Java object or null if
+     */
+    public SignObject getSignByID(int id) {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SignObject().getSelectSQL(id));
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return null;
+            } else {
+                /* The ResultSet is not empty */
+                return new SignObject(rs);
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    /* Set of select all queries                                             */
+    ///////////////////////////////////////////////////////////////////////////
+    /**
+     * Get all the beds objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of BedsObject objects
+     */
+    public ArrayList<SpatialObject> getBedsAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new BedsObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<SpatialObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+
+                /* Add the first object */
+                lst.add(new BedsObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new BedsObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<SpatialObject>();
+        }
+    }
+
+    /**
+     * Get all the soil objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of SpatialObject objects
+     */
+    public ArrayList<SpatialObject> getSoilAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SoilObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<SpatialObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+
+                /* Add the first object */
+                lst.add(new SoilObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new SoilObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<SpatialObject>();
+        }
+    }
+
+    /**
+     * Get all the path objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of SpatialObject objects
+     */
+    public ArrayList<SpatialObject> getPathAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PathObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<SpatialObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+
+                /* Add the first object */
+                lst.add(new PathObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new PathObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<SpatialObject>();
+        }
+    }
+
+    /**
+     * Get all the water objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of SpatialObject objects
+     */
+    public ArrayList<SpatialObject> getWaterAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new WaterObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<SpatialObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+
+                /* Add the first object */
+                lst.add(new WaterObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new WaterObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<SpatialObject>();
+        }
+    }
+
+    /**
+     * Get all the fences objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of SpatialObject objects
+     */
+    public ArrayList<SpatialObject> getFencesAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new FencesObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<SpatialObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+
+                /* Add the first object */
+                lst.add(new FencesObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new FencesObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<SpatialObject>();
+        }
+    }
+
+    /**
+     * Get all the sign objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of SpatialObject objects
+     */
+    public ArrayList<SpatialObject> getSignAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SignObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<SpatialObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+
+                /* Add the first object */
+                lst.add(new SignObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new SignObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<SpatialObject>();
+        }
+    }
+
+    /**
+     * Get all the layers objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of DataObject objects
+     */
+    public ArrayList<DataObject> getLayersAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new LayersObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<DataObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<DataObject> lst = new ArrayList<DataObject>();
+
+                /* Add the first object */
+                lst.add(new LayersObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new LayersObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<DataObject>();
+        }
+    }
+
+    /**
+     * Get all the soil_type objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of DataObject objects
+     */
+    public ArrayList<DataObject> getSoilTypeAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new SoilTypeObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<DataObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<DataObject> lst = new ArrayList<DataObject>();
+
+                /* Add the first object */
+                lst.add(new SoilTypeObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new SoilTypeObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<DataObject>();
+        }
+    }
+
+    /**
+     * Get all the plant_type objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of DataObject objects
+     */
+    public ArrayList<DataObject> getPlantTypeAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PlantTypeObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<DataObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<DataObject> lst = new ArrayList<DataObject>();
+
+                /* Add the first object */
+                lst.add(new PlantTypeObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new PlantTypeObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<DataObject>();
+        }
+    }
+
+    /**
+     * Get all the plants objects from DB and return a list of their Java
+     * representatives
+     *
+     * @return List of PlantsObject objects
+     */
+    public ArrayList<DataObject> getPlantsAll() {
+        try {
+            OracleResultSet rs = (OracleResultSet) this.connector.executeQueryWithResults(new PlantsObject().getAllSQL());
+            if (!rs.next()) {
+                /* The ResultSet is empty */
+                return new ArrayList<DataObject>();
+            } else {
+                /* The ResultSet is not empty */
+                ArrayList<DataObject> lst = new ArrayList<DataObject>();
+
+                /* Add the first object */
+                lst.add(new PlantsObject(rs));
+
+                /* Add all the remaining objects */
+                while (rs.next()) {
+                    lst.add(new PlantsObject(rs));
+                }
+
+                /* Return the list */
+                return lst;
+            }
+        } catch (Exception e) {
+            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            return new ArrayList<DataObject>();
         }
     }
 }

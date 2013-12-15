@@ -5,8 +5,11 @@
 package cz.vutbr.fit.pdb.containers;
 
 
+import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.BedsObject;
+import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.FencesObject;
+import cz.vutbr.fit.pdb.model.LayersObject;
 import cz.vutbr.fit.pdb.model.PathObject;
 import cz.vutbr.fit.pdb.model.SignObject;
 import cz.vutbr.fit.pdb.model.SoilObject;
@@ -17,38 +20,105 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import oracle.spatial.geometry.JGeometry;
 
 /**
  *
  * @author Martin Simon
  */
 public class SpatialContainer {
+    private DatabaseAPI db;
 
     private Map<Integer, ArrayList<SpatialObject>> spatialObjectList;
     private SpatialObject selected;
     private SpatialObject hovered;
+    private ArrayList<DataObject> layers;
 
-    public SpatialContainer(){
-        spatialObjectList = new HashMap<Integer, ArrayList<SpatialObject>>();
-        selected = null;
-        hovered = null;
+    public SpatialContainer(String login, String password) {
+        this.spatialObjectList = new HashMap<Integer, ArrayList<SpatialObject>>();
+        this.layers = null;
+        this.selected = null;
+        this.hovered = null;
+
+        this.db = new DatabaseAPI(login, password);
     }
 
     /**
      * Connect to DB and fill appropriate containers
      */
     public void initialize() {
-        //TODO get all objects from DB and fill appripriate containers
+        if (this.layers != null) {
+            /* Repeated initialization - need to clear the map and array */
+            this.spatialObjectList.clear();
+            this.layers.clear();
+            this.selected = null;
+            this.hovered = null;
+        }
+
+        /* Get the layers and store them */
+        this.layers = this.db.getLayersAll();
+
+        /* For every type of object get all of occurences from db and store them
+         * under appropriate integer into spatialObjectList */
+        ArrayList<SpatialObject> tmp = this.db.getBedsAll();
+        if (!tmp.isEmpty()) {
+            int layer = tmp.get(0).getLayer();
+            this.spatialObjectList.put(layer, tmp);
+        }
+        tmp.clear();
+
+        tmp = this.db.getFencesAll();
+        if (!tmp.isEmpty()) {
+            int layer = tmp.get(0).getLayer();
+            this.spatialObjectList.put(layer, tmp);
+        }
+        tmp.clear();
+
+        tmp = this.db.getPathAll();
+        if (!tmp.isEmpty()) {
+            int layer = tmp.get(0).getLayer();
+            this.spatialObjectList.put(layer, tmp);
+        }
+        tmp.clear();
+
+        tmp = this.db.getSignAll();
+        if (!tmp.isEmpty()) {
+            int layer = tmp.get(0).getLayer();
+            this.spatialObjectList.put(layer, tmp);
+        }
+        tmp.clear();
+
+        tmp = this.db.getSoilAll();
+        if (!tmp.isEmpty()) {
+            int layer = tmp.get(0).getLayer();
+            this.spatialObjectList.put(layer, tmp);
+        }
+        tmp.clear();
+
+        tmp = this.db.getWaterAll();
+        if (!tmp.isEmpty()) {
+            int layer = tmp.get(0).getLayer();
+            this.spatialObjectList.put(layer, tmp);
+        }
+        tmp.clear();
     }
 
     /**
      * Return a list of geometries of all object on the map. The list is sorted
      * in draw order (first object - first to draw)
      *
+     * @return List of all geometries in order to draw
      */
-    public void getGeometries() {
-        //TODO go through all the list and create a list of all of them
-        //TODO return value
+    public ArrayList<JGeometry> getGeometries() {
+        ArrayList<JGeometry> geometries = new ArrayList<JGeometry>();
+        for (DataObject layer : layers) { //TODO is the order unsured?
+            ArrayList<SpatialObject> lst = this.spatialObjectList.get(layer.getId());
+            for (SpatialObject obj : lst) {
+                geometries.add(obj.getGeometry());
+            }
+        }
+
+        return geometries;
     }
 
     /**
@@ -57,10 +127,16 @@ public class SpatialContainer {
      * to draw)
      *
      * @param _layer Id of layer to draw
+     * @return List of geometries in layer determined by param
      */
-    public void getGeometries(int _layer) {
-        //TODO go through the list determined by argument and create a list
-        //TODO return value
+    public ArrayList<JGeometry> getGeometries(int _layer) {
+        ArrayList<JGeometry> geometries = new ArrayList<JGeometry>();
+
+        ArrayList<SpatialObject> lst = this.spatialObjectList.get(_layer);
+        for (SpatialObject obj : lst) {
+            geometries.add(obj.getGeometry());
+        }
+        return geometries;
     }
 
     /**
@@ -77,87 +153,25 @@ public class SpatialContainer {
      * Clear the selected flag from all the objects.
      */
     public void deselectAll() {
-        //TODO fix it
-        Set<Integer> keys = spatialObjectList.keySet();
-        for (Integer i : keys) {
-            ArrayList<SpatialObject> layerItems = spatialObjectList.get(i);
-            for (SpatialObject so : layerItems) {
-                so.setSelection(false);
+        for (DataObject layer : layers) {
+            ArrayList<SpatialObject> lst = this.spatialObjectList.get(layer.getId());
+            for (SpatialObject obj : lst) {
+                obj.setSelection(false);
             }
         }
     }
 
     /**
-     * Return object marked as selected. SignObject variant.
+     * Return object marked as selected. General SpatialObject variant.
      *
-     * Note: To determine object type see selectObject method.
+     * Note: To determine object type try instanceof operator.
      *
-     * @return Selected object or null if incorrect type or no object selected
+     * @return Selected object or null if no object selected
      */
-    public SignObject getSelectedSign() {
-        //TODO determine selected object and return it
-        return new SignObject();
+    public SpatialObject getSelected() {
+        return this.selected;
     }
 
-    /**
-     * Return object marked as selected. FencesObject variant.
-     *
-     * Note: To determine object type see selectObject method.
-     *
-     * @return Selected object or null if incorrect type or no object selected
-     */
-    public FencesObject getSelectedFences() {
-        //TODO determine selected object and return it
-        return new FencesObject();
-    }
-
-    /**
-     * Return object marked as selected. BedsObject variant.
-     *
-     * Note: To determine object type see selectObject method.
-     *
-     * @return Selected object or null if incorrect type or no object selected
-     */
-    public BedsObject getSelectedBeds() {
-        //TODO determine selected object and return it
-        return new BedsObject();
-    }
-
-    /**
-     * Return object marked as selected. SoilObject variant.
-     *
-     * Note: To determine object type see selectObject method.
-     *
-     * @return Selected object or null if incorrect type or no object selected
-     */
-    public SoilObject getSelectedSoil() {
-        //TODO determine selected object and return it
-        return new SoilObject();
-    }
-
-    /**
-     * Return object marked as selected. PathObject variant.
-     *
-     * Note: To determine object type see selectObject method.
-     *
-     * @return Selected object or null if incorrect type or no object selected
-     */
-    public PathObject getSelectedPath() {
-        //TODO determine selected object and return it
-        return new PathObject();
-    }
-
-    /**
-     * Return object marked as selected. WaterObject variant.
-     *
-     * Note: To determine object type see selectObject method.
-     *
-     * @return Selected object or null if incorrect type or no object selected
-     */
-    public WaterObject getSelectedWater() {
-        //TODO determine selected object and return it
-        return new WaterObject();
-    }
 
     /**
      * Add given object to appropriate container and add a record to SQL queue.
