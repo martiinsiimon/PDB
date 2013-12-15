@@ -14,3 +14,4 @@
 lib/nblibraries.properties
 nbbuild.xml
 manifest.mf
+/dist/
