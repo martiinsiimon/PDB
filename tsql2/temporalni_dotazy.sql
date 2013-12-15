@@ -64,7 +64,7 @@ INSERT INTO signs (id, layer, geometry, description, plant, date_from, date_to)
 
 
 -- DELETE temporalne promenlivych dat:
--- Odstran ploty, ktere byly do zahrady instalovany 8.4.20111
+-- Odstran ploty, ktere byly do zahrady instalovany 8.4.2011
 --
 -- ATSQL:
 VALIDTIME PERIOD[2013/04/08-2013/04/09) DELETE FROM fences;
