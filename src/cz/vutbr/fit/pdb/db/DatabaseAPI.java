@@ -12,6 +12,7 @@ import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.model.WaterObject;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -55,6 +56,18 @@ public class DatabaseAPI {
      */
     public void resetDBData() {
         this.connector.resetData(null);
+
+        ArrayList<DataObject> plants = this.getPlantsAll();
+        for (DataObject o : plants) {
+            File f = new File("assets/pict/" + o.getName() + ".jpg");
+            if (f.exists()) {
+                /* Add image */
+                this.connector.storeImage((PlantsObject) o, f.getPath());
+            } else {
+                System.out.println("File assets/pict/" + o.getName() + ".jpg not found (" + f.getPath() + ")");
+            }
+
+        }
     }
 
     /**
@@ -65,6 +78,17 @@ public class DatabaseAPI {
      */
     public void resetDBData(String _path) {
         this.connector.resetData(_path);
+
+        ArrayList<DataObject> plants = this.getPlantsAll();
+        for (DataObject o : plants) {
+            File f = new File("assets/pict/" + o.getName() + ".jpg");
+            if (f.exists()) {
+                /* Add image */
+                this.connector.storeImage((PlantsObject) o, f.getPath());
+            } else {
+                System.out.println("File assets/pict/" + o.getName() + ".jpg not found (" + f.getPath() + ")");
+            }
+        }
     }
     ///////////////////////////////////////////////////////////////////////////
     /* Set of update queries                                                 */
@@ -127,6 +151,22 @@ public class DatabaseAPI {
      */
     public void update(SignObject _obj) {
         this.addQuery(_obj.getUpdateSQL());
+    }
+
+    /**
+     * Generate query to update object in DB and append it to the internal
+     * queries stack. This method also contains multimedia upload.
+     *
+     * @param _obj Object to update
+     */
+    public void update(PlantsObject _obj) {
+        this.addQuery(_obj.getUpdateSQL());
+
+        File f = new File("assets/pict/" + _obj.getName() + ".jpg");
+        if (f.exists()) {
+            /* Add image */
+            this.connector.storeImage(_obj, f.getPath());
+        }
     }
 
     /**
@@ -200,6 +240,22 @@ public class DatabaseAPI {
      */
     public void insert(SignObject _obj) {
         this.addQuery(_obj.getInsertSQL());
+    }
+
+    /**
+     * Generate query to insert object into DB and append it to the internal
+     * queries stack
+     *
+     * @param _obj Object to insert
+     */
+    public void insert(PlantsObject _obj) {
+        this.addQuery(_obj.getInsertSQL());
+
+        File f = new File("assets/pict/" + _obj.getName() + ".jpg");
+        if (f.exists()) {
+            /* Add image */
+            this.connector.storeImage(_obj, f.getPath());
+        }
     }
 
     /**

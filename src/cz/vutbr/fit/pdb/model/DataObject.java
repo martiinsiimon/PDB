@@ -39,8 +39,8 @@ public class DataObject extends Table {
     @Override
     public String getUpdateSQL() {
         String query;
-        query = "UPDATE signs"
-                + " SET name = '" + this.tableName + "'"
+        query = "UPDATE " + this.tableName
+                + " SET name = '" + this.name + "'"
                 + " WHERE id = " + this.id;
         return query;
     }
