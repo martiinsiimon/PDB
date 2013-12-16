@@ -20,10 +20,12 @@ public class DataObject extends Table {
 
     public DataObject() {
         this.id = -1;
+        this.name = "";
     }
 
     public DataObject(OracleResultSet rset) throws Exception {
         this.id = rset.getInt("id");
+        this.name = rset.getString("name");
     }
 
     public void setName(String _name) {
