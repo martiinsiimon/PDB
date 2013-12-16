@@ -12,23 +12,26 @@ import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.model.WaterObject;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleResultSet;
 
 /**
+ * Database application program interface. Contains methods to access the DB and
+ * connector to execute queries
  *
  * @author Martin Simon
  */
 public class DatabaseAPI {
-
-
     Connector connector;
 
+    /**
+     * Constructor of DatabaseAPI.
+     *
+     * @param login Username to access database
+     * @param password Password to access database
+     */
     public DatabaseAPI(String login, String password) {
-
         this.connector = new Connector(login, password);
     }
 
@@ -42,7 +45,7 @@ public class DatabaseAPI {
     }
 
     /**
-     * Delete last query in query queue - step back
+     * Delete last query in query queue - step back.
      */
     public void deleteLastQuery() {
         this.connector.delCommit();
@@ -268,7 +271,7 @@ public class DatabaseAPI {
     }
 
     /**
-     * Commit all update/insert/delete queries in the stack
+     * Commit all update/insert/delete queries in the stack to the database.
      */
     public void commit() {
         this.connector.executeQuery();
@@ -293,11 +296,9 @@ public class DatabaseAPI {
                 /* The ResultSet is not empty */
                 return new BedsObject(rs);
             }
-        } catch (java.sql.SQLSyntaxErrorException e) {
-            System.out.println("Table of beds does not exists");
-            return null;
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return null;
         }
     }
@@ -318,11 +319,9 @@ public class DatabaseAPI {
                 /* The ResultSet is not empty */
                 return new SoilObject(rs);
             }
-        } catch (SQLException e) {
-            System.out.println("Table of soils does not exists");
-            return null;
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return null;
         }
     }
@@ -343,11 +342,9 @@ public class DatabaseAPI {
                 /* The ResultSet is not empty */
                 return new PathObject(rs);
             }
-        } catch (SQLException e) {
-            System.out.println("Table of pathes does not exists");
-            return null;
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return null;
         }
     }
@@ -368,11 +365,9 @@ public class DatabaseAPI {
                 /* The ResultSet is not empty */
                 return new WaterObject(rs);
             }
-        } catch (SQLException e) {
-            System.out.println("Table of water objects does not exists");
-            return null;
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return null;
         }
     }
@@ -393,11 +388,9 @@ public class DatabaseAPI {
                 /* The ResultSet is not empty */
                 return new FencesObject(rs);
             }
-        } catch (SQLException e) {
-            System.out.println("Table of fences does not exists");
-            return null;
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return null;
         }
     }
@@ -418,11 +411,9 @@ public class DatabaseAPI {
                 /* The ResultSet is not empty */
                 return new SignObject(rs);
             }
-        } catch (SQLException e) {
-            System.out.println("Table of signs does not exists");
-            return null;
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return null;
         }
     }
@@ -457,11 +448,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of beds does not exists");
-            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<SpatialObject>();
         }
     }
@@ -493,11 +482,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of soils does not exists");
-            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<SpatialObject>();
         }
     }
@@ -529,11 +516,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of pathes does not exists");
-            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<SpatialObject>();
         }
     }
@@ -565,11 +550,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of water objects does not exists");
-            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<SpatialObject>();
         }
     }
@@ -601,11 +584,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of fences does not exists");
-            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<SpatialObject>();
         }
     }
@@ -637,11 +618,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of signs does not exists");
-            return new ArrayList<SpatialObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<SpatialObject>();
         }
     }
@@ -673,11 +652,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of layers does not exists");
-            return new ArrayList<DataObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<DataObject>();
         }
     }
@@ -709,11 +686,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of soil type does not exists");
-            return new ArrayList<DataObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<DataObject>();
         }
     }
@@ -745,11 +720,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of plant_type does not exists");
-            return new ArrayList<DataObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<DataObject>();
         }
     }
@@ -781,11 +754,9 @@ public class DatabaseAPI {
                 /* Return the list */
                 return lst;
             }
-        } catch (SQLException e) {
-            System.out.println("Table of plants does not exists");
-            return new ArrayList<DataObject>();
         } catch (Exception e) {
-            Logger.getLogger(DatabaseAPI.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(e.getMessage());
+            System.out.println("Exception: " + e.getMessage());
             return new ArrayList<DataObject>();
         }
     }

@@ -6,13 +6,12 @@ import cz.vutbr.fit.pdb.model.LayersObject;
 import cz.vutbr.fit.pdb.model.PlantTypeObject;
 import cz.vutbr.fit.pdb.model.PlantsObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
-import cz.vutbr.fit.pdb.model.SpatialObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Container for data objects
+ * Container of data objects
  *
  * @author Martin Simon <martiin.siimon@gmail.com>
  */
@@ -21,6 +20,12 @@ public class DataContainer {
     private Map<Integer, ArrayList<DataObject>> dataObjectList;
     private Map<String, Integer> dataType;
 
+    /**
+     * Constructor of DataContainer. Variant with DatabaseAPI given in
+     * parameter.
+     *
+     * @param _db DatabaseAPI reference to access database objects
+     */
     public DataContainer(DatabaseAPI _db) {
         this.dataObjectList = new HashMap<Integer, ArrayList<DataObject>>();
         this.dataType = new HashMap<String, Integer>();
@@ -28,6 +33,13 @@ public class DataContainer {
         this.db = _db;
     }
 
+    /**
+     * Constructor of DataContainer. Variant with username and password in
+     * parameter.
+     *
+     * @param login Username to access database
+     * @param password Password to access database
+     */
     public DataContainer(String login, String password) {
         this.dataObjectList = new HashMap<Integer, ArrayList<DataObject>>();
         this.dataType = new HashMap<String, Integer>();
@@ -206,7 +218,7 @@ public class DataContainer {
                 /* Remove the record */
                 this.dataObjectList.get(id).remove(obj);
 
-                /* Append SQL query by type to DB queue */
+                /* Append SQL query to DB queue */
                 this.db.delete(_obj);
                 break;
             }

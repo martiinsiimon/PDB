@@ -13,13 +13,15 @@ import java.util.logging.Logger;
 import oracle.jdbc.pool.OracleDataSource;
 
 /**
+ * Class representing connection to the database and git-like system.
+ *
  * TODO: edit class to run in separate thread
  *
  * @author Martin Simon
  */
 public class Connector {
 
-    private static String url = "jdbc:oracle:thin:@berta.fit.vutbr.cz:1522:dbfit";
+    private static final String url = "jdbc:oracle:thin:@berta.fit.vutbr.cz:1522:dbfit";
     private final String login;
     private final String password;
     private Stack<String> queries;
@@ -31,7 +33,7 @@ public class Connector {
     }
 
     /**
-     * Add a query to the internal stack
+     * Add a query to the internal stack.
      *
      * @param query Query to be added to the queue
      */
@@ -40,14 +42,14 @@ public class Connector {
     }
 
     /**
-     * Delete the last commit from queue
+     * Delete the last commit from queue.
      */
     public void delCommit() {
         this.queries.pop();
     }
 
     /**
-     * Returns connection to DB
+     * Returns connection to DB.
      *
      * @return New connection to database
      * @throws SQLException
@@ -64,7 +66,7 @@ public class Connector {
     }
 
     /**
-     * Execute update (insert,update,delete) queries stored in internal stack
+     * Execute update (insert,update,delete) queries stored in internal stack.
      */
     public void executeQuery() {
         try {
@@ -90,14 +92,20 @@ public class Connector {
                 /* Close connection */
                 conn.close();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
 
         this.queries.clear();
     }
 
-
+    /**
+     * Execute query given in parameter and return ResultSet of the query.
+     *
+     * @param query String containing select SQL query
+     * @return ResultSet of result of the select query
+     */
     public ResultSet executeQueryWithResults(String query) {
         /* Execute query in parameter and return ResultSet */
         ResultSet result = null;
@@ -116,8 +124,9 @@ public class Connector {
                 /* Close connection */
                 conn.close();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Connector.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
         }
 
         /* Return result */

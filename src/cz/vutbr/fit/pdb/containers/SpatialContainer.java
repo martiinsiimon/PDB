@@ -17,7 +17,9 @@ import cz.vutbr.fit.pdb.model.WaterObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 import oracle.spatial.geometry.JGeometry;
 
 /**
@@ -34,6 +36,12 @@ public class SpatialContainer {
     private SpatialObject hovered;
     private ArrayList<DataObject> layers;
 
+    /**
+     * Constructor of SpatialContainer.
+     *
+     * @param login Username to access database
+     * @param password Password to access database
+     */
     public SpatialContainer(String login, String password) {
         this.spatialObjectList = new HashMap<Integer, ArrayList<SpatialObject>>();
         this.layers = null;
@@ -44,7 +52,7 @@ public class SpatialContainer {
     }
 
     /**
-     * Connect to DB and fill appropriate containers
+     * Connect to DB and fill appropriate containers.
      */
     public void initialize() {
         if (this.layers != null) {
@@ -104,6 +112,64 @@ public class SpatialContainer {
     }
 
     /**
+     * Append layers given in parameter to the stored list of layers.
+     *
+     * @param _layers ArrayList of layers to append
+     */
+    public void addLayers(ArrayList<DataObject> _layers) {
+        if (this.layers == null) {
+            this.layers = _layers;
+        } else {
+            this.layers.addAll(_layers);
+        }
+    }
+
+    /**
+     * Replace layers with list given in parameter.
+     *
+     * @param _layers ArrayList of layers to replace with
+     */
+    public void replaceLayers(ArrayList<DataObject> _layers) {
+        if (this.layers == null) {
+            this.layers = _layers;
+        } else {
+            this.layers.clear();
+            this.layers.addAll(_layers);
+        }
+    }
+
+    /**
+     * Append (or update) layer given in parameter to the stored list of layers.
+     *
+     * @param _layer Layer to append (or update, if already exists)
+     */
+    public void addLayer(DataObject _layer) {
+        if (this.layers == null) {
+            this.layers = new ArrayList<DataObject>();
+            this.layers.add(_layer);
+        } else {
+            this.layers.add(_layer);
+        }
+    }
+
+    /**
+     * Remove layer given in parameter from the stored list of layers or do
+     * nothing if the layer does not exists.
+     *
+     * @param _layer Layer to remove
+     */
+    public void removeLayer(DataObject _layer) {
+        if (this.layers != null && !this.layers.isEmpty()) {
+            for (DataObject l : this.layers) {
+                if (l.getName().equals(_layer.getName())) {
+                    this.layers.remove(l);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
      * Return a list of geometries of all object on the map. The list is sorted
      * in draw order (first object - first to draw)
      *
@@ -111,7 +177,7 @@ public class SpatialContainer {
      */
     public ArrayList<JGeometry> getGeometries() {
         ArrayList<JGeometry> geometries = new ArrayList<JGeometry>();
-        for (DataObject layer : layers) { //TODO is the order unsured?
+        for (DataObject layer : this.layers) { //TODO is the order unsured?
             ArrayList<SpatialObject> lst = this.spatialObjectList.get(layer.getId());
             for (SpatialObject obj : lst) {
                 geometries.add(obj.getGeometry());
@@ -153,6 +219,10 @@ public class SpatialContainer {
      * Clear the selected flag from all the objects.
      */
     public void deselectAll() {
+        this.selected = null;
+        if (this.spatialObjectList.isEmpty()) {
+            return;
+        }
         for (DataObject layer : layers) {
             ArrayList<SpatialObject> lst = this.spatialObjectList.get(layer.getId());
             for (SpatialObject obj : lst) {
@@ -185,67 +255,72 @@ public class SpatialContainer {
      * @param _obj Object to add
      */
     public void store(SpatialObject _obj) {
-        if (_obj.getId() == -1) {
-            /* New object without ID */
-            ArrayList<SpatialObject> lst = this.spatialObjectList.get(_obj.getLayer());
-            Integer lastId = -1;
-            for (SpatialObject obj : lst) {
-                if (lastId < obj.getId()) {
-                    lastId = obj.getId();
-                }
-            }
-
-            /* Set the new ID */
-            _obj.setId(lastId++);
-
-            /* Store the object to the container */
-            this.spatialObjectList.get(_obj.getLayer()).add(_obj);
-
-            /* Append SQL query to DB queue */
-            if (_obj instanceof BedsObject) {
-                this.db.insert((BedsObject) _obj);
-            } else if (_obj instanceof FencesObject) {
-                this.db.insert((FencesObject) _obj);
-            } else if (_obj instanceof PathObject) {
-                this.db.insert((PathObject) _obj);
-            } else if (_obj instanceof SignObject) {
-                this.db.insert((SignObject) _obj);
-            } else if (_obj instanceof SoilObject) {
-                this.db.insert((SoilObject) _obj);
-            } else if (_obj instanceof WaterObject) {
-                this.db.insert((WaterObject) _obj);
-            }
+        if (this.spatialObjectList.isEmpty()) {
+            ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+            lst.add(_obj);
+            this.spatialObjectList.put(_obj.getLayer(), lst);
         } else {
             ArrayList<SpatialObject> lst = this.spatialObjectList.get(_obj.getLayer());
-            for (SpatialObject obj : lst) {
-                /* Find the correct record */
-                if (obj.getId() == _obj.getId()) {
-                    /* Update the record - common part*/
-                    this.spatialObjectList.get(_obj.getLayer()).get(lst.indexOf(obj)).setGeometry(_obj.getGeometry());
-
-                    /* Update the record - type specific part */
-                    if (_obj instanceof BedsObject) {
-                        ((BedsObject) this.spatialObjectList.get(_obj.getLayer()).
-                                get(lst.indexOf(obj))).setPlant(((BedsObject) _obj).getPlant());
-                        this.db.update((BedsObject) _obj);
-                    } else if (_obj instanceof FencesObject) {
-                        this.db.update((FencesObject) _obj);
-                    } else if (_obj instanceof PathObject) {
-                        this.db.update((PathObject) _obj);
-                    } else if (_obj instanceof SignObject) {
-                        ((SignObject) this.spatialObjectList.get(_obj.getLayer()).
-                                get(lst.indexOf(obj))).setDescription(((SignObject) _obj).getDescription());
-                        ((SignObject) this.spatialObjectList.get(_obj.getLayer()).
-                                get(lst.indexOf(obj))).setPlant(((SignObject) _obj).getPlant());
-                        this.db.update((SignObject) _obj);
-                    } else if (_obj instanceof SoilObject) {
-                        ((SoilObject) this.spatialObjectList.get(_obj.getLayer()).
-                                get(lst.indexOf(obj))).setSoilType(((SoilObject) _obj).getSoilType());
-                        this.db.update((SoilObject) _obj);
-                    } else if (_obj instanceof WaterObject) {
-                        this.db.update((WaterObject) _obj);
+            if (_obj.getId() == -1) {
+                /* New object without ID */
+                Integer lastId = -1;
+                for (SpatialObject obj : lst) {
+                    if (lastId < obj.getId()) {
+                        lastId = obj.getId();
                     }
-                    break;
+                }
+
+                /* Set the new ID */
+                _obj.setId(lastId++);
+
+                /* Store the object to the container */
+                this.spatialObjectList.get(_obj.getLayer()).add(_obj);
+
+                /* Append SQL query to DB queue */
+                if (_obj instanceof BedsObject) {
+                    this.db.insert((BedsObject) _obj);
+                } else if (_obj instanceof FencesObject) {
+                    this.db.insert((FencesObject) _obj);
+                } else if (_obj instanceof PathObject) {
+                    this.db.insert((PathObject) _obj);
+                } else if (_obj instanceof SignObject) {
+                    this.db.insert((SignObject) _obj);
+                } else if (_obj instanceof SoilObject) {
+                    this.db.insert((SoilObject) _obj);
+                } else if (_obj instanceof WaterObject) {
+                    this.db.insert((WaterObject) _obj);
+                }
+            } else {
+                for (SpatialObject obj : lst) {
+                    /* Find the correct record */
+                    if (obj.getId() == _obj.getId()) {
+                        /* Update the record - common part*/
+                        this.spatialObjectList.get(_obj.getLayer()).get(lst.indexOf(obj)).setGeometry(_obj.getGeometry());
+
+                        /* Update the record - type specific part */
+                        if (_obj instanceof BedsObject) {
+                            ((BedsObject) this.spatialObjectList.get(_obj.getLayer()).
+                                    get(lst.indexOf(obj))).setPlant(((BedsObject) _obj).getPlant());
+                            this.db.update((BedsObject) _obj);
+                        } else if (_obj instanceof FencesObject) {
+                            this.db.update((FencesObject) _obj);
+                        } else if (_obj instanceof PathObject) {
+                            this.db.update((PathObject) _obj);
+                        } else if (_obj instanceof SignObject) {
+                            ((SignObject) this.spatialObjectList.get(_obj.getLayer()).
+                                    get(lst.indexOf(obj))).setDescription(((SignObject) _obj).getDescription());
+                            ((SignObject) this.spatialObjectList.get(_obj.getLayer()).
+                                    get(lst.indexOf(obj))).setPlant(((SignObject) _obj).getPlant());
+                            this.db.update((SignObject) _obj);
+                        } else if (_obj instanceof SoilObject) {
+                            ((SoilObject) this.spatialObjectList.get(_obj.getLayer()).
+                                    get(lst.indexOf(obj))).setSoilType(((SoilObject) _obj).getSoilType());
+                            this.db.update((SoilObject) _obj);
+                        } else if (_obj instanceof WaterObject) {
+                            this.db.update((WaterObject) _obj);
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -259,6 +334,10 @@ public class SpatialContainer {
      * @param _obj Object to remove
      */
     public void delete(SpatialObject _obj) {
+        if (this.spatialObjectList.isEmpty()) {
+            System.err.println("SpatialContainer::delete(): Unable to delete due empty spatialObjectList");
+            return;
+        }
         ArrayList<SpatialObject> lst = this.spatialObjectList.get(_obj.getLayer());
         for (SpatialObject obj : lst) {
             /* Find the correct record */
@@ -293,6 +372,10 @@ public class SpatialContainer {
      * @param _id Id of object
      */
     public void delete(int _type, int _id) {
+        if (this.spatialObjectList.isEmpty()) {
+            System.err.println("SpatialContainer::delete(): Unable to delete due empty spatialObjectList");
+            return;
+        }
         SpatialObject _obj = this.spatialObjectList.get(_type).get(_id);
         this.spatialObjectList.get(_obj.getLayer()).remove(_obj);
         if (_obj instanceof BedsObject) {
@@ -308,7 +391,6 @@ public class SpatialContainer {
         } else if (_obj instanceof WaterObject) {
             this.db.delete((WaterObject) _obj);
         }
-
     }
 }
 
