@@ -17,8 +17,9 @@ import java.util.Map;
  */
 public class DataContainer {
     private final DatabaseAPI db;
-    private Map<Integer, ArrayList<DataObject>> dataObjectList;
-    private Map<String, Integer> dataType;
+    private final Map<Integer, ArrayList<DataObject>> dataObjectList;
+    private final Map<String, Integer> str2id;
+    private final HashMap<Integer, String> id2str;
 
     /**
      * Constructor of DataContainer. Variant with DatabaseAPI given in
@@ -28,7 +29,8 @@ public class DataContainer {
      */
     public DataContainer(DatabaseAPI _db) {
         this.dataObjectList = new HashMap<Integer, ArrayList<DataObject>>();
-        this.dataType = new HashMap<String, Integer>();
+        this.str2id = new HashMap<String, Integer>();
+        this.id2str = new HashMap<Integer, String>();
 
         this.db = _db;
     }
@@ -42,7 +44,8 @@ public class DataContainer {
      */
     public DataContainer(String login, String password) {
         this.dataObjectList = new HashMap<Integer, ArrayList<DataObject>>();
-        this.dataType = new HashMap<String, Integer>();
+        this.str2id = new HashMap<String, Integer>();
+        this.id2str = new HashMap<Integer, String>();
 
         this.db = new DatabaseAPI(login, password);
     }
@@ -54,28 +57,29 @@ public class DataContainer {
         if (!this.dataObjectList.isEmpty()) {
             /* Repeated initialization - need to clear the maps */
             this.dataObjectList.clear();
-            this.dataType.clear();
+            this.str2id.clear();
+            this.id2str.clear();
         }
 
         ArrayList<DataObject> tmp = this.db.getLayersAll();
-        this.dataType.put("layers", 0);
+        this.str2id.put("layers", 0);
+        this.id2str.put(0, "layers");
         this.dataObjectList.put(0, tmp);
-        tmp.clear();
 
         tmp = this.db.getPlantTypeAll();
-        this.dataType.put("plant_type", 1);
+        this.str2id.put("plant_type", 1);
+        this.id2str.put(1, "plant_type");
         this.dataObjectList.put(1, tmp);
-        tmp.clear();
 
         tmp = this.db.getPlantsAll();
-        this.dataType.put("plants", 2);
+        this.str2id.put("plants", 2);
+        this.id2str.put(2, "plants");
         this.dataObjectList.put(2, tmp);
-        tmp.clear();
 
         tmp = this.db.getSoilTypeAll();
-        this.dataType.put("soil_type", 3);
+        this.str2id.put("soil_type", 3);
+        this.id2str.put(3, "soil_type");
         this.dataObjectList.put(3, tmp);
-        tmp.clear();
     }
 
     /**
@@ -84,7 +88,23 @@ public class DataContainer {
      * @return List of DataObjects
      */
     public ArrayList<DataObject> getLayers() {
-        return this.dataObjectList.get(this.dataType.get("layers"));
+        return this.dataObjectList.get(this.str2id.get("layers"));
+    }
+
+    /**
+     * Get DataObject specified by id (not id in array, but id in db).
+     *
+     * @param id Id of object in DB
+     * @return Object with id given in parameter or null, if such an object does
+     * not exists
+     */
+    public DataObject getLayers(int id) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("layers"))) {
+            if (o.getId() == id) {
+                return o;
+            }
+        }
+        return null;
     }
 
     /**
@@ -93,7 +113,23 @@ public class DataContainer {
      * @return List of DataObjects
      */
     public ArrayList<DataObject> getPlantType() {
-        return this.dataObjectList.get(this.dataType.get("plant_type"));
+        return this.dataObjectList.get(this.str2id.get("plant_type"));
+    }
+
+    /**
+     * Get DataObject specified by id (not id in array, but id in db).
+     *
+     * @param id Id of object in DB
+     * @return Object with id given in parameter or null, if such an object does
+     * not exists
+     */
+    public DataObject getPlantType(int id) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("plant_type"))) {
+            if (o.getId() == id) {
+                return o;
+            }
+        }
+        return null;
     }
 
     /**
@@ -102,7 +138,23 @@ public class DataContainer {
      * @return List of DataObjects
      */
     public ArrayList<DataObject> getPlants() {
-        return this.dataObjectList.get(this.dataType.get("plants"));
+        return this.dataObjectList.get(this.str2id.get("plants"));
+    }
+
+    /**
+     * Get DataObject specified by id (not id in array, but id in db).
+     *
+     * @param id Id of object in DB
+     * @return Object with id given in parameter or null, if such an object does
+     * not exists
+     */
+    public DataObject getPlants(int id) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("plants"))) {
+            if (o.getId() == id) {
+                return o;
+            }
+        }
+        return null;
     }
 
     /**
@@ -111,7 +163,23 @@ public class DataContainer {
      * @return List of DataObjects
      */
     public ArrayList<DataObject> getSoilType() {
-        return this.dataObjectList.get(this.dataType.get("soil_type"));
+        return this.dataObjectList.get(this.str2id.get("soil_type"));
+    }
+
+    /**
+     * Get DataObject specified by id (not id in array, but id in db).
+     *
+     * @param id Id of object in DB
+     * @return Object with id given in parameter or null, if such an object does
+     * not exists
+     */
+    public DataObject getSoilType(int id) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("soil_type"))) {
+            if (o.getId() == id) {
+                return o;
+            }
+        }
+        return null;
     }
 
     /**
@@ -129,13 +197,13 @@ public class DataContainer {
     public void store(DataObject _obj) {
         Integer id;
         if (_obj instanceof LayersObject) {
-            id = this.dataType.get("layers");
+            id = this.str2id.get("layers");
         } else if (_obj instanceof SoilTypeObject) {
-            id = this.dataType.get("soil_type");
+            id = this.str2id.get("soil_type");
         } else if (_obj instanceof PlantsObject) {
-            id = this.dataType.get("plants");
+            id = this.str2id.get("plants");
         } else if (_obj instanceof PlantTypeObject) {
-            id = this.dataType.get("plant_type");
+            id = this.str2id.get("plant_type");
         } else {
             return;
         }
@@ -200,13 +268,13 @@ public class DataContainer {
     public void delete(DataObject _obj) {
         Integer id;
         if (_obj instanceof LayersObject) {
-            id = this.dataType.get("layers");
+            id = this.str2id.get("layers");
         } else if (_obj instanceof SoilTypeObject) {
-            id = this.dataType.get("soil_type");
+            id = this.str2id.get("soil_type");
         } else if (_obj instanceof PlantsObject) {
-            id = this.dataType.get("plants");
+            id = this.str2id.get("plants");
         } else if (_obj instanceof PlantTypeObject) {
-            id = this.dataType.get("plant_type");
+            id = this.str2id.get("plant_type");
         } else {
             return;
         }

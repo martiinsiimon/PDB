@@ -9,7 +9,6 @@ import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.BedsObject;
 import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.FencesObject;
-import cz.vutbr.fit.pdb.model.LayersObject;
 import cz.vutbr.fit.pdb.model.PathObject;
 import cz.vutbr.fit.pdb.model.SignObject;
 import cz.vutbr.fit.pdb.model.SoilObject;
@@ -30,7 +29,7 @@ import oracle.spatial.geometry.JGeometry;
 public class SpatialContainer {
     private final DatabaseAPI db;
 
-    private Map<Integer, ArrayList<SpatialObject>> spatialObjectList;
+    private final Map<Integer, ArrayList<SpatialObject>> spatialObjectList;
     private SpatialObject selected;
     private SpatialObject hovered;
     private ArrayList<DataObject> layers;
