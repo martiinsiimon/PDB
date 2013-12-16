@@ -1,5 +1,17 @@
 package cz.vutbr.fit.pdb.db;
 
+import cz.vutbr.fit.pdb.model.BedsObject;
+import cz.vutbr.fit.pdb.model.DataObject;
+import cz.vutbr.fit.pdb.model.FencesObject;
+import cz.vutbr.fit.pdb.model.LayersObject;
+import cz.vutbr.fit.pdb.model.PathObject;
+import cz.vutbr.fit.pdb.model.PlantTypeObject;
+import cz.vutbr.fit.pdb.model.PlantsObject;
+import cz.vutbr.fit.pdb.model.SignObject;
+import cz.vutbr.fit.pdb.model.SoilObject;
+import cz.vutbr.fit.pdb.model.SoilTypeObject;
+import cz.vutbr.fit.pdb.model.SpatialObject;
+import cz.vutbr.fit.pdb.model.WaterObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,10 +21,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import java.util.Stack;
-import java.util.Iterator;
 import java.util.logging.Logger;
+import oracle.jdbc.OracleResultSet;
 
 import oracle.jdbc.pool.OracleDataSource;
 
@@ -110,14 +121,16 @@ public class Connector {
     }
 
     /**
-     * Execute query given in parameter and return ResultSet of the query.
+     * Execute query given in parameter and return array list of spatial objects
+     * of the query.
      *
      * @param query String containing select SQL query
-     * @return ResultSet of result of the select query
+     * @return Array of all returned spatial objects
      */
-    public ResultSet executeQueryWithResults(String query) {
+    public ArrayList<SpatialObject> executeQueryWithResultsBeds(String query) {
         /* Execute query in parameter and return ResultSet */
-        ResultSet result = null;
+        ResultSet rs;
+        ArrayList<SpatialObject> result = new ArrayList<SpatialObject>();
         try {
             /* Connect to the database */
             Connection conn = this.getConnection();
@@ -125,10 +138,405 @@ public class Connector {
                 Statement stm = conn.createStatement();
 
                 /* Execute query */
-                result = stm.executeQuery(query);
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new BedsObject((OracleResultSet) rs));
+                }
 
                 /* Close statement */
                 stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of spatial objects
+     * of the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned spatial objects
+     */
+    public ArrayList<SpatialObject> executeQueryWithResultsSoil(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<SpatialObject> result = new ArrayList<SpatialObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new SoilObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of spatial objects
+     * of the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned spatial objects
+     */
+    public ArrayList<SpatialObject> executeQueryWithResultsPath(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<SpatialObject> result = new ArrayList<SpatialObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new PathObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of spatial objects
+     * of the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned spatial objects
+     */
+    public ArrayList<SpatialObject> executeQueryWithResultsWater(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<SpatialObject> result = new ArrayList<SpatialObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new WaterObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of spatial objects
+     * of the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned spatial objects
+     */
+    public ArrayList<SpatialObject> executeQueryWithResultsFences(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<SpatialObject> result = new ArrayList<SpatialObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new FencesObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of spatial objects
+     * of the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned spatial objects
+     */
+    public ArrayList<SpatialObject> executeQueryWithResultsSign(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<SpatialObject> result = new ArrayList<SpatialObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new SignObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of data objects of
+     * the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned data objects
+     */
+    public ArrayList<DataObject> executeQueryWithResultsLayers(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<DataObject> result = new ArrayList<DataObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new LayersObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of data objects of
+     * the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned data objects
+     */
+    public ArrayList<DataObject> executeQueryWithResultsSoilType(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<DataObject> result = new ArrayList<DataObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new SoilTypeObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of data objects of
+     * the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned data objects
+     */
+    public ArrayList<DataObject> executeQueryWithResultsPlantType(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<DataObject> result = new ArrayList<DataObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new PlantTypeObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
+     * Execute query given in parameter and return array list of data objects of
+     * the query.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all returned data objects
+     */
+    public ArrayList<DataObject> executeQueryWithResultsPlants(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<DataObject> result = new ArrayList<DataObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new PlantsObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
             } finally {
                 /* Close connection */
                 conn.close();

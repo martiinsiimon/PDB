@@ -9,6 +9,7 @@ import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.BedsObject;
 import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.FencesObject;
+import cz.vutbr.fit.pdb.model.LayersObject;
 import cz.vutbr.fit.pdb.model.PathObject;
 import cz.vutbr.fit.pdb.model.SignObject;
 import cz.vutbr.fit.pdb.model.SoilObject;
@@ -17,9 +18,7 @@ import cz.vutbr.fit.pdb.model.WaterObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Logger;
 import oracle.spatial.geometry.JGeometry;
 
 /**
@@ -66,6 +65,7 @@ public class SpatialContainer {
         /* Get the layers and store them */
         this.layers = this.db.getLayersAll();
 
+
         /* For every type of object get all of occurences from db and store them
          * under appropriate integer into spatialObjectList */
         ArrayList<SpatialObject> tmp = this.db.getBedsAll();
@@ -73,42 +73,36 @@ public class SpatialContainer {
             int layer = tmp.get(0).getLayer();
             this.spatialObjectList.put(layer, tmp);
         }
-        tmp.clear();
 
         tmp = this.db.getFencesAll();
         if (!tmp.isEmpty()) {
             int layer = tmp.get(0).getLayer();
             this.spatialObjectList.put(layer, tmp);
         }
-        tmp.clear();
 
         tmp = this.db.getPathAll();
         if (!tmp.isEmpty()) {
             int layer = tmp.get(0).getLayer();
             this.spatialObjectList.put(layer, tmp);
         }
-        tmp.clear();
 
         tmp = this.db.getSignAll();
         if (!tmp.isEmpty()) {
             int layer = tmp.get(0).getLayer();
             this.spatialObjectList.put(layer, tmp);
         }
-        tmp.clear();
 
         tmp = this.db.getSoilAll();
         if (!tmp.isEmpty()) {
             int layer = tmp.get(0).getLayer();
             this.spatialObjectList.put(layer, tmp);
         }
-        tmp.clear();
 
         tmp = this.db.getWaterAll();
         if (!tmp.isEmpty()) {
             int layer = tmp.get(0).getLayer();
             this.spatialObjectList.put(layer, tmp);
         }
-        tmp.clear();
     }
 
     /**
