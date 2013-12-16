@@ -550,6 +550,28 @@ public class Connector {
         return result;
     }
 
+    public void storeImage(PlantsObject o, String path) {
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                o.loadPhotoFromFile(conn, path);
+            } catch (IOException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("IOException: " + e.getMessage());
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("SQLException: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+    }
+
     /**
      * Read file determined by parameter or predefined i parameter is null and
      * reset data in db by it
