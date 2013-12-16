@@ -51,6 +51,22 @@ public class DatabaseAPI {
         this.connector.delCommit();
     }
 
+    /**
+     * Reset database (remote) data to the initial state.
+     */
+    public void resetDBData() {
+        this.connector.resetData(null);
+    }
+
+    /**
+     * Reset database (remote) data to the initial state. Use sql script
+     * determined by given path.
+     *
+     * @param _path Path to the sql script with initial data
+     */
+    public void resetDBData(String _path) {
+        this.connector.resetData(_path);
+    }
     ///////////////////////////////////////////////////////////////////////////
     /* Set of update queries                                                 */
     ///////////////////////////////////////////////////////////////////////////
@@ -274,7 +290,7 @@ public class DatabaseAPI {
      * Commit all update/insert/delete queries in the stack to the database.
      */
     public void commit() {
-        this.connector.executeQuery();
+        this.connector.executeQueries();
     }
 
     ///////////////////////////////////////////////////////////////////////////
