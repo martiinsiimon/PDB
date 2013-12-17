@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import oracle.ord.im.OrdImage;
-import oracle.ord.im.OrdImageSignature;
 
 /**
  * Java object for plant from DB. Datovy Java objekt pro jednotlive rostliny.
@@ -70,6 +69,10 @@ public class PlantsObject extends DataObject {
         return this.image;
     }
 
+    public void delImage() {
+        this.image = null;
+    }
+
     public void setPlantType(int _plantType) {
         this.plant_type = _plantType;
     }
@@ -86,6 +89,25 @@ public class PlantsObject extends DataObject {
                 + this.name + "', "
                 + this.plant_type
                 + ", ordsys.ordimage.init(), ordsys.ordimage.init())";
+        return query;
+    }
+
+    @Override
+    public String getUpdateSQL() {
+        String query;
+        if (this.image == null) {
+            query = "UPDATE " + this.tableName
+                    + " SET name = '" + this.name + "',"
+                    + " plant_type = " + this.plant_type
+                    + " WHERE id = " + this.id;
+        } else {
+            query = "UPDATE " + this.tableName
+                    + " SET name = '" + this.name + "',"
+                    + " plant_type = " + this.plant_type + ","
+                    + " photo = ordsys.ordimage.init(), "
+                    + " photo_thumb = ordsys.ordimage.init()"
+                    + " WHERE id = " + this.id;
+        }
         return query;
     }
 
