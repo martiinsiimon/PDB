@@ -50,6 +50,20 @@ public class SpatialContainer {
     }
 
     /**
+     * Constructor of SpatialContainer.
+     *
+     * @param _db DatabaseAPI object instance
+     */
+    public SpatialContainer(DatabaseAPI _db) {
+        this.spatialObjectList = new HashMap<Integer, ArrayList<SpatialObject>>();
+        this.layers = null;
+        this.selected = null;
+        this.hovered = null;
+
+        this.db = _db;
+    }
+
+    /**
      * Connect to DB and fill appropriate containers.
      */
     public void initialize() {
@@ -68,39 +82,33 @@ public class SpatialContainer {
         /* For every type of object get all of occurences from db and store them
          * under appropriate integer into spatialObjectList */
         ArrayList<SpatialObject> tmp = this.db.getBedsAll();
-        if (!tmp.isEmpty()) {
-            int layer = tmp.get(0).getLayer();
-            this.spatialObjectList.put(layer, tmp);
+        for (SpatialObject o : tmp) {
+            this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getFencesAll();
-        if (!tmp.isEmpty()) {
-            int layer = tmp.get(0).getLayer();
-            this.spatialObjectList.put(layer, tmp);
+        for (SpatialObject o : tmp) {
+            this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getPathAll();
-        if (!tmp.isEmpty()) {
-            int layer = tmp.get(0).getLayer();
-            this.spatialObjectList.put(layer, tmp);
+        for (SpatialObject o : tmp) {
+            this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getSignAll();
-        if (!tmp.isEmpty()) {
-            int layer = tmp.get(0).getLayer();
-            this.spatialObjectList.put(layer, tmp);
+        for (SpatialObject o : tmp) {
+            this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getSoilAll();
-        if (!tmp.isEmpty()) {
-            int layer = tmp.get(0).getLayer();
-            this.spatialObjectList.put(layer, tmp);
+        for (SpatialObject o : tmp) {
+            this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getWaterAll();
-        if (!tmp.isEmpty()) {
-            int layer = tmp.get(0).getLayer();
-            this.spatialObjectList.put(layer, tmp);
+        for (SpatialObject o : tmp) {
+            this.spatialObjectList.get(o.getLayer()).add(o);
         }
     }
 
