@@ -22,10 +22,12 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleResultSet;
 
 import oracle.jdbc.pool.OracleDataSource;
+import oracle.ord.im.OrdImage;
 
 /**
  * Class representing connection to the database and git-like system.
@@ -550,6 +552,13 @@ public class Connector {
         return result;
     }
 
+    /**
+     * Store image to the object in parameter to the database.
+     *
+     * @param o Object to which the object should be stored
+     * @param path Path to the image. If null, image from object properties
+     * should be stored
+     */
     public void storeImage(PlantsObject o, String path) {
         try {
             /* Connect to the database */
@@ -570,6 +579,98 @@ public class Connector {
             Logger.getLogger(e.getMessage());
             System.out.println("SQLException: " + e.getMessage());
         }
+    }
+
+    /**
+     * Get image which belongs to the object in parameter. Image transformations
+     * are determined by given sql query.
+     *
+     * @param query SQL query
+     * @return Image of determined object or null if there is no such a object
+     * stored in database
+     */
+    public OrdImage getImage(String query) {
+        OrdImage img = null;
+        OracleResultSet rs;
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = (OracleResultSet) stm.executeQuery(query);
+
+                /* Copy the result to array */
+                if (rs.next()) {
+                    img = (OrdImage) rs.getORAData("photo", OrdImage.getORADataFactory());
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return img;
+    }
+
+
+    /**
+     * Get PlantsObject most similar (in image level) to the object in parameter
+     *
+     * @param query SQL query
+     * @return Most similar object (in image level) or new PlantsObject if there
+     * is no such an object
+     */
+    public PlantsObject getImageSimilar(String query) {
+        PlantsObject obj = new PlantsObject();
+        OrdImage img;
+        OracleResultSet rs;
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = (OracleResultSet) stm.executeQuery(query);
+
+                /* Copy the result to array */
+                if (rs.next()) {
+                    img = (OrdImage) rs.getORAData("photo", OrdImage.getORADataFactory());
+                    obj = new PlantsObject(rs);
+                    obj.setImage(img, false);
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("SQLException: " + e.getMessage());
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return obj;
     }
 
     /**

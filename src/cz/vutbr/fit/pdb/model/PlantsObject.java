@@ -20,32 +20,52 @@ import oracle.ord.im.OrdImageSignature;
  * @author martin
  */
 public class PlantsObject extends DataObject {
-
-    private MultimedialObject image;
+    private Boolean imgChanged;
+    private OrdImage image;
     private int plant_type;
+
 
     public PlantsObject() {
         super();
         this.tableName = "plants";
         this.plant_type = -1;
-        image = new MultimedialObject();
+        this.imgChanged = false;
+        this.image = null;
     }
 
     public PlantsObject(OracleResultSet rset) throws Exception {
         super(rset);
         this.tableName = "plants";
         this.plant_type = rset.getInt("plant_type");
-        this.image = new MultimedialObject();
-
-        this.image.setImage((OrdImage) rset.getORAData("photo", OrdImage.getORADataFactory()));
-        this.image.setSignature((OrdImageSignature) rset.getORAData("photo_sig", OrdImageSignature.getORADataFactory()));
+        this.imgChanged = false;
+        this.image = null;
     }
 
-    public void setImage(MultimedialObject img) {
+    public Boolean isImgChanged() {
+        return this.imgChanged;
+    }
+
+    public void setImgChanged() {
+        this.imgChanged = true;
+    }
+
+    public void unsetImgChanged() {
+        this.imgChanged = false;
+    }
+
+    public void setImage(OrdImage img) {
         this.image = img;
+        this.setImgChanged();
     }
 
-    public MultimedialObject getImage() {
+    public void setImage(OrdImage img, Boolean change) {
+        this.image = img;
+        if (change) {
+            this.setImgChanged();
+        }
+    }
+
+    public OrdImage getImage() {
         return this.image;
     }
 
@@ -65,6 +85,28 @@ public class PlantsObject extends DataObject {
                 + this.name + "', "
                 + this.plant_type
                 + ", ordsys.ordimage.init(), ordsys.ordimagesignature.init())";
+        return query;
+    }
+
+    public String getImageSQL() {
+        return "SELECT photo FROM " + this.tableName + " WHERE id = " + this.id;
+    }
+
+    public String getImageScaleSQL(Integer maxx, Integer maxy) {
+        return "SELECT photo.process('maxScale=" + maxx + " " + maxy + "') FROM " + this.tableName + " WHERE id = " + this.id;
+    }
+
+    public String getImageRotateSQL(Float r) {
+        return "SELECT photo.process('rotate=" + r + "') FROM " + this.tableName + " WHERE id = " + this.id;
+    }
+
+    public String getImageSimilarSQL() {
+        String query
+                = "SELECT * FROM " + this.tableName + " src, " + this.tableName + " dst "
+                + "WHERE ordsys.IMGSimilar(src.photo_sig,dst.photo_sig,color=0.3,texture=0.3,shape=0.3,location=0.1,100,1) = 1 "
+                + "AND (src.id <> dst.id) "
+                + "AND src.id = " + this.id + " ORDER BY ordsys.IMGScore(1)";
+
         return query;
     }
 
@@ -99,7 +141,12 @@ public class PlantsObject extends DataObject {
                 connection.setAutoCommit(autoCommit);
                 return;
             }
-            imgProxy.loadDataFromFile(filename);
+            if (filename == null) {
+                imgProxy = this.image;
+                this.unsetImgChanged();
+            } else {
+                imgProxy.loadDataFromFile(filename);
+            }
             imgProxy.setProperties();
             sigProxy.generateSignature(imgProxy);
 
@@ -129,4 +176,7 @@ public class PlantsObject extends DataObject {
             connection.setAutoCommit(autoCommit);
         }
     }
+
+    //TODO getImageFromDB
+    //TODO get image from db and store it to the this.image (don't set isChanged)
 }

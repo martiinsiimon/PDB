@@ -15,6 +15,7 @@ import cz.vutbr.fit.pdb.model.WaterObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import oracle.ord.im.OrdImage;
 
 /**
  * Database application program interface. Contains methods to access the DB and
@@ -53,7 +54,10 @@ public class DatabaseAPI {
     }
 
     /**
-     * Reset database (remote) data to the initial state.
+     * Reset database (remote) data to the initial state. Use default sql script
+     * path
+     *
+     * @see Conector#predefinedPath
      */
     public void resetDBData() {
         this.connector.resetData(null);
@@ -163,10 +167,8 @@ public class DatabaseAPI {
     public void update(PlantsObject _obj) {
         this.addQuery(_obj.getUpdateSQL());
 
-        File f = new File("assets/pict/" + _obj.getName() + ".jpg");
-        if (f.exists()) {
-            /* Add image */
-            this.connector.storeImage(_obj, f.getPath());
+        if (_obj.isImgChanged()) {
+            this.connector.storeImage(_obj, null);
         }
     }
 
@@ -252,10 +254,8 @@ public class DatabaseAPI {
     public void insert(PlantsObject _obj) {
         this.addQuery(_obj.getInsertSQL());
 
-        File f = new File("assets/pict/" + _obj.getName() + ".jpg");
-        if (f.exists()) {
-            /* Add image */
-            this.connector.storeImage(_obj, f.getPath());
+        if (_obj.isImgChanged()) {
+            this.connector.storeImage(_obj, null);
         }
     }
 
@@ -591,5 +591,62 @@ public class DatabaseAPI {
      */
     public ArrayList<DataObject> getPlantsAll() {
         return this.connector.executeQueryWithResultsPlants(new PlantsObject().getAllSQL());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Specific queries                                                      //
+    ///////////////////////////////////////////////////////////////////////////
+    /**
+     * Get original image stored in database by given object, store and return
+     * it.
+     *
+     * @param o Object which is looking for image
+     * @return Image which belongs to the object or null if there is no such an
+     * object. The object is stored too, if it is not null
+     */
+    public OrdImage getPlantsImage(PlantsObject o) {
+        OrdImage img = this.connector.getImage(o.getImageSQL());
+        if (img != null) {
+            o.setImage(img);
+        }
+        return img;
+    }
+
+    /**
+     * Get image which belongs to the object in parameter scaled by scale factor
+     * in parameter (with preserving aspect ratio)
+     *
+     * @param o Object whom image belongs
+     * @param maxx Maximal X size
+     * @param maxy Maximal Y size
+     * @return Scaled image of determined object or null if there is no such a
+     * object * stored in database
+     */
+    public OrdImage getPlantsImageScaled(PlantsObject o, Integer maxx, Integer maxy) {
+        return this.connector.getImage(o.getImageScaleSQL(maxx, maxy));
+    }
+
+    /**
+     * Get image which belongs to the object in parameter rotated by rotation
+     * factor in parameter
+     *
+     * @param o Object whom image belongs
+     * @param r Degrees to rotate clockwise
+     * @return Rotated image of determined object or null if there is no such a
+     * object stored in database
+     */
+    public OrdImage getPlantsImageRotated(PlantsObject o, Float r) {
+        return this.connector.getImage(o.getImageRotateSQL(r));
+    }
+
+    /**
+     * Get PlantsObject most similar (in image level) to the object in parameter
+     *
+     * @param o Object what finds the most similar
+     * @return Most similar object (in image level) or new PlantsObject if there
+     * is no such an object
+     */
+    public PlantsObject getMostSimilar(PlantsObject o) {
+        return this.connector.getImageSimilar(o.getImageSimilarSQL());
     }
 }
