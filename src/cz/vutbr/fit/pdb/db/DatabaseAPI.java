@@ -613,40 +613,25 @@ public class DatabaseAPI {
     }
 
     /**
-     * Get image which belongs to the object in parameter scaled by scale factor
-     * in parameter (with preserving aspect ratio)
+     * Get thumbnail of image which belongs to the object in parameter
      *
      * @param o Object whom image belongs
-     * @param maxx Maximal X size
-     * @param maxy Maximal Y size
-     * @return Scaled image of determined object or null if there is no such a
-     * object * stored in database
+     * @return Thumbnailed image of determined object or null if there is no
+     * such a object * stored in database
      */
-    public OrdImage getPlantsImageScaled(PlantsObject o, Integer maxx, Integer maxy) {
-        return this.connector.getImage(o.getImageScaleSQL(maxx, maxy));
+    public OrdImage getPlantsImageThumb(PlantsObject o) {
+        return this.connector.getImage(o.getImageThumbSQL());
     }
 
-    /**
-     * Get image which belongs to the object in parameter rotated by rotation
-     * factor in parameter
-     *
-     * @param o Object whom image belongs
-     * @param r Degrees to rotate clockwise
-     * @return Rotated image of determined object or null if there is no such a
-     * object stored in database
-     */
-    public OrdImage getPlantsImageRotated(PlantsObject o, Float r) {
-        return this.connector.getImage(o.getImageRotateSQL(r));
-    }
 
     /**
      * Get PlantsObject most similar (in image level) to the object in parameter
      *
      * @param o Object what finds the most similar
-     * @return Most similar object (in image level) or new PlantsObject if there
-     * is no such an object
+     * @return Most similar object (in image level) id or null if there is no
+     * such an object
      */
-    public PlantsObject getMostSimilar(PlantsObject o) {
+    public Integer getMostSimilar(PlantsObject o) {
         return this.connector.getImageSimilar(o.getImageSimilarSQL());
     }
 }

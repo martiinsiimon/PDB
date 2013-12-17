@@ -23,6 +23,7 @@ public class PlantsObject extends DataObject {
     private Boolean imgChanged;
     private OrdImage image;
     private int plant_type;
+    private static final String THRES = "200 200";
 
 
     public PlantsObject() {
@@ -80,11 +81,11 @@ public class PlantsObject extends DataObject {
     @Override
     public String getInsertSQL() {
         String query
-                = "INSERT INTO " + this.tableName + " VALUES ("
+                = "INSERT INTO " + this.tableName + " (id, name, plant_type, photo, photo_thumb) VALUES ("
                 + this.id + ", '"
                 + this.name + "', "
                 + this.plant_type
-                + ", ordsys.ordimage.init(), ordsys.ordimagesignature.init())";
+                + ", ordsys.ordimage.init(), ordsys.ordimage.init())";
         return query;
     }
 
@@ -92,20 +93,18 @@ public class PlantsObject extends DataObject {
         return "SELECT photo FROM " + this.tableName + " WHERE id = " + this.id;
     }
 
-    public String getImageScaleSQL(Integer maxx, Integer maxy) {
-        return "SELECT photo.process('maxScale=" + maxx + " " + maxy + "') FROM " + this.tableName + " WHERE id = " + this.id;
+    public String getImageThumbSQL() {
+        return "SELECT photo_thumb FROM " + this.tableName + " WHERE id = " + this.id;
     }
 
-    public String getImageRotateSQL(Float r) {
-        return "SELECT photo.process('rotate=" + r + "') FROM " + this.tableName + " WHERE id = " + this.id;
-    }
 
     public String getImageSimilarSQL() {
         String query
-                = "SELECT * FROM " + this.tableName + " src, " + this.tableName + " dst "
-                + "WHERE ordsys.IMGSimilar(src.photo_sig,dst.photo_sig,color=0.3,texture=0.3,shape=0.3,location=0.1,100,1) = 1 "
-                + "AND (src.id <> dst.id) "
-                + "AND src.id = " + this.id + " ORDER BY ordsys.IMGScore(1)";
+                = "SELECT dst.id, SI_ScoreByFtrList("
+                + "new SI_FeatureList(src.photo_ac,0.4,src.photo_ch,0.4,src.photo_pc,0.1,src.photo_tx,0.1),dst.photo_si)"
+                + " as similarity FROM " + this.tableName + " src, " + this.tableName + " dst "
+                + "WHERE (src.id <> dst.id) "
+                + "AND src.id = " + this.id + " ORDER BY similarity ASC";
 
         return query;
     }
@@ -115,11 +114,11 @@ public class PlantsObject extends DataObject {
         connection.setAutoCommit(false);
         try {
             OrdImage imgProxy = null;
-            OrdImageSignature sigProxy = null;
+            OrdImage thProxy = null;
             // ziskame proxy
             OraclePreparedStatement pstmtSelect
                     = (OraclePreparedStatement) connection.prepareStatement(
-                            "SELECT photo, photo_sig FROM " + this.tableName + " WHERE id = ? FOR UPDATE");
+                            "SELECT photo, photo_thumb FROM " + this.tableName + " WHERE id = ? FOR UPDATE");
             try {
                 pstmtSelect.setInt(1, this.id);
 
@@ -127,7 +126,7 @@ public class PlantsObject extends DataObject {
                 try {
                     if (rset.next()) {
                         imgProxy = (OrdImage) rset.getORAData("photo", OrdImage.getORADataFactory());
-                        sigProxy = (OrdImageSignature) rset.getORAData("photo_sig", OrdImageSignature.getORADataFactory());
+                        thProxy = (OrdImage) rset.getORAData("photo_thumb", OrdImage.getORADataFactory());
                     }
                 } finally {
                     rset.close();
@@ -137,7 +136,7 @@ public class PlantsObject extends DataObject {
             }
 
             // pouzijeme proxy
-            if (imgProxy == null || sigProxy == null) {
+            if (imgProxy == null) {
                 connection.setAutoCommit(autoCommit);
                 return;
             }
@@ -145,38 +144,53 @@ public class PlantsObject extends DataObject {
                 imgProxy = this.image;
                 this.unsetImgChanged();
             } else {
+                System.out.println("File " + filename);
                 imgProxy.loadDataFromFile(filename);
             }
+            imgProxy.processCopy("maxScale =" + PlantsObject.THRES, thProxy);
             imgProxy.setProperties();
-            sigProxy.generateSignature(imgProxy);
 
             // ulozime zmenene obrazky
             OraclePreparedStatement pstmtUpdate1
                     = (OraclePreparedStatement) connection.prepareStatement(
-                            "UPDATE " + this.tableName + " SET photo = ? WHERE id = ?");
+                            "UPDATE " + this.tableName + " SET photo = ?, photo_thumb = ? WHERE id = ?");
             try {
                 pstmtUpdate1.setORAData(1, imgProxy);
-                pstmtUpdate1.setInt(2, this.id);
+                pstmtUpdate1.setORAData(2, thProxy);
+                pstmtUpdate1.setInt(3, this.id);
                 pstmtUpdate1.executeUpdate();
             } finally {
                 pstmtUpdate1.close();
             }
-
-            OraclePreparedStatement pstmtUpdate2 = (OraclePreparedStatement) connection.prepareStatement(
-                    "UPDATE " + this.tableName + " v SET v.photo_sig = ? WHERE id = ?");
+            OraclePreparedStatement pstmtUpdate2
+                    = (OraclePreparedStatement) connection.prepareStatement(
+                            "UPDATE " + this.tableName + " p "
+                            + "SET p.photo_si = SI_StillImage(p.photo.getContent()) "
+                            + "WHERE id = ?");
             try {
-                pstmtUpdate2.setORAData(1, sigProxy);
-                pstmtUpdate2.setInt(2, this.id);
+                pstmtUpdate2.setInt(1, this.id);
                 pstmtUpdate2.executeUpdate();
             } finally {
                 pstmtUpdate2.close();
             }
+            OraclePreparedStatement pstmtUpdate3
+                    = (OraclePreparedStatement) connection.prepareStatement(
+                            "UPDATE " + this.tableName
+                            + " SET photo_ac = SI_AverageColor(photo_si), "
+                            + "photo_ch = SI_ColorHistogram(photo_si), "
+                            + "photo_pc = SI_PositionalColor(photo_si), "
+                            + "photo_tx = SI_Texture(photo_si) "
+                            + "WHERE id = ?");
+            try {
+                pstmtUpdate3.setInt(1, this.id);
+                pstmtUpdate3.executeUpdate();
+            } finally {
+                pstmtUpdate3.close();
+            }
+
             connection.commit();
         } finally {
             connection.setAutoCommit(autoCommit);
         }
     }
-
-    //TODO getImageFromDB
-    //TODO get image from db and store it to the this.image (don't set isChanged)
 }

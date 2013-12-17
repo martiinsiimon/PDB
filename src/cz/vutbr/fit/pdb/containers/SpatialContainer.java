@@ -83,31 +83,49 @@ public class SpatialContainer {
          * under appropriate integer into spatialObjectList */
         ArrayList<SpatialObject> tmp = this.db.getBedsAll();
         for (SpatialObject o : tmp) {
+            if (!this.spatialObjectList.containsKey(o.getLayer())) {
+                this.spatialObjectList.put(o.getLayer(), new ArrayList<SpatialObject>());
+            }
             this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getFencesAll();
         for (SpatialObject o : tmp) {
+            if (!this.spatialObjectList.containsKey(o.getLayer())) {
+                this.spatialObjectList.put(o.getLayer(), new ArrayList<SpatialObject>());
+            }
             this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getPathAll();
         for (SpatialObject o : tmp) {
+            if (!this.spatialObjectList.containsKey(o.getLayer())) {
+                this.spatialObjectList.put(o.getLayer(), new ArrayList<SpatialObject>());
+            }
             this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getSignAll();
         for (SpatialObject o : tmp) {
+            if (!this.spatialObjectList.containsKey(o.getLayer())) {
+                this.spatialObjectList.put(o.getLayer(), new ArrayList<SpatialObject>());
+            }
             this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getSoilAll();
         for (SpatialObject o : tmp) {
+            if (!this.spatialObjectList.containsKey(o.getLayer())) {
+                this.spatialObjectList.put(o.getLayer(), new ArrayList<SpatialObject>());
+            }
             this.spatialObjectList.get(o.getLayer()).add(o);
         }
 
         tmp = this.db.getWaterAll();
         for (SpatialObject o : tmp) {
+            if (!this.spatialObjectList.containsKey(o.getLayer())) {
+                this.spatialObjectList.put(o.getLayer(), new ArrayList<SpatialObject>());
+            }
             this.spatialObjectList.get(o.getLayer()).add(o);
         }
     }

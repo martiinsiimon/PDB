@@ -632,9 +632,8 @@ public class Connector {
      * @return Most similar object (in image level) or new PlantsObject if there
      * is no such an object
      */
-    public PlantsObject getImageSimilar(String query) {
-        PlantsObject obj = new PlantsObject();
-        OrdImage img;
+    public Integer getImageSimilar(String query) {
+        Integer id = null;
         OracleResultSet rs;
         try {
             /* Connect to the database */
@@ -645,11 +644,10 @@ public class Connector {
                 /* Execute query */
                 rs = (OracleResultSet) stm.executeQuery(query);
 
-                /* Copy the result to array */
+                /* Get result */
                 if (rs.next()) {
-                    img = (OrdImage) rs.getORAData("photo", OrdImage.getORADataFactory());
-                    obj = new PlantsObject(rs);
-                    obj.setImage(img, false);
+                    id = rs.getInt("id");
+                    System.out.println(id);
                 }
 
                 /* Close statement */
@@ -657,9 +655,6 @@ public class Connector {
             } catch (SQLException e) {
                 Logger.getLogger(e.getMessage());
                 System.out.println("SQLException: " + e.getMessage());
-            } catch (Exception e) {
-                Logger.getLogger(e.getMessage());
-                System.out.println("Exception: " + e.getMessage());
             } finally {
                 /* Close connection */
                 conn.close();
@@ -670,7 +665,7 @@ public class Connector {
         }
 
         /* Return result */
-        return obj;
+        return id;
     }
 
     /**

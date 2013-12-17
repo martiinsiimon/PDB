@@ -123,10 +123,10 @@ public class DataContainer {
      * @return Object with id given in parameter or null, if such an object does
      * not exists
      */
-    public DataObject getPlantType(int id) {
+    public PlantTypeObject getPlantType(int id) {
         for (DataObject o : this.dataObjectList.get(this.str2id.get("plant_type"))) {
             if (o.getId() == id) {
-                return o;
+                return (PlantTypeObject) o;
             }
         }
         return null;
@@ -148,10 +148,10 @@ public class DataContainer {
      * @return Object with id given in parameter or null, if such an object does
      * not exists
      */
-    public DataObject getPlants(int id) {
+    public PlantsObject getPlants(int id) {
         for (DataObject o : this.dataObjectList.get(this.str2id.get("plants"))) {
             if (o.getId() == id) {
-                return o;
+                return (PlantsObject) o;
             }
         }
         return null;
