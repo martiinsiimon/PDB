@@ -4,10 +4,7 @@
  */
 package cz.vutbr.fit.pdb.control;
 
-import cz.vutbr.fit.pdb.containers.SpatialContainer;
-import java.awt.event.MouseEvent;
-import javax.swing.JPanel;
-import javax.swing.event.MouseInputListener;
+import cz.vutbr.fit.pdb.view.RootPanel;
 
 /**
  *
@@ -15,12 +12,22 @@ import javax.swing.event.MouseInputListener;
  */
 public class RootControl{
     
-    private JPanel view;
+    private RootPanel view;
     
     
-    public RootControl(JPanel view){
+    public RootControl(RootPanel view){
         this.view = view;
         
+    }
+
+    
+    public void enableEdit(){
+        this.view.enableEditMode();
+    
+    }
+    
+    public void disableEdit(){
+        this.view.disableEditMode();
     }
 
     

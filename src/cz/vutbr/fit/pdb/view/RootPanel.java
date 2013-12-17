@@ -5,6 +5,7 @@
 package cz.vutbr.fit.pdb.view;
 
 import java.awt.GridBagConstraints;
+import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -20,6 +21,7 @@ public class RootPanel extends JPanel{
     private GridBagConstraints gbc;
     private MapPanel mPanel;
     private InfoPanel iPanel;
+    private EditPanel ePanel = new EditPanel();
     private boolean editMode = false;
     
     public RootPanel(MapPanel mp, InfoPanel ip){
@@ -32,12 +34,20 @@ public class RootPanel extends JPanel{
         
     }
     
-    private void rebake(){
+    public void rebake(){
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
  
         if(this.editMode == true){
-            
+            editSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, mPanel, ePanel);
+            editSplitPane.setResizeWeight(1);
+            editSplitPane.setOneTouchExpandable(true);
+            editSplitPane.setContinuousLayout(false);
+            splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, editSplitPane, iPanel);
+            splitPane.setResizeWeight(0.8);
+            splitPane.setOneTouchExpandable(true);
+            splitPane.setContinuousLayout(true);
+            add(splitPane);
             
         }else{
             splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mPanel, iPanel);
@@ -47,6 +57,7 @@ public class RootPanel extends JPanel{
             add(splitPane);
             
         }
+        revalidate();
     
     }
     
@@ -67,6 +78,11 @@ public class RootPanel extends JPanel{
     public void disableEditMode(){
         this.editMode = false;
         this.rebake();
+    
+    }
+    
+    public void registerMenuListener(ActionListener al){
+    
     
     }
           

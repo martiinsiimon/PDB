@@ -13,7 +13,12 @@ import cz.vutbr.fit.pdb.view.MapPanel;
 import cz.vutbr.fit.pdb.view.RootPanel;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 
 /**
  *
@@ -34,13 +39,20 @@ public class Core {
     }
 
     public void initGui(){
-
+        
+        
         InfoPanel ip = new InfoPanel();
         MapPanel mp = new MapPanel();
         SpatialContainer sc = new SpatialContainer("login", "heslo");
         rootPanel = new RootPanel(mp, ip);
         rootControl = new RootControl(rootPanel);
         mapControl = new MapControl(mp, sc);
+        rootPanel.rebake();
+        
+        MenuControl mc = new MenuControl();
+        mainMenu.registerActionListener(mc);
+        mainMenu.registerItemListener(mc);
+        
         mainWindow.setJMenuBar(mainMenu);
         mainWindow.add(rootPanel);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,6 +69,25 @@ public class Core {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainWindow.setLocation(screenSize.width / 2 -frameSize.width / 2, screenSize.height /2 - frameSize.height / 2);
 
+    }
+    
+    
+    class MenuControl implements ActionListener,ItemListener{
+    
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println(e.getSource().toString());
+        }
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if(((JMenuItem)(e.getSource())).isSelected()){
+                rootControl.enableEdit();
+            }else{
+                rootControl.disableEdit();
+            }
+
+        }
     }
 
 

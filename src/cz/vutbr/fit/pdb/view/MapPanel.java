@@ -55,5 +55,10 @@ public class MapPanel extends JPanel{
 
     }
     
+    private void drawMap(){
+        
+    
+    }
+    
     
 }
