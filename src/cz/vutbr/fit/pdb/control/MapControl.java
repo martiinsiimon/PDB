@@ -43,6 +43,9 @@ public class MapControl{
             }
             so.setSelection(true);
             model.setSelected(so);
+
+            model.checkHovering(e.getPoint(), view.getAffineTransform());
+            view.updateUI();
         }
 
         @Override
