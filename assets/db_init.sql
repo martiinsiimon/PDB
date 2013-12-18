@@ -127,13 +127,13 @@ INSERT INTO user_sdo_geom_metadata values (
   sdo_dim_array(sdo_dim_element('X', 0, 1000, 1),
   sdo_dim_element('Y', 0, 700, 1)),
   NULL);
-  
+
   INSERT INTO user_sdo_geom_metadata values (
   'water', 'geometry',
   sdo_dim_array(sdo_dim_element('X', 0, 1000, 1),
   sdo_dim_element('Y', 0, 700, 1)),
   NULL);
-  
+
 -- Data: --
 
 INSERT INTO soil VALUES (
@@ -221,7 +221,7 @@ INSERT INTO water VALUES (
     (select id from layers where name = 'water'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 4),
-        SDO_ORDINATE_ARRAY(210,444, 385,343, 210,244))
+        SDO_ORDINATE_ARRAY(210,460, 370,320, 210,170))
 );
 
 -- Validation: --
@@ -263,7 +263,7 @@ INSERT INTO fences VALUES (
     (select id from layers where name = 'fences'),
     SDO_GEOMETRY(2002, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 2, 1),
-        SDO_ORDINATE_ARRAY(105,425, 140,475, 260,475, 300,430)),
+        SDO_ORDINATE_ARRAY(125,450, 140,475, 260,475, 275,458)),
     TO_DATE('05-08-2012', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
@@ -273,7 +273,7 @@ INSERT INTO fences VALUES (
     (select id from layers where name = 'fences'),
     SDO_GEOMETRY(2002, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 2, 1),
-        SDO_ORDINATE_ARRAY(555,525, 800,525)),
+        SDO_ORDINATE_ARRAY(532,570, 555,525, 800,525)),
     TO_DATE('04-05-2012', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
@@ -283,7 +283,7 @@ INSERT INTO fences VALUES (
     (select id from layers where name = 'fences'),
     SDO_GEOMETRY(2002, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 2, 1),
-        SDO_ORDINATE_ARRAY(835,685, 835,420, 985,475)),
+        SDO_ORDINATE_ARRAY(835,685, 835,420, 880,436)),
     TO_DATE('04-08-2011', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
@@ -293,7 +293,7 @@ INSERT INTO fences VALUES (
     (select id from layers where name = 'fences'),
     SDO_GEOMETRY(2002, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 2, 1),
-        SDO_ORDINATE_ARRAY(985,460, 835,405, 835,315, 985,315)),
+        SDO_ORDINATE_ARRAY(883,422, 835,405, 835,315, 850,315)),
     TO_DATE('04-08-2011', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
 );
@@ -760,7 +760,7 @@ INSERT INTO beds VALUES (
     (select id from layers where name = 'beds'),
     SDO_GEOMETRY(2003, NULL, NULL,
         SDO_ELEM_INFO_ARRAY(1, 1003, 1),
-        SDO_ORDINATE_ARRAY(165,260, 280,260, 370,325, 160,325, 95,290, 165,260)),
+        SDO_ORDINATE_ARRAY(165,260, 280,260, 330,325, 160,325, 95,290, 165,260)),
     (select id from plants where name = 'leknín bílý'),
     TO_DATE('12-13-2011', 'MM-DD-YYYY'),
     TO_DATE('12-31-9999', 'MM-DD-YYYY')
