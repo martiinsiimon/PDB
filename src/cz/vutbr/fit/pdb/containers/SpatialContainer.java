@@ -268,36 +268,33 @@ public class SpatialContainer {
     public ArrayList<DataObject> getLayers() {
         return this.layers;
     }
-    
-    
+
     /**
      * Return a list of layers size.
      *
      * @return ArrayList size.
      */
-    public int countLayers(){
+    public int countLayers() {
         return this.layers.size();
     }
-    
-    
-    public Rectangle getBiggestObjectBoundaries(){
-    
+
+    public Rectangle getBiggestObjectBoundaries() {
+
         ArrayList<SpatialObject> allLayers = getGeometries();
         int mostLeft = 0;
         int mostBottom = 0;
-        for(SpatialObject o : allLayers){
-             Shape sh = o.getGeometry().createShape();
-             Rectangle actual = sh.getBounds();
-             if((actual.width + actual.x) > mostLeft){
-                 mostLeft = (actual.width + actual.x);
-             }
-             if((actual.height + actual.y) > mostBottom){
-                 mostBottom = (actual.height + actual.y);
-             }
+        for (SpatialObject o : allLayers) {
+            Shape sh = o.getGeometry().createShape();
+            Rectangle actual = sh.getBounds();
+            if ((actual.width + actual.x) > mostLeft) {
+                mostLeft = (actual.width + actual.x);
+            }
+            if ((actual.height + actual.y) > mostBottom) {
+                mostBottom = (actual.height + actual.y);
+            }
         }
         return new Rectangle(mostLeft, mostBottom);
-        
-        
+
     }
 
     /**
@@ -423,7 +420,6 @@ public class SpatialContainer {
         }
 
         for (Integer i : this.spatialSignsList.keySet()) {
-            //System.out.println(this.spatialSignsList.get(i).getGeometry().isPoint());
             Integer layer = this.spatialSignsList.get(i).getLayer();
             if (geometries.containsKey(layer)) {
                 geometries.get(layer).add(this.spatialSignsList.get(i));
@@ -538,16 +534,16 @@ public class SpatialContainer {
     public SpatialObject getSelected() {
         return this.selected;
     }
-    
-    public SpatialObject getHovered(){
+
+    public SpatialObject getHovered() {
         return this.hovered;
     }
-    
-    public void setSelected(SpatialObject so){
+
+    public void setSelected(SpatialObject so) {
         this.selected = so;
     }
-    
-    public void setHovered(SpatialObject so){
+
+    public void setHovered(SpatialObject so) {
         this.hovered = so;
     }
 
@@ -761,50 +757,50 @@ public class SpatialContainer {
             this.db.delete(_obj);
         }
     }
-    
-    public void checkHovering(Point p, AffineTransform at){
+
+    public void checkHovering(Point p, AffineTransform at) {
         ArrayList<SpatialObject> allItems = getGeometries();
         boolean haveSelected = false;
-        for(int j = allItems.size() -1; j >=0; j--){
-            if(haveSelected == false){
+        for (int j = allItems.size() - 1; j >= 0; j--) {
+            if (haveSelected == false) {
                 haveSelected = allItems.get(j).hoverIfMouseOver(p, at);
                 this.hovered = allItems.get(j);
-            }else{
+            } else {
                 allItems.get(j).setHovering(false);
             }
         }
         return;
-/*
-        for (Integer i : this.spatialBedsList.keySet()) {
-               this.spatialBedsList.get(i).hoverIfMouseOver(p, at);
-        }
-        
-
-        for (Integer i : this.spatialFencesList.keySet()) {
-           this.spatialFencesList.get(i).hoverIfMouseOver(p, at);
-        }
-        
-        
-
-        for (Integer i : this.spatialPathsList.keySet()) {
-           this.spatialPathsList.get(i).hoverIfMouseOver(p, at);
-        }
-        
-
-        for (Integer i : this.spatialSignsList.keySet()) {
-            this.spatialSignsList.get(i).hoverIfMouseOver(p, at);
-        }
+        /*
+         for (Integer i : this.spatialBedsList.keySet()) {
+         this.spatialBedsList.get(i).hoverIfMouseOver(p, at);
+         }
 
 
-        for (Integer i : this.spatialSoilList.keySet()) {
-            this.spatialSoilList.get(i).hoverIfMouseOver(p, at);
-        }
+         for (Integer i : this.spatialFencesList.keySet()) {
+         this.spatialFencesList.get(i).hoverIfMouseOver(p, at);
+         }
 
 
-        for (Integer i : this.spatialWaterList.keySet()) {
-            this.spatialWaterList.get(i).hoverIfMouseOver(p, at);
-        }
-  */  
-    
+
+         for (Integer i : this.spatialPathsList.keySet()) {
+         this.spatialPathsList.get(i).hoverIfMouseOver(p, at);
+         }
+
+
+         for (Integer i : this.spatialSignsList.keySet()) {
+         this.spatialSignsList.get(i).hoverIfMouseOver(p, at);
+         }
+
+
+         for (Integer i : this.spatialSoilList.keySet()) {
+         this.spatialSoilList.get(i).hoverIfMouseOver(p, at);
+         }
+
+
+         for (Integer i : this.spatialWaterList.keySet()) {
+         this.spatialWaterList.get(i).hoverIfMouseOver(p, at);
+         }
+         */
+
     }
 }

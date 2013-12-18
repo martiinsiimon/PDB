@@ -15,20 +15,20 @@ import javax.swing.event.MouseInputListener;
  * @author casey
  */
 public class MapControl{
-    
+
     private MapPanel view;
     private SpatialContainer model;
-    
+
     public MapControl(MapPanel mp, SpatialContainer sc){
         this.view = mp;
         this.model = sc;
         this.view.registerListener(new MapMouseControl());
     }
-    
-    
-    
+
+
+
     class MapMouseControl implements MouseInputListener{
-    
+
         @Override
         public void mouseClicked(MouseEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
@@ -38,6 +38,9 @@ public class MapControl{
         public void mousePressed(MouseEvent e) {
             model.deselectAll();
             SpatialObject so = model.getHovered();
+            if (so == null) {
+                return;
+            }
             so.setSelection(true);
             model.setSelected(so);
         }
