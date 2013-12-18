@@ -109,7 +109,7 @@ public class Core {
            }else if("a_help".equals(e.getActionCommand())){
                
            }else if("a_about".equals(e.getActionCommand())){
-               JOptionPane.showMessageDialog(mainWindow, "PDB Projekt 2012 - ZOO \nJan Jeřábek - xjerab13\nMartin Simon -x*******\nMilan Bárta -x*******");
+               JOptionPane.showMessageDialog(mainWindow, "PDB Projekt 2013 - Botanická zahrada \nJan Jeřábek - xjerab13\nMartin Šimon - xsimon14\nMilan Bárta - xbarta32");
                
            }else if("a".equals(e.getActionCommand())){
                

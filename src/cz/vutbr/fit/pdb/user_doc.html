@@ -1,14 +1,89 @@
 <HTML>
+<META CHARSET="UTF-8">
+<TITLE>Projekt do předmětu PDB - Botanická zahrada</TITLE>
 <HEAD>
 </HEAD>
 
 <BODY>
 <CENTER>
-<H1>Projekt do předmětu PDB</H1>
-<H1>Botanická zahrada</H1>
+    <H1>Projekt do předmětu PDB - Botanická zahrada</H1>
+    <H1>Uživatelská dokumentace</H1>
 </CENTER>
 
-<P>Text ...</P>
+<P>Tento dokument slouží jako uživatelská dokumentace k aplikaci umožňující správu
+objektů v botanické zahradě.</P>
+
+<P>V následujících kapitolách jsou postupně probrány možnosti připojení k databázi,
+její inicializace, v další kapitole je obecně popsáno uživatelské prostředí aplikace,
+možnosti editačního módu a na závěr je uveden popis k dotazům prostorové, multimediální
+a temporální databáze.</P>
+
+<H2>Připojení k databázi</H2>
+<P>K databázi se lze připojit dvojím způsobem. První možností je využít dialogové
+okno, které je uživateli zobrazeno okamžitě po spuštění samotné aplikace. Druhou
+možnosti pak představuje hlavní menu aplikace, kde je taktéž vyhledáním příslušné
+položky v menu možné tento dialog vyvolat.</P>
+
+<P>Dialogové okno pro připojení k databázovému serveru vyžaduje zadání několika
+povinných údajů.<BR>
+Jsou jimi:
+
+<UL>
+<LI>Uživatelské jméno</LI>
+<LI>Heslo</LI>
+<LI>Adresa databázového serveru</LI>
+<LI>Port</LI>
+<LI>Název služby</LI>
+</UL>
+
+</P>
+
+<P>Databázi lze před prvním použitím, či kdykoliv během používání, inicializovat
+pomocí přiloženého inicializačního skriptu, který databázi uvede do původního stavu.
+Tuto akci lze vyvolat přes příslušné tlačítko v menu aplikace.</P>
+
+<H2>Popis prostředí aplikace</H2>
+<P>Aplikační okno je rozděleno na dvě hlavní části. V horní části aplikace je
+vykreslována mapa načtená z databáze. Ve spodní části jsou pak zobrazovány informace
+o jednotlivých vybraných objektech na mapě. V případě vybrání např. záhonu květin
+je ve spodní části aplikačního okna vypsán název květiny společně s obrázkem, pokud
+je dostupný.</P>
+
+<H2>Editační mód</H2>
+<P>Přepnutí do editačního módu lze realizovat vyhledáním odpovídající volby v
+aplikačním menu. Následně je v pravé části zobrazen nový panel obsahující nástroje
+pro editaci mapy.</P>
+
+<P>Mezi tyto editační nástroje patří:
+
+<UL>
+<LI>Tlačítka pro přidání různých typů nových objektů na mapu</LI>
+<LI>Tlačítka pro úpravu různých vlastností vybraného objektu:</LI>
+    <UL>
+    <LI>Změna pozice (souřadnice x, y)</LI>
+    <LI>Změna velikosti (souřadnice x, y)</LI>
+    <LI>Změna rotace objektu</LI>
+    <LI>Změna vrstvy</LI>
+    </UL>
+</UL>
+
+</P>
+
+<H2>Dotazy prostorové databáze</H2>
+<P>Dotazy prostorové databáze jsou dostupné z aplikačního menu pod příslušnou položkou.
+Umožňují pokročilé operace vkládání, mazání a změnu uživatelských prostorových dat.</P>
+
+<H2>Dotazy multimediální databáze</H2>
+<P>Dotazy multimediální databáze jsou dostupné z aplikačního menu pod příslušnou položkou.
+Umožňují pokročilé operace vkládání, mazání a úprava multimédií a jejich vyhledání
+podle multimediálního obsahu.</P>
+
+<H2>Dotazy temporální databáze</H2>
+<P>Dotazy temporální databáze jsou dostupné z aplikačního menu pod příslušnou položkou.
+Umožňují pokročilé operace vkládání, mazání a změnu uživatelsky temporálně proměnlivých
+dat.</P>
+
+<P>Podrobnější informace k temporálním dotazům lze nalézt k dokumentaci temporálních dotazů.</P>
 
 </BODY>
 </HTML>
