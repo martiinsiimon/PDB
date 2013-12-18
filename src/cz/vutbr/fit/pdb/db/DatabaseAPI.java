@@ -719,6 +719,29 @@ public class DatabaseAPI {
     }
 
     /**
+     * Get count of unique plants that grow on given soil.
+     *
+     * @param plantType Type of plant you want to count
+     * @param soilType Type of soil you want to search in
+     * @return
+     */
+    public Integer getCountOfUniquePlantOnSoil(Integer plantType, Integer soilType) {
+        String query
+                = "SELECT COUNT(p.id) id"
+                + " FROM plants p"
+                + " WHERE p.plant_type = " + plantType
+                + " AND EXISTS (SELECT 1 FROM beds b, soil s WHERE p.id = b.plant"
+                + " AND s.soil_type = " + soilType
+                + " AND SDO_RELATE(b.geometry, s.geometry,'mask=ANYINTERACT') = 'TRUE')";
+
+        ArrayList<Integer> lst = this.connector.executeQueryWithResultsInteger(query);
+        if (lst.isEmpty()) {
+            return -1;
+        } else {
+            return lst.get(0);
+        }
+    }
+    /**
      * Get a list of the smallest beds of flowers on the map.
      *
      * @return List of ID's of the smallest beds of flower

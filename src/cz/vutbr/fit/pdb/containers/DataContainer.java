@@ -9,6 +9,7 @@ import cz.vutbr.fit.pdb.model.SoilTypeObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import oracle.ord.im.OrdImage;
 
 /**
  * Container of data objects
@@ -245,6 +246,47 @@ public class DataContainer {
             }
         }
         return null;
+    }
+
+    /**
+     * Get image (full resolution) of given object. The object has to be
+     * initialized as PlansObject type.
+     *
+     * @param obj
+     * @return
+     */
+    public OrdImage getImage(PlantsObject obj) {
+        if (obj == null) {
+            return null;
+        } else {
+            return this.getImage(obj.getId());
+        }
+    }
+
+    /**
+     * Get image (full resolution) of given object. The object has to be
+     * initialized as PlansObject type. Object is determined by its ID.
+     *
+     * @param id ID of PlantsObject
+     * @return OrdImage of given object or null if fail
+     */
+    public OrdImage getImage(Integer id) {
+        DataObject obj = this.getPlants(id);
+        if (obj == null || !(obj instanceof PlantsObject)) {
+            /* There's no such and object */
+            return null;
+        }
+
+        /* Return locally cashed image */
+        if (((PlantsObject) obj).getImage() != null) {
+            return ((PlantsObject) obj).getImage();
+        }
+
+        /* Get the object from db */
+        OrdImage img = db.getPlantsImage((PlantsObject) obj);
+
+        /* Return result */
+        return img;
     }
 
     /**
