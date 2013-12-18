@@ -75,13 +75,13 @@ public class Core {
         sc.initialize();
         dc = new DataContainer(dbAPI);
         dc.initialize();
-        
+
         InfoPanel ip = new InfoPanel();
         mp = new MapPanel(sc);
        
         rootPanel = new RootPanel(mp, ip);
         rootControl = new RootControl(rootPanel);
-        mapControl = new MapControl(mp, sc);
+        mapControl = new MapControl(mp, ip, sc, dc);
         rootPanel.rebake();
         mainWindow.add(rootPanel);
         mainWindow.invalidate();

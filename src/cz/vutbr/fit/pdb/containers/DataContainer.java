@@ -252,8 +252,8 @@ public class DataContainer {
      * Get image (full resolution) of given object. The object has to be
      * initialized as PlansObject type.
      *
-     * @param obj
-     * @return
+     * @param obj PlantObject which is looking for image
+     * @return OrdImage of given object or null if fail
      */
     public OrdImage getImage(PlantsObject obj) {
         if (obj == null) {
@@ -280,6 +280,42 @@ public class DataContainer {
         /* Return locally cashed image */
         if (((PlantsObject) obj).getImage() != null) {
             return ((PlantsObject) obj).getImage();
+        }
+
+        /* Get the object from db */
+        OrdImage img = db.getPlantsImage((PlantsObject) obj);
+
+        /* Return result */
+        return img;
+    }
+
+    /**
+     * Get image (thumbnail) of given object. The object has to be initialized
+     * as PlansObject type.
+     *
+     * @param obj PlantObject which is looking for image
+     * @return OrdImage of given object or null if fail
+     */
+    public OrdImage getImageThumbnail(PlantsObject obj) {
+        if (obj == null) {
+            return null;
+        } else {
+            return this.getImageThumbnail(obj.getId());
+        }
+    }
+
+    /**
+     * Get image (thumbnail) of given object. The object has to be initialized
+     * as PlansObject type. Object is determined by its ID.
+     *
+     * @param id ID of PlantsObject
+     * @return OrdImage of given object or null if fail
+     */
+    public OrdImage getImageThumbnail(Integer id) {
+        DataObject obj = this.getPlants(id);
+        if (obj == null || !(obj instanceof PlantsObject)) {
+            /* There's no such and object */
+            return null;
         }
 
         /* Get the object from db */
