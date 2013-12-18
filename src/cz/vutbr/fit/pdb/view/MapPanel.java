@@ -5,6 +5,7 @@
 package cz.vutbr.fit.pdb.view;
 
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
+import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -106,51 +107,71 @@ public class MapPanel extends JPanel{
          System.out.println(actLayer.size());
          for(SpatialObject o : actLayer){
                 g2.setStroke(new BasicStroke(1));
+                boolean to_be_filled = true;
+                boolean to_draw_black_border = true;
                 switch (layer) {
-                    case 2:
-                        g2.setColor(Color.DARK_GRAY);
+                    case 1: // soil
+                        switch (((SoilObject)o).getSoilType()) {
+                            case 1:
+                                g2.setColor(new Color(123, 69, 33));
+                                break;
+                            case 2:
+                                g2.setColor(new Color(175, 105, 59));
+                                break;
+                            case 3:
+                                g2.setColor(new Color(255, 207, 13));
+                                break;
+                            default:
+                                g2.setColor(new Color(160, 90, 44));
+                                break;
+                        }
                         break;
-                    case 3:
-                        g2.setColor(Color.GREEN);
+                    case 2: // water
+                        g2.setColor(new Color(128, 179, 255));
                         break;
-                    case 4:
-                        g2.setColor(Color.BLUE);
+                    case 3: // paths
+                        g2.setColor(new Color(80, 68, 22));
                         break;
-                    case 5:
-                        g2.setColor(new Color(185, 120, 90));
+                    case 4: // beds
+                        g2.setColor(new Color(171, 200, 55));
                         break;
-                    case 6:
-                        g2.setColor(Color.RED);
+                    case 5: // fences
+                        g2.setStroke(new BasicStroke(3));
+                        g2.setColor(new Color(193, 34, 0));
+                        to_be_filled = false;
+                        to_draw_black_border = false;
+                        break;
+                    case 6: // signs
+                        g2.setColor(new Color(193, 34, 0));
                         break;
                     default:
-                        g2.setColor(Color.BLACK);
+                        g2.setColor(new Color(200, 171, 55));
                         break;
                 }
                 JGeometry geo = o.getGeometry();
                 if (o.isSelected()) {
-                    g2.setColor(Color.red);
-                    g2.setStroke(new BasicStroke(5));
+                    g2.setStroke(new BasicStroke(6));
 
                 } else if (o.isHovered()) {
-                    g2.setColor(Color.green);
-                    g2.setStroke(new BasicStroke(5));
+                    g2.setColor(g2.getColor().darker());
                 }
-                System.out.println(geo.isPoint());
+                
                 if (geo.isPoint()) {
                     Point2D points = geo.getJavaPoint();
-                    Shape s = at.createTransformedShape(new Ellipse2D.Double((int) points.getX() - 3, (int) points.getY() - 3, 6, 6));
+                    Shape s = at.createTransformedShape(new Ellipse2D.Double((int) points.getX() - 5, (int) points.getY() - 5, 10, 10));
                     g2.fill(s);
-
-                } else {
-                       
-                    g2.draw(geo.createShape(at));
+                    g2.setColor(Color.BLACK);
+                    g2.draw(s);
                 }
+                
+                if (to_be_filled) {
+                    g2.fill(geo.createShape(at));
+                }
+                if (to_draw_black_border) {
+                    g2.setColor(Color.BLACK);
+                }
+                g2.draw(geo.createShape(at));
 
-            
-         
-         
          } 
     }
-    
-    
 }
