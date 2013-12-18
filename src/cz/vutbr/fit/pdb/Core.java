@@ -4,6 +4,7 @@
  */
 package cz.vutbr.fit.pdb;
 
+import cz.vutbr.fit.pdb.containers.DataContainer;
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
 import cz.vutbr.fit.pdb.control.MapControl;
 import cz.vutbr.fit.pdb.control.RootControl;
@@ -61,13 +62,14 @@ public class Core {
     public void initMainPanel(){
         SpatialContainer sc = new SpatialContainer(dbAPI);
         sc.initialize();
-        
+        DataContainer dc = new DataContainer(dbAPI);
+        dc.initialize();
         InfoPanel ip = new InfoPanel();
         MapPanel mp = new MapPanel(sc);
        
         rootPanel = new RootPanel(mp, ip);
         rootControl = new RootControl(rootPanel);
-        mapControl = new MapControl(mp, sc);
+        mapControl = new MapControl(mp, ip, sc, dc);
         rootPanel.rebake();
         mainWindow.add(rootPanel);
         mainWindow.invalidate();
