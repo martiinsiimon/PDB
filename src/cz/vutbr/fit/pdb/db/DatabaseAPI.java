@@ -760,32 +760,21 @@ public class DatabaseAPI {
 
 
     /**
-     * FIXME!!!
+     * Get a list of plants that are independent on soil where they grow. It
+     * means they grow on two or more different soil types.
      *
-     * @return
+     * @param plantType The plant type you are interested in
+     * @return List of all multisoil plants
      */
-    public ArrayList<DataObject> getMultisoilTrees() {
-        String query2
-                = "SELECT tree.id, tree.plant_type, tree.name"
-                + " FROM plants tree"
-                + " WHERE tree.plant_type = (SELECT id FROM plant_type WHERE name = 'tree')"
-                + " AND (EXISTS (SELECT 1 FROM soil s, beds b WHERE b.plant = tree.id AND s.soil_type = 2 AND SDO_RELATE(s.geometry, b.geometry, 'mask=ANYINTERACT') = 'TRUE'))";
-
-        String query3
-                = "SELECT bed.id"
-                + " FROM beds bed"
-                + " WHERE bed.plant = (SELECT id FROM plants  WHERE plant_type = (SELECT id FROM plant_type WHERE name = 'tree'))"
-                + " WHERE EXISTS (SELECT 1 FROM soils soil WHERE soil.)";
-
+    public ArrayList<Integer> getMultisoilPlants(Integer plantType) {
         String query
-                = "SELECT one.cislo_klece, one.layer, one.geometrie, one.date_from, one.date_to "
-                + "from zoo one "
-                + "where (one.layer = (select id from layers where group_name = 'cages')) and "
-                + "one.date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY') and "
-                + "exists(select 1 from zoo water "
-                + "where water.layer = (select id from layers where group_name = 'water') and "
-                + "water.date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY') and "
-                + "SDO_RELATE(water.geometrie, one.geometrie, 'mask=INSIDE+COVEREDBY') = 'TRUE')";
-        return this.connector.getMultisoilTrees(query2);
+                = "SELECT p.id"
+                + " FROM plants p"
+                + " WHERE p.plant_type = " + plantType
+                + " AND EXISTS (SELECT 1 FROM beds b1, soil s1, beds b2, soil s2"
+                + " WHERE p.id = b1.plant AND p.id = b2.plant AND s1.id <> s2.id"
+                + " AND SDO_RELATE(b1.geometry, s1.geometry,'mask=ANYINTERACT') = 'TRUE'"
+                + " AND SDO_RELATE(b2.geometry, s2.geometry,'mask=ANYINTERACT') = 'TRUE')";
+        return this.connector.executeQueryWithResultsInteger(query);
     }
 }
