@@ -18,7 +18,7 @@ import javax.swing.JMenuItem;
  */
 public class MainMenu extends JMenuBar{
     
-    private JMenu mFile,mAbout,mEdit,mDatabase,mSpatial;
+    private JMenu mFile, mAbout, mEdit, mDatabase, mSpatial, mMultimedial, mTemporal;
     private JMenuItem mF_quit, mD_Connect, mD_Init, mA_Help, mA_About;
     private JMenuItem mS_BedBySoil, mS_BedsWithFences, mS_DistBtwBeds, mS_BiggestBed, mS_SmallestBed;
     private JCheckBoxMenuItem mE_cbEdit;
@@ -31,6 +31,8 @@ public class MainMenu extends JMenuBar{
         mEdit =  new JMenu("Edit");
         mDatabase = new JMenu("Database");
         mSpatial = new JMenu("Spatial operations");
+        mMultimedial = new JMenu("Multimedial operations");
+        mTemporal = new JMenu("Temporal operations");
         
         mF_quit = new JMenuItem("Quit");
         mF_quit.setActionCommand("f_quit");
@@ -80,9 +82,9 @@ public class MainMenu extends JMenuBar{
         add(mEdit);
         add(mDatabase);
         add(mSpatial);
+        add(mMultimedial);
+        add(mTemporal);
         add(mAbout);
-        
-    
     }
     
     

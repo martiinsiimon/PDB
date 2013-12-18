@@ -504,7 +504,7 @@ public class SpatialContainer {
      *
      * @param _obj List of SpatialObject to mark as selected
      */
-    public void setTheseAsSelected(SpatialObject[] _obj) {
+    public void setTheseAsSelected(ArrayList<SpatialObject> _obj) {
         this.deselectAll();
 
         for (SpatialObject o : _obj) {
