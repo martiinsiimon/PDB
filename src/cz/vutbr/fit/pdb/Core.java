@@ -74,14 +74,9 @@ public class Core {
     public void initMainPanel(){
         sc = new SpatialContainer(dbAPI);
         sc.initialize();
-<<<<<<< HEAD
-        DataContainer dc = new DataContainer(dbAPI);
-        dc.initialize();
-=======
         dc = new DataContainer(dbAPI);
         dc.initialize();
-        
->>>>>>> 0815d3b1851e58f6de1bb0b4139ee5f0b1b84cc8
+
         InfoPanel ip = new InfoPanel();
         mp = new MapPanel(sc);
        
