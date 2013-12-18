@@ -646,25 +646,95 @@ public class DatabaseAPI {
      * @param soil SoilObject instance with soilType set
      * @return List of data object
      */
-    public ArrayList<Integer> getPlantsBySoil(PlantsObject plant, SoilObject soil) {
-        return this.getPlantsBySoil(plant.getPlantType(), soil.getSoilType());
+    public ArrayList<Integer> getBedsBySoil(PlantsObject plant, SoilObject soil) {
+        return this.getBedsBySoil(plant.getPlantType(), soil.getSoilType());
     }
 
     /**
-     * Get list of DataObjects of plants which grows on soil.
+     * Get list of ID's of beds what grows on given soil. Return all occurencies
+     * of given plantType on given soilType.
      *
      * @param plantType Id of plantType (from database)
      * @param soilType Id of soilType (from database)
-     * @return List of data object
+     * @return List of id's of BedsObject (from database)
      */
-    public ArrayList<Integer> getPlantsBySoil(Integer plantType, Integer soilType) {
+    public ArrayList<Integer> getBedsBySoil(Integer plantType, Integer soilType) {
         String query
-                = "SELECT bed.id"
-                + " FROM beds bed"
-                + " WHERE bed.plant IN (SELECT id FROM plants  WHERE plant_type = " + plantType + ")"; //FIXME ONLY FINDS BY PLANTTYPE
-        //+ " AND (EXISTS (SELECT 1 FROM soil s, beds b WHERE b.id = bed.id AND s.soil_type = " + soilType + " AND SDO_RELATE(s.geometry, b.geometry, 'mask=ANYINTERACT') = 'TRUE'))";
+                = "SELECT b.id"
+                + " FROM beds b"
+                + " WHERE b.plant IN (SELECT id FROM plants  WHERE plant_type = " + plantType + ")"
+                + " AND EXISTS (SELECT 1 FROM soil s WHERE s.soil_type = " + soilType
+                + " AND SDO_RELATE(s.geometry, b.geometry, 'mask=ANYINTERACT') = 'TRUE')";
         return this.connector.executeQueryWithResultsInteger(query);
     }
+
+    /**
+     * Get all beds which are borderer (at least partially) with any fence.
+     *
+     * @return List of id's of BedsObject (from database)
+     */
+    public ArrayList<Integer> getBedsBorderedWithFence() {
+        String query
+                = "SELECT b.id"
+                + " FROM beds b"
+                + " WHERE EXISTS (SELECT 1 FROM fences f"
+                + " WHERE SDO_RELATE(f.geometry, b.geometry, 'mask=ANYINTERACT') = 'TRUE')";
+        return this.connector.executeQueryWithResultsInteger(query);
+    }
+
+    /**
+     * Get distance between two beds determined by id
+     *
+     * @param b1 ID of first bed (ID from database)
+     * @param b2 ID of second bed (ID from database)
+     * @return Distance in points or -1 if fail or no such objects
+     */
+    public Integer getDistance(Integer b1, Integer b2) {
+        String query
+                = "SELECT SDO_GEOM.SDO_DISTANCE(a.geometry, b.geometry, 1) id"
+                + " FROM beds a, beds b"
+                + " WHERE a.id = " + b1 + " AND b.id = " + b2;
+        ArrayList<Integer> lst = this.connector.executeQueryWithResultsInteger(query);
+        if (lst.isEmpty()) {
+            return -1;
+        } else {
+            return lst.get(0);
+        }
+    }
+
+    /**
+     * Get a list of the biggest beds of flowers on the map.
+     *
+     * @return List of ID's of the biggest beds of flower
+     */
+    public ArrayList<Integer> getBiggestBed() {
+        String query
+                = "SELECT b.id"
+                + " FROM beds b"
+                + " WHERE b.plant IN (SELECT id FROM plants WHERE plant_type = (SELECT id from plant_type WHERE name = 'flower'))"
+                + " AND NOT EXISTS"
+                + "	(SELECT 1 FROM beds comp"
+                + "	WHERE (SDO_GEOM.SDO_AREA(comp.geometry, 1) > SDO_GEOM.SDO_AREA(b.geometry, 1)) AND (b.id <> comp.id))";
+        return this.connector.executeQueryWithResultsInteger(query);
+    }
+
+    /**
+     * Get a list of the smallest beds of flowers on the map.
+     *
+     * @return List of ID's of the smallest beds of flower
+     */
+    public ArrayList<Integer> getSmallestBed() {
+        String query
+                = "SELECT b.id"
+                + " FROM beds b"
+                + " WHERE b.plant IN (SELECT id FROM plants WHERE plant_type = (SELECT id from plant_type WHERE name = 'flower'))"
+                + " AND NOT EXISTS"
+                + "	(SELECT 1 FROM beds comp"
+                + "	WHERE comp.plant IN (SELECT id FROM plants WHERE plant_type = (SELECT id from plant_type WHERE name = 'flower'))"
+                + " AND (SDO_GEOM.SDO_AREA(comp.geometry, 1) < SDO_GEOM.SDO_AREA(b.geometry, 1)) AND (b.id <> comp.id))";
+        return this.connector.executeQueryWithResultsInteger(query);
+    }
+
 
     /**
      * FIXME!!!
