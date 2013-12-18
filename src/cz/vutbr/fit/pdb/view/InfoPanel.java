@@ -11,6 +11,7 @@
 package cz.vutbr.fit.pdb.view;
 
 import cz.vutbr.fit.pdb30.gui.ImagePanel;
+import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
 
 /**
@@ -102,6 +103,11 @@ public class InfoPanel extends javax.swing.JPanel {
     
     public void setNameField(String name){
         this.jTextFieldName.setText(name);
+    }
+    
+    
+    public void setImage(BufferedImage img){
+        this.photoPanel.setImage(img);
     }
 
 }
