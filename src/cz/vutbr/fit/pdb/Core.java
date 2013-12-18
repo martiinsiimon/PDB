@@ -4,10 +4,13 @@
  */
 package cz.vutbr.fit.pdb;
 
+import cz.vutbr.fit.pdb.containers.DataContainer;
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
 import cz.vutbr.fit.pdb.control.MapControl;
 import cz.vutbr.fit.pdb.control.RootControl;
 import cz.vutbr.fit.pdb.db.DatabaseAPI;
+import cz.vutbr.fit.pdb.model.DataObject;
+import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MainMenu;
 import cz.vutbr.fit.pdb.view.MapPanel;
@@ -18,13 +21,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 
 /**
  *
@@ -37,12 +43,19 @@ public class Core {
     private MainMenu mainMenu;
     private RootControl rootControl;
     private MapControl mapControl;
+    private MapPanel mp;
 
     private DatabaseAPI dbAPI;
+    
+    private DataContainer dc;
+    private SpatialContainer sc;
 
     public Core(){
         mainWindow = new JFrame("PDB 2013");
         mainMenu = new MainMenu();
+        dc = null;
+        sc = null;
+        mp = null;
     }
 
     public void initGui(){
@@ -59,15 +72,17 @@ public class Core {
     }
     
     public void initMainPanel(){
-        SpatialContainer sc = new SpatialContainer(dbAPI);
+        sc = new SpatialContainer(dbAPI);
         sc.initialize();
-        
+        dc = new DataContainer(dbAPI);
+        dc.initialize();
+
         InfoPanel ip = new InfoPanel();
-        MapPanel mp = new MapPanel(sc);
+        mp = new MapPanel(sc);
        
         rootPanel = new RootPanel(mp, ip);
         rootControl = new RootControl(rootPanel);
-        mapControl = new MapControl(mp, sc);
+        mapControl = new MapControl(mp, ip, sc, dc);
         rootPanel.rebake();
         mainWindow.add(rootPanel);
         mainWindow.invalidate();
@@ -106,7 +121,10 @@ public class Core {
                    dbAPI.resetDBData();
                    
                }
-           }else if("a_help".equals(e.getActionCommand())){
+           } else if ("s_bed_by_soil".equals(e.getActionCommand())) {
+               getBedBySoilDialog();
+               
+           } else if("a_help".equals(e.getActionCommand())){
                
            }else if("a_about".equals(e.getActionCommand())){
                JOptionPane.showMessageDialog(mainWindow, "PDB Projekt 2013 - Botanická zahrada \nJan Jeřábek - xjerab13\nMartin Šimon - xsimon14\nMilan Bárta - xbarta32");
@@ -156,6 +174,38 @@ public class Core {
            initMainPanel(); 
         }
 
+    } 
+   
+   public void getBedBySoilDialog() {
+       ArrayList<String> plant_types = new ArrayList<String>();
+       for (DataObject o: dc.getPlantType()) {
+           plant_types.add(o.getName());
+       }
+       ArrayList<String> soil_types = new ArrayList<String>();
+       for (DataObject o: dc.getSoilType()) {
+           soil_types.add(o.getName());
+       }
+       
+       JList soil_type_list = new JList(soil_types.toArray());
+       soil_type_list.setSelectedIndex(0);
+       JList plant_type_list = new JList(plant_types.toArray());
+       plant_type_list.setSelectedIndex(0);
+       final JComponent[] inputs = new JComponent[]{
+           new JLabel("Soil type"), soil_type_list,
+           new JLabel("Plant type"), plant_type_list
+       };
+       int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select soil type", JOptionPane.OK_CANCEL_OPTION);
+       if (a == JOptionPane.OK_OPTION) {
+           System.out.println("Index soil_type: " + soil_type_list.getSelectedIndex());
+           System.out.println("Index plant_type: " + plant_type_list.getSelectedIndex());
+           ArrayList<Integer> bedsID = dbAPI.getBedsBySoil(plant_type_list.getSelectedIndex()+1, soil_type_list.getSelectedIndex()+1);
+           ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+           for (Integer i: bedsID) {
+               bedsSpatial.add(sc.getBed(i));
+           }
+           sc.setTheseAsSelected(bedsSpatial);
+           mp.updateUI();
+        }
     } 
 
 
