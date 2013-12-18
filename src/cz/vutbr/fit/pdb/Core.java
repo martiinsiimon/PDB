@@ -30,7 +30,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 
 /**
  *
@@ -101,8 +100,7 @@ public class Core {
         mainWindow.setLocation(screenSize.width / 2 -frameSize.width / 2, screenSize.height /2 - frameSize.height / 2);
 
     }
-    
-    
+
     class MenuControl implements ActionListener,ItemListener{
     
         @Override
@@ -123,7 +121,14 @@ public class Core {
                }
            } else if ("s_bed_by_soil".equals(e.getActionCommand())) {
                getBedBySoilDialog();
-               
+           } else if ("s_beds_with_fences".equals(e.getActionCommand())) {
+               getBedsWithFencesDialog();
+           } else if ("s_dist_btw_beds".equals(e.getActionCommand())) {
+               getDistBtwBedsDialog();
+           }else if ("s_biggest_bed".equals(e.getActionCommand())) {
+               getBiggestBedDialog();
+           } else if ("s_smallest_bed".equals(e.getActionCommand())) {
+               getSmallestBedDialog();
            } else if("a_help".equals(e.getActionCommand())){
                
            }else if("a_about".equals(e.getActionCommand())){
@@ -196,8 +201,6 @@ public class Core {
        };
        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select soil type", JOptionPane.OK_CANCEL_OPTION);
        if (a == JOptionPane.OK_OPTION) {
-           System.out.println("Index soil_type: " + soil_type_list.getSelectedIndex());
-           System.out.println("Index plant_type: " + plant_type_list.getSelectedIndex());
            ArrayList<Integer> bedsID = dbAPI.getBedsBySoil(plant_type_list.getSelectedIndex()+1, soil_type_list.getSelectedIndex()+1);
            ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
            for (Integer i: bedsID) {
@@ -207,7 +210,52 @@ public class Core {
            mp.updateUI();
         }
     } 
+   
+   public void getBedsWithFencesDialog() {
+       ArrayList<Integer> bedsID = dbAPI.getBedsBorderedWithFence();
+       ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+       for (Integer i : bedsID) {
+           bedsSpatial.add(sc.getBed(i));
+       }
+       sc.setTheseAsSelected(bedsSpatial);
+       mp.updateUI();
+   }
+   
+   public void getDistBtwBedsDialog() {
+//       final JComponent[] inputs = new JComponent[]{
+//           new JLabel("?? TODO")
+//       };
+       //int a = JOptionPane.showConfirmDialog(mainMenu, inputs, "Select beds to measure distance between", JOptionPane.OK_CANCEL_OPTION);
+       //if (a == JOptionPane.OK_OPTION) {
+//           ArrayList<Integer> bedsID = dbAPI.getBedsBySoil(plant_type_list.getSelectedIndex()+1, soil_type_list.getSelectedIndex()+1);
+//           ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+//           for (Integer i: bedsID) {
+//               bedsSpatial.add(sc.getBed(i));
+//           }
+//           sc.setTheseAsSelected(bedsSpatial);
+//           mp.updateUI();
+        //}
+   }
+   
+   public void getBiggestBedDialog() {
+       ArrayList<Integer> bedsID = dbAPI.getBiggestBed();
+       ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+       for (Integer i : bedsID) {
+           bedsSpatial.add(sc.getBed(i));
+       }
+       sc.setTheseAsSelected(bedsSpatial);
+       mp.updateUI();
+   }
 
+   public void getSmallestBedDialog() {
+       ArrayList<Integer> bedsID = dbAPI.getSmallestBed();
+       ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+       for (Integer i : bedsID) {
+           bedsSpatial.add(sc.getBed(i));
+       }
+       sc.setTheseAsSelected(bedsSpatial);
+       mp.updateUI();
+   }
 
     public static void main(String[] args){
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
