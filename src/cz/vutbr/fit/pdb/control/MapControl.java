@@ -5,6 +5,7 @@
 package cz.vutbr.fit.pdb.control;
 
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
+import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.view.MapPanel;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputListener;
@@ -13,7 +14,7 @@ import javax.swing.event.MouseInputListener;
  *
  * @author casey
  */
-public class MapControl implements MouseInputListener{
+public class MapControl{
     
     private MapPanel view;
     private SpatialContainer model;
@@ -21,41 +22,51 @@ public class MapControl implements MouseInputListener{
     public MapControl(MapPanel mp, SpatialContainer sc){
         this.view = mp;
         this.model = sc;
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.view.registerListener(new MapMouseControl());
     }
     
+    
+    
+    class MapMouseControl implements MouseInputListener{
+    
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            model.deselectAll();
+            SpatialObject so = model.getHovered();
+            so.setSelection(true);
+            model.setSelected(so);
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            model.checkHovering(e.getPoint(), view.getAffineTransform());
+            //System.out.println(e.getPoint());
+            view.updateUI();
+        }
+    }
 }

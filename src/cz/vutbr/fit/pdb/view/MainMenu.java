@@ -31,15 +31,22 @@ public class MainMenu extends JMenuBar{
         mDatabase = new JMenu("Database");
         
         mF_quit = new JMenuItem("Quit");
+        mF_quit.setActionCommand("f_quit");
+       
         
         mE_cbEdit = new JCheckBoxMenuItem("Enable");
         
         mD_Connect = new JMenuItem("Connect To");
+        mD_Connect.setActionCommand("db_connect");
+        
         mD_Init = new JMenuItem("Init");
+        mD_Init.setActionCommand("db_init");
         
         mA_Help = new JMenuItem("Help");
-        mA_About = new JMenuItem("About");
+        mA_Help.setActionCommand("a_help");
         
+        mA_About = new JMenuItem("About");
+        mA_About.setActionCommand("a_about");
         
         mFile.add(mF_quit);
         mEdit.add(mE_cbEdit);
@@ -65,6 +72,11 @@ public class MainMenu extends JMenuBar{
     
     public void registerActionListener(ActionListener controler){
         this.mE_cbEdit.addActionListener(controler);
+        this.mF_quit.addActionListener(controler);
+        this.mD_Connect.addActionListener(controler);
+        this.mD_Init.addActionListener(controler);
+        this.mA_About.addActionListener(controler);
+        this.mA_Help.addActionListener(controler);
     }
     
 }

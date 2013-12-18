@@ -46,14 +46,14 @@ public class RootPanel extends JPanel{
             splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, editSplitPane, iPanel);
             splitPane.setResizeWeight(0.8);
             splitPane.setOneTouchExpandable(true);
-            splitPane.setContinuousLayout(true);
+            splitPane.setContinuousLayout(false);
             add(splitPane);
             
         }else{
             splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, mPanel, iPanel);
             splitPane.setResizeWeight(1);
             splitPane.setOneTouchExpandable(true);
-            splitPane.setContinuousLayout(true);
+            splitPane.setContinuousLayout(false);
             add(splitPane);
             
         }

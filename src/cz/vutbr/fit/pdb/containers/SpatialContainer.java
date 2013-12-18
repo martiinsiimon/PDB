@@ -14,6 +14,10 @@ import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.model.WaterObject;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -264,6 +268,37 @@ public class SpatialContainer {
     public ArrayList<DataObject> getLayers() {
         return this.layers;
     }
+    
+    
+    /**
+     * Return a list of layers size.
+     *
+     * @return ArrayList size.
+     */
+    public int countLayers(){
+        return this.layers.size();
+    }
+    
+    
+    public Rectangle getBiggestObjectBoundaries(){
+    
+        ArrayList<SpatialObject> allLayers = getGeometries();
+        int mostLeft = 0;
+        int mostBottom = 0;
+        for(SpatialObject o : allLayers){
+             Shape sh = o.getGeometry().createShape();
+             Rectangle actual = sh.getBounds();
+             if((actual.width + actual.x) > mostLeft){
+                 mostLeft = (actual.width + actual.x);
+             }
+             if((actual.height + actual.y) > mostBottom){
+                 mostBottom = (actual.height + actual.y);
+             }
+        }
+        return new Rectangle(mostLeft, mostBottom);
+        
+        
+    }
 
     /**
      * Return a list of geometries of all object on the map. The list is sorted
@@ -502,6 +537,18 @@ public class SpatialContainer {
     public SpatialObject getSelected() {
         return this.selected;
     }
+    
+    public SpatialObject getHovered(){
+        return this.hovered;
+    }
+    
+    public void setSelected(SpatialObject so){
+        this.selected = so;
+    }
+    
+    public void setHovered(SpatialObject so){
+        this.hovered = so;
+    }
 
     /**
      * Invoke commit all the queries in query queue.
@@ -712,5 +759,51 @@ public class SpatialContainer {
             this.spatialWaterList.remove(_obj.getId());
             this.db.delete(_obj);
         }
+    }
+    
+    public void checkHovering(Point p, AffineTransform at){
+        ArrayList<SpatialObject> allItems = getGeometries();
+        boolean haveSelected = false;
+        for(int j = allItems.size() -1; j >=0; j--){
+            if(haveSelected == false){
+                haveSelected = allItems.get(j).hoverIfMouseOver(p, at);
+                this.hovered = allItems.get(j);
+            }else{
+                allItems.get(j).setHovering(false);
+            }
+        }
+        return;
+/*
+        for (Integer i : this.spatialBedsList.keySet()) {
+               this.spatialBedsList.get(i).hoverIfMouseOver(p, at);
+        }
+        
+
+        for (Integer i : this.spatialFencesList.keySet()) {
+           this.spatialFencesList.get(i).hoverIfMouseOver(p, at);
+        }
+        
+        
+
+        for (Integer i : this.spatialPathsList.keySet()) {
+           this.spatialPathsList.get(i).hoverIfMouseOver(p, at);
+        }
+        
+
+        for (Integer i : this.spatialSignsList.keySet()) {
+            this.spatialSignsList.get(i).hoverIfMouseOver(p, at);
+        }
+
+
+        for (Integer i : this.spatialSoilList.keySet()) {
+            this.spatialSoilList.get(i).hoverIfMouseOver(p, at);
+        }
+
+
+        for (Integer i : this.spatialWaterList.keySet()) {
+            this.spatialWaterList.get(i).hoverIfMouseOver(p, at);
+        }
+  */  
+    
     }
 }
