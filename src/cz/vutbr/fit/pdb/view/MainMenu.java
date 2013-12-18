@@ -45,15 +45,15 @@ public class MainMenu extends JMenuBar{
         mD_Init = new JMenuItem("Init");
         mD_Init.setActionCommand("db_init");
         
-        mS_BedBySoil = new JMenuItem("List beds on given soil");
+        mS_BedBySoil = new JMenuItem("Show beds on given soil");
         mS_BedBySoil.setActionCommand("s_bed_by_soil");
-        mS_BedsWithFences = new JMenuItem("List beds bordered by fences");
+        mS_BedsWithFences = new JMenuItem("Show beds bordered by fences");
         mS_BedsWithFences.setActionCommand("s_beds_with_fences");
         mS_DistBtwBeds = new JMenuItem("Print distance between given beds");
         mS_DistBtwBeds.setActionCommand("s_dist_btw_beds");
-        mS_BiggestBed = new JMenuItem("List biggest beds");
+        mS_BiggestBed = new JMenuItem("Show biggest beds");
         mS_BiggestBed.setActionCommand("s_biggest_bed");
-        mS_SmallestBed = new JMenuItem("List smallest beds");
+        mS_SmallestBed = new JMenuItem("Show smallest beds");
         mS_SmallestBed.setActionCommand("s_smallest_bed");
         
         mA_Help = new JMenuItem("Help");
