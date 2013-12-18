@@ -764,7 +764,11 @@ public class SpatialContainer {
         for (int j = allItems.size() - 1; j >= 0; j--) {
             if (haveSelected == false) {
                 haveSelected = allItems.get(j).hoverIfMouseOver(p, at);
-                this.hovered = allItems.get(j);
+                if (haveSelected) {
+                    this.hovered = allItems.get(j);
+                } else {
+                    this.hovered = null;
+                }
             } else {
                 allItems.get(j).setHovering(false);
             }
