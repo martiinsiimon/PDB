@@ -94,7 +94,7 @@ public class MapPanel extends JPanel{
     private void drawMap(Graphics2D g2){
         int layers = sc.countLayers();
         
-        for(int a = 0; a < layers; a++){
+        for(int a = 1; a <= layers; a++){
             drawMapLayer(g2, a);
         } 
             
@@ -103,6 +103,7 @@ public class MapPanel extends JPanel{
     private void drawMapLayer(Graphics2D g2, int layer){
          //SpatialObject list[] = (SpatialObject[])sc.getGeometries();
          ArrayList<SpatialObject> actLayer = sc.getGeometries(layer);
+         System.out.println(actLayer.size());
          for(SpatialObject o : actLayer){
                 g2.setStroke(new BasicStroke(1));
                 switch (layer) {
@@ -134,6 +135,7 @@ public class MapPanel extends JPanel{
                     g2.setColor(Color.green);
                     g2.setStroke(new BasicStroke(5));
                 }
+                System.out.println(geo.isPoint());
                 if (geo.isPoint()) {
                     Point2D points = geo.getJavaPoint();
                     Shape s = at.createTransformedShape(new Ellipse2D.Double((int) points.getX() - 3, (int) points.getY() - 3, 6, 6));

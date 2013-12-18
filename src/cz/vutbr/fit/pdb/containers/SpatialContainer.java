@@ -423,6 +423,7 @@ public class SpatialContainer {
         }
 
         for (Integer i : this.spatialSignsList.keySet()) {
+            //System.out.println(this.spatialSignsList.get(i).getGeometry().isPoint());
             Integer layer = this.spatialSignsList.get(i).getLayer();
             if (geometries.containsKey(layer)) {
                 geometries.get(layer).add(this.spatialSignsList.get(i));
