@@ -18,8 +18,9 @@ import javax.swing.JMenuItem;
  */
 public class MainMenu extends JMenuBar{
     
-    private JMenu mFile,mAbout,mEdit,mDatabase;
+    private JMenu mFile,mAbout,mEdit,mDatabase,mSpatial;
     private JMenuItem mF_quit, mD_Connect, mD_Init, mA_Help, mA_About;
+    private JMenuItem mS_BedBySoil, mS_BedsWithFences, mS_DistBtwBeds, mS_BiggestBed, mS_SmallestBed;
     private JCheckBoxMenuItem mE_cbEdit;
     
     
@@ -29,11 +30,11 @@ public class MainMenu extends JMenuBar{
         mAbout = new JMenu("About");
         mEdit =  new JMenu("Edit");
         mDatabase = new JMenu("Database");
+        mSpatial = new JMenu("Spatial operations");
         
         mF_quit = new JMenuItem("Quit");
         mF_quit.setActionCommand("f_quit");
        
-        
         mE_cbEdit = new JCheckBoxMenuItem("Enable");
         
         mD_Connect = new JMenuItem("Connect To");
@@ -42,6 +43,17 @@ public class MainMenu extends JMenuBar{
         mD_Init = new JMenuItem("Init");
         mD_Init.setActionCommand("db_init");
         
+        mS_BedBySoil = new JMenuItem("List beds on given soil");
+        mS_BedBySoil.setActionCommand("s_bed_by_soil");
+        mS_BedsWithFences = new JMenuItem("List beds bordered by fences");
+        mS_BedsWithFences.setActionCommand("s_beds_with_fences");
+        mS_DistBtwBeds = new JMenuItem("Print distance between given beds");
+        mS_DistBtwBeds.setActionCommand("s_dist_btw_beds");
+        mS_BiggestBed = new JMenuItem("List biggest beds");
+        mS_BiggestBed.setActionCommand("s_biggest_bed");
+        mS_SmallestBed = new JMenuItem("List smallest beds");
+        mS_SmallestBed.setActionCommand("s_smallest_bed");
+        
         mA_Help = new JMenuItem("Help");
         mA_Help.setActionCommand("a_help");
         
@@ -49,15 +61,25 @@ public class MainMenu extends JMenuBar{
         mA_About.setActionCommand("a_about");
         
         mFile.add(mF_quit);
+        
         mEdit.add(mE_cbEdit);
+        
         mDatabase.add(mD_Connect);
         mDatabase.add(mD_Init);
+        
+        mSpatial.add(mS_BedBySoil);
+        mSpatial.add(mS_BedsWithFences);
+        mSpatial.add(mS_DistBtwBeds);
+        mSpatial.add(mS_BiggestBed);
+        mSpatial.add(mS_SmallestBed);
+        
         mAbout.add(mA_Help);
         mAbout.add(mA_About);
         
         add(mFile);
         add(mEdit);
         add(mDatabase);
+        add(mSpatial);
         add(mAbout);
         
     
@@ -75,6 +97,11 @@ public class MainMenu extends JMenuBar{
         this.mF_quit.addActionListener(controler);
         this.mD_Connect.addActionListener(controler);
         this.mD_Init.addActionListener(controler);
+        this.mS_BedBySoil.addActionListener(controler);
+        this.mS_BedsWithFences.addActionListener(controler);
+        this.mS_DistBtwBeds.addActionListener(controler);
+        this.mS_BiggestBed.addActionListener(controler);
+        this.mS_SmallestBed.addActionListener(controler);
         this.mA_About.addActionListener(controler);
         this.mA_Help.addActionListener(controler);
     }
