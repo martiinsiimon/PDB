@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cz.vutbr.fit.pdb.model;
 
 import oracle.jdbc.OracleResultSet;
@@ -16,7 +15,8 @@ import oracle.jdbc.OracleResultSet;
  * @author martin
  */
 public class BedsObject extends SpatialObject {
-    private int plant;
+
+    private Integer plant;
 
     public BedsObject() {
         super();
@@ -43,8 +43,8 @@ public class BedsObject extends SpatialObject {
     @Override
     public String getUpdateSQL() {
         String query = "UPDATE beds"
-                + " SET geometry = '" + this.geometry + "'"
-                + " SET plant = " + this.plant
+                + " SET geometry = '" + this.geometry + "', "
+                + " plant = " + this.plant
                 + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
 
         return query;

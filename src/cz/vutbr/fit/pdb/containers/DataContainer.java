@@ -16,6 +16,7 @@ import java.util.Map;
  * @author Martin Simon <martiin.siimon@gmail.com>
  */
 public class DataContainer {
+
     private final DatabaseAPI db;
     private final Map<Integer, ArrayList<DataObject>> dataObjectList;
     private final Map<String, Integer> str2id;
@@ -98,9 +99,25 @@ public class DataContainer {
      * @return Object with id given in parameter or null, if such an object does
      * not exists
      */
-    public DataObject getLayers(int id) {
+    public DataObject getLayers(Integer id) {
         for (DataObject o : this.dataObjectList.get(this.str2id.get("layers"))) {
             if (o.getId() == id) {
+                return o;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get DataObject specified by name.
+     *
+     * @param str Name of object in DB
+     * @return Object with name given in parameter or null, if such an object
+     * does * not exists
+     */
+    public DataObject getLayers(String str) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("layers"))) {
+            if (o.getName().equals(str)) {
                 return o;
             }
         }
@@ -120,12 +137,28 @@ public class DataContainer {
      * Get DataObject specified by id (not id in array, but id in db).
      *
      * @param id Id of object in DB
-     * @return Object with id given in parameter or null, if such an object does
-     * not exists
+     * @return Object with name given in parameter or null, if such an object
+     * does * not exists
      */
-    public PlantTypeObject getPlantType(int id) {
+    public PlantTypeObject getPlantType(Integer id) {
         for (DataObject o : this.dataObjectList.get(this.str2id.get("plant_type"))) {
             if (o.getId() == id) {
+                return (PlantTypeObject) o;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get DataObject specified by name.
+     *
+     * @param str Name of object in DB
+     * @return Object with name given in parameter or null, if such an object
+     * does * not exists
+     */
+    public PlantTypeObject getPlantType(String str) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("plant_type"))) {
+            if (o.getName().equals(str)) {
                 return (PlantTypeObject) o;
             }
         }
@@ -148,9 +181,25 @@ public class DataContainer {
      * @return Object with id given in parameter or null, if such an object does
      * not exists
      */
-    public PlantsObject getPlants(int id) {
+    public PlantsObject getPlants(Integer id) {
         for (DataObject o : this.dataObjectList.get(this.str2id.get("plants"))) {
             if (o.getId() == id) {
+                return (PlantsObject) o;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get DataObject specified by name.
+     *
+     * @param str Name of object in DB
+     * @return Object with name given in parameter or null, if such an object
+     * does * not exists
+     */
+    public PlantsObject getPlants(String str) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("plants"))) {
+            if (o.getName().equals(str)) {
                 return (PlantsObject) o;
             }
         }
@@ -173,9 +222,25 @@ public class DataContainer {
      * @return Object with id given in parameter or null, if such an object does
      * not exists
      */
-    public DataObject getSoilType(int id) {
+    public DataObject getSoilType(Integer id) {
         for (DataObject o : this.dataObjectList.get(this.str2id.get("soil_type"))) {
             if (o.getId() == id) {
+                return o;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get DataObject specified by name.
+     *
+     * @param str Name of object in DB
+     * @return Object with id given in parameter or null, if such an object does
+     * not exists
+     */
+    public DataObject getSoilType(String str) {
+        for (DataObject o : this.dataObjectList.get(this.str2id.get("soil_type"))) {
+            if (o.getName().equals(str)) {
                 return o;
             }
         }

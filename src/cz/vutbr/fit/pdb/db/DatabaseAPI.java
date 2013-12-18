@@ -57,7 +57,7 @@ public class DatabaseAPI {
      * Reset database (remote) data to the initial state. Use default sql script
      * path
      *
-     * @see Conector#predefinedPath
+     * @see Connector#predefinedPath
      */
     public void resetDBData() {
         this.connector.resetData(null);
@@ -623,9 +623,9 @@ public class DatabaseAPI {
         return this.connector.getImage(o.getImageThumbSQL());
     }
 
-
     /**
-     * Get PlantsObject most similar (in image level) to the object in parameter
+     * Get id of plant of most similar (in image level) to the object in
+     * parameter
      *
      * @param o Object what finds the most similar
      * @return Most similar object (in image level) id or null if there is no
@@ -633,5 +633,66 @@ public class DatabaseAPI {
      */
     public Integer getMostSimilar(PlantsObject o) {
         return this.connector.getImageSimilar(o.getImageSimilarSQL());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Advanced spatial queries                                              //
+    ///////////////////////////////////////////////////////////////////////////
+    /**
+     * Get list of DataObjects of plants which grows on soil. In given plant has
+     * to be planType set and in given soil has to be set soilType.
+     *
+     * @param plant PlantObject instace with plantType attribute set
+     * @param soil SoilObject instance with soilType set
+     * @return List of data object
+     */
+    public ArrayList<Integer> getPlantsBySoil(PlantsObject plant, SoilObject soil) {
+        return this.getPlantsBySoil(plant.getPlantType(), soil.getSoilType());
+    }
+
+    /**
+     * Get list of DataObjects of plants which grows on soil.
+     *
+     * @param plantType Id of plantType (from database)
+     * @param soilType Id of soilType (from database)
+     * @return List of data object
+     */
+    public ArrayList<Integer> getPlantsBySoil(Integer plantType, Integer soilType) {
+        String query
+                = "SELECT bed.id"
+                + " FROM beds bed"
+                + " WHERE bed.plant IN (SELECT id FROM plants  WHERE plant_type = " + plantType + ")"; //FIXME ONLY FINDS BY PLANTTYPE
+        //+ " AND (EXISTS (SELECT 1 FROM soil s, beds b WHERE b.id = bed.id AND s.soil_type = " + soilType + " AND SDO_RELATE(s.geometry, b.geometry, 'mask=ANYINTERACT') = 'TRUE'))";
+        return this.connector.executeQueryWithResultsInteger(query);
+    }
+
+    /**
+     * FIXME!!!
+     *
+     * @return
+     */
+    public ArrayList<DataObject> getMultisoilTrees() {
+        String query2
+                = "SELECT tree.id, tree.plant_type, tree.name"
+                + " FROM plants tree"
+                + " WHERE tree.plant_type = (SELECT id FROM plant_type WHERE name = 'tree')"
+                + " AND (EXISTS (SELECT 1 FROM soil s, beds b WHERE b.plant = tree.id AND s.soil_type = 2 AND SDO_RELATE(s.geometry, b.geometry, 'mask=ANYINTERACT') = 'TRUE'))";
+
+        String query3
+                = "SELECT bed.id"
+                + " FROM beds bed"
+                + " WHERE bed.plant = (SELECT id FROM plants  WHERE plant_type = (SELECT id FROM plant_type WHERE name = 'tree'))"
+                + " WHERE EXISTS (SELECT 1 FROM soils soil WHERE soil.)";
+
+        String query
+                = "SELECT one.cislo_klece, one.layer, one.geometrie, one.date_from, one.date_to "
+                + "from zoo one "
+                + "where (one.layer = (select id from layers where group_name = 'cages')) and "
+                + "one.date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY') and "
+                + "exists(select 1 from zoo water "
+                + "where water.layer = (select id from layers where group_name = 'water') and "
+                + "water.date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY') and "
+                + "SDO_RELATE(water.geometrie, one.geometrie, 'mask=INSIDE+COVEREDBY') = 'TRUE')";
+        return this.connector.getMultisoilTrees(query2);
     }
 }

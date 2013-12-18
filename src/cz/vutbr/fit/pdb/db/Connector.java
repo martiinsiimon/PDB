@@ -22,7 +22,6 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Stack;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import oracle.jdbc.OracleResultSet;
 
@@ -553,6 +552,49 @@ public class Connector {
     }
 
     /**
+     * Execute query given in parameter and return array list of ids of spatial
+     * objects.
+     *
+     * @param query String containing select SQL query
+     * @return Array of all ids of resulted spatial objects
+     */
+    public ArrayList<Integer> executeQueryWithResultsInteger(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(rs.getInt("id"));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
+    }
+
+    /**
      * Store image to the object in parameter to the database.
      *
      * @param o Object to which the object should be stored
@@ -624,7 +666,6 @@ public class Connector {
         return img;
     }
 
-
     /**
      * Get PlantsObject most similar (in image level) to the object in parameter
      *
@@ -647,7 +688,6 @@ public class Connector {
                 /* Get result */
                 if (rs.next()) {
                     id = rs.getInt("id");
-                    System.out.println(id);
                 }
 
                 /* Close statement */
@@ -789,5 +829,41 @@ public class Connector {
             Logger.getLogger(e.getMessage());
             System.out.println("IOException: " + e.getMessage());
         }
+    }
+
+    public ArrayList<DataObject> getMultisoilTrees(String query) {
+        /* Execute query in parameter and return ResultSet */
+        ResultSet rs;
+        ArrayList<DataObject> result = new ArrayList<DataObject>();
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+                System.out.println(query);
+                /* Execute query */
+                rs = stm.executeQuery(query);
+
+                /* Copy the result to array */
+                while (rs.next()) {
+                    result.add(new PlantsObject((OracleResultSet) rs));
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (Exception e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("Exception: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return result;
     }
 }
