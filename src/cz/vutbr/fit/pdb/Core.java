@@ -31,10 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -136,11 +132,11 @@ public class Core {
            if("f_quit".equals(e.getActionCommand())){
                System.exit(0);
            }else if("db_connect".equals(e.getActionCommand())){
-               dbSetUp();
+               dbSetUp(true);
 
            }else if("db_init".equals(e.getActionCommand())){
                if(dbAPI == null){
-                   dbSetUp();
+                   dbSetUp(false);
                }
                if(dbAPI != null){
                    JOptionPane.showMessageDialog(mainWindow, "Inicializace Databaze, prosim cekejte.");
@@ -202,7 +198,7 @@ public class Core {
     /**
      * Function displays dialog window with DB credentials.
      */
-    public void dbSetUp() {
+    public void dbSetUp(boolean initMainPanel) {
         JTextField username = new JTextField("xjerab13");
         JPasswordField password = new JPasswordField("w0z7dnrt");
         JTextField url = new JTextField("berta.fit.vutbr.cz");
@@ -222,7 +218,8 @@ public class Core {
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Connect to...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
             dbAPI = new DatabaseAPI(username.getText(), password.getText());
-           initMainPanel();
+            if(initMainPanel){
+            initMainPanel();}
         }
 
     }
@@ -527,7 +524,7 @@ public class Core {
                 Core c = new Core();
                 c.initGui();
                 c.showGui();
-                c.dbSetUp();
+                //c.dbSetUp();
             }
         });
 
