@@ -32,11 +32,13 @@ WHERE EXISTS(
 SELECT sings.description FROM signs WHERE EXISTS(VALIDTIME PERIOD[2012/01-2012/07) SELECT 1 from beds WHERE beds.plant=signs.plant);
 
 -- SQL:
-SELECT signs.description FROM signs
-WHERE EXISTS(
-    SELECT 1 FROM beds WHERE beds.plant=signs.plant AND
-    date_to >= TO_DATE('06-30-2012', 'MM-DD-YYYY') AND
-    date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY'));
+SELECT signs.description FROM signs s
+WHERE s.date_to >= TO_DATE('06-30-2012', 'MM-DD-YYYY')
+AND s.date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY')
+AND EXISTS(
+    SELECT 1 FROM beds b WHERE beds.plant=signs.plant AND
+    b.date_to >= TO_DATE('06-30-2012', 'MM-DD-YYYY') AND
+    b.date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY'));
 
 
 -- UPDATE temporalne promenlivych dat:

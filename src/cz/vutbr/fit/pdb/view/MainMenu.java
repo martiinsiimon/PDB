@@ -22,7 +22,7 @@ public class MainMenu extends JMenuBar{
     private JMenuItem mF_quit, mD_Connect, mD_Init, mA_Help, mA_About;
     private JMenuItem mS_BedBySoil, mS_BedsWithFences, mS_DistBtwBeds, mS_BiggestBed, mS_SmallestBed;
     private JMenuItem mM_FindSimilar;
-    private JMenuItem mT_SignDesc, mT_PlantNames, mT_SignDescForPlants, mT_ChangeDate, mT_RemoveFences ;
+    private JMenuItem mT_SignDesc, mT_PlantNames, mT_SignDescForPlants, mT_ChangeDate;
     private JCheckBoxMenuItem mE_cbEdit;
 
 
@@ -69,8 +69,6 @@ public class MainMenu extends JMenuBar{
         mT_SignDescForPlants.setActionCommand("t_sign_desc_for_plants");
         mT_ChangeDate = new JMenuItem("Change date");
         mT_ChangeDate.setActionCommand("t_change_date");
-        mT_RemoveFences = new JMenuItem("Remove fences installed from ... to ...");
-        mT_RemoveFences.setActionCommand("t_remove_fences");
 
         mA_Help = new JMenuItem("Help");
         mA_Help.setActionCommand("a_help");
@@ -99,7 +97,6 @@ public class MainMenu extends JMenuBar{
         mTemporal.add(mT_PlantNames);
         mTemporal.add(mT_SignDescForPlants);
 
-        mTemporal.add(mT_RemoveFences);
 
         mAbout.add(mA_Help);
         mAbout.add(mA_About);
@@ -135,7 +132,6 @@ public class MainMenu extends JMenuBar{
         this.mT_PlantNames.addActionListener(controler);
         this.mT_SignDescForPlants.addActionListener(controler);
         this.mT_ChangeDate.addActionListener(controler);
-        this.mT_RemoveFences.addActionListener(controler);
         this.mA_About.addActionListener(controler);
         this.mA_Help.addActionListener(controler);
     }

@@ -12,6 +12,7 @@ import cz.vutbr.fit.pdb.control.RootControl;
 import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.PlantsObject;
+import cz.vutbr.fit.pdb.model.SignObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.view.EditPanel;
 import cz.vutbr.fit.pdb.view.InfoPanel;
@@ -155,8 +156,6 @@ public class Core {
                getSignDescForPlantsDialog();
            } else if ("t_change_date".equals(e.getActionCommand())) {
                changeDateDialog();
-           } else if ("t_remove_fences".equals(e.getActionCommand())) {
-               removeFencesDialog();
            }
 
            else if("a_help".equals(e.getActionCommand())){
@@ -336,8 +335,6 @@ public class Core {
 
     public void getSignDescDialog() {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        Date date_from = new Date();
-        Date date_to = new Date();
         Calendar cal = Calendar.getInstance();
 
         JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
@@ -350,17 +347,31 @@ public class Core {
 
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
-            // TODO: implement
-            final JComponent[] outputs = new JComponent[]{
-            };
-            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                dateFormat.parse(textdate_from.getText());
+                dateFormat.parse(textdate_to.getText());
+
+                ArrayList<SpatialObject> lst = dbAPI.getSignsInTimePeriod(textdate_from.getText(), textdate_to.getText());
+
+                String str = new String();
+                str += "<html>";
+                for (SpatialObject o : lst) {
+                    str += dc.getPlants((((SignObject) o).getPlant())).getName() + " - " + ((SignObject) o).getDescription() + "<br />";
+                }
+                str += "</html>";
+                JLabel desc_list = new JLabel(str);
+                final JComponent[] outputs = new JComponent[]{desc_list};
+
+                JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+            } catch (ParseException ex) {
+                final JComponent[] result = new JComponent[]{new JLabel("The date you have entered is invalid!")};
+                JOptionPane.showInternalMessageDialog(mainMenu, result, "Error!", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
     public void getPlantNamesDialog() {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        Date date_from = new Date();
-        Date date_to = new Date();
         Calendar cal = Calendar.getInstance();
 
         JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
@@ -373,10 +384,26 @@ public class Core {
 
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
-            // TODO: implement
-            final JComponent[] outputs = new JComponent[]{
-            };
-            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                dateFormat.parse(textdate_from.getText());
+                dateFormat.parse(textdate_to.getText());
+
+                ArrayList<DataObject> lst = dbAPI.getPlantsInTimePeriod(textdate_from.getText(), textdate_to.getText());
+
+                String str = new String();
+                str += "<html>";
+                for (DataObject o : lst) {
+                    str += o.getName() + "<br />";
+                }
+                str += "</html>";
+                JLabel desc_list = new JLabel(str);
+                final JComponent[] outputs = new JComponent[]{desc_list};
+
+                JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+            } catch (ParseException ex) {
+                final JComponent[] result = new JComponent[]{new JLabel("The date you have entered is invalid!")};
+                JOptionPane.showInternalMessageDialog(mainMenu, result, "Error!", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -396,10 +423,26 @@ public class Core {
 
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
-            // TODO: implement
-            final JComponent[] outputs = new JComponent[]{
-            };
-            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                dateFormat.parse(textdate_from.getText());
+                dateFormat.parse(textdate_to.getText());
+
+                ArrayList<SpatialObject> lst = dbAPI.getSignsByPlantsInTimePeriod(textdate_from.getText(), textdate_to.getText());
+
+                String str = new String();
+                str += "<html>";
+                for (SpatialObject o : lst) {
+                    str += dc.getPlants((((SignObject) o).getPlant())).getName() + " - " + ((SignObject) o).getDescription() + "<br />";
+                }
+                str += "</html>";
+                JLabel desc_list = new JLabel(str);
+                final JComponent[] outputs = new JComponent[]{desc_list};
+
+                JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+            } catch (ParseException ex) {
+                final JComponent[] result = new JComponent[]{new JLabel("The date you have entered is invalid!")};
+                JOptionPane.showInternalMessageDialog(mainMenu, result, "Error!", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -408,23 +451,20 @@ public class Core {
             return;
         }
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        Date date = new Date();
         Calendar cal = Calendar.getInstance();
 
         JTextField textdate = new JTextField(dateFormat.format(cal.getTime()));
 
         final JComponent[] inputs = new JComponent[]{
-            new JLabel("From (MM-DD-YYYY)"), textdate,
-        };
+            new JLabel("Date (MM-DD-YYYY)"), textdate};
 
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select actual date (MM-DD-YYYY)", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
-            //TODO add check
             dateFormat.setLenient(false);
             try {
                 dateFormat.parse(textdate.getText());
                 sc.setDate(textdate.getText());
-                System.out.println(textdate.getText());
+
                 mp.updateUI();
                 final JComponent[] result = new JComponent[]{new JLabel("The date has been set.")};
                 JOptionPane.showInternalMessageDialog(mainMenu, result, "Date has been set.", JOptionPane.INFORMATION_MESSAGE);
@@ -435,25 +475,6 @@ public class Core {
         }
     }
 
-    public void removeFencesDialog() {
-        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        Date date_from = new Date();
-        Date date_to = new Date();
-        Calendar cal = Calendar.getInstance();
-
-        JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
-        JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
-
-        final JComponent[] inputs = new JComponent[]{
-            new JLabel("From (MM-DD-YYYY)"), textdate_from,
-            new JLabel("To (MM-DD-YYYY)"), textdate_to
-        };
-
-        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
-        if (a == JOptionPane.OK_OPTION) {
-            // TODO: implement
-        }
-    }
     public static void main(String[] args){
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
