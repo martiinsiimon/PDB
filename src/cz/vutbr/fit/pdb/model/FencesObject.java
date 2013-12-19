@@ -53,4 +53,18 @@ public class FencesObject extends SpatialObject {
         return query;
     }
 
+    /**
+     * Return SQL query to get all beds from DB in given date.
+     *
+     * @param date String of date in format MM-DD-YYYY. Select only rows that
+     * are valid in that day
+     * @return String with sql query
+     */
+    public String getAllSQL(String date) {
+        String query
+                = "SELECT * FROM " + this.tableName
+                + " WHERE date_to >= TO_DATE('" + date + "', 'MM-DD-YYYY')"
+                + " AND date_from <= TO_DATE('" + date + "', 'MM-DD-YYYY')";
+        return query;
+    }
 }
