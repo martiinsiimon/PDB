@@ -961,21 +961,15 @@ INSERT INTO beds VALUES (
 SELECT b.id, b.geometry.ST_IsValid() FROM beds b;
 
 
-DROP INDEX beds_index;
 CREATE INDEX beds_index ON beds(geometry) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 
-DROP INDEX fences_index;
 CREATE INDEX fences_index ON fences(geometry) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 
-DROP INDEX paths_index;
 CREATE INDEX paths_index ON paths(geometry) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 
-DROP INDEX signs_index;
 CREATE INDEX signs_index ON signs(geometry) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 
-DROP INDEX soil_index;
 CREATE INDEX soil_index ON soil(geometry) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 
-DROP INDEX water_index;
 CREATE INDEX water_index ON water(geometry) INDEXTYPE IS MDSYS.SPATIAL_INDEX;
 //
