@@ -9,17 +9,25 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for layer from DB. Datovy Java objekt pro jednotlive vrstvy
+ * Java object for layer from DB.
  *
  * @author martin
  */
 public class LayersObject extends DataObject {
 
+    /**
+     * Initialization function for LayersObject class.
+     */
     public LayersObject() {
         super();
         this.tableName = "layers";
     }
 
+    /**
+     * LayersObject Exception
+     * @param rset
+     * @throws Exception
+     */
     public LayersObject(OracleResultSet rset) throws Exception {
         super(rset);
         this.tableName = "layers";

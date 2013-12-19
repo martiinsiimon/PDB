@@ -16,12 +16,19 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
+/**
+ * ImagePanel class.
+ * @author milan
+ */
 public class ImagePanel extends JPanel implements MouseListener {
 
     private BufferedImage image = null;
     private boolean resize = false;
 
+    /**
+     * Initialization function for ImagePanel class.
+     * @param image image to be displayed
+     */
     public ImagePanel(BufferedImage image) {
         super();
         this.image = image;
@@ -50,10 +57,18 @@ public class ImagePanel extends JPanel implements MouseListener {
         //updateSize();
     }
 
+    /**
+     * Resize setter.
+     * @param resize True/False
+     */
     public void setResize(boolean resize) {
         this.resize = resize;
     }
 
+    /**
+     * Painting function.
+     * @param g Graphics object
+     */
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -83,10 +98,18 @@ public class ImagePanel extends JPanel implements MouseListener {
         }
     }
 
+    /**
+     * Mouse clicked event handler.
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
     }
 
+    /**
+     * Mouse pressed event handler.
+     * @param e
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         if (image != null) {
@@ -100,14 +123,26 @@ public class ImagePanel extends JPanel implements MouseListener {
         }
     }
 
+    /**
+     * Mouse released event handler.
+     * @param e
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
     }
 
+    /**
+     * Mouse entered event handler.
+     * @param e
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    /**
+     * Mouse exited event handler.
+     * @param e 
+     */
     @Override
     public void mouseExited(MouseEvent e) {
     }

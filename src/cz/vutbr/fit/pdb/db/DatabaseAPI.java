@@ -196,7 +196,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -212,7 +212,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -228,7 +228,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -244,7 +244,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -260,7 +260,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -276,7 +276,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**

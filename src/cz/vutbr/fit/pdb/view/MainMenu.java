@@ -13,7 +13,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 /**
- *
+ * MainMenu class.
  * @author casey
  */
 public class MainMenu extends JMenuBar{
@@ -25,7 +25,9 @@ public class MainMenu extends JMenuBar{
     private JMenuItem mT_SignDesc, mT_PlantNames, mT_SignDescForPlants, mT_ChangeDate;
     private JCheckBoxMenuItem mE_cbEdit;
 
-
+    /**
+     * Initialization function for MainMenu class.
+     */
     public MainMenu(){
         super();
         mFile = new JMenu("File");
@@ -110,13 +112,19 @@ public class MainMenu extends JMenuBar{
         add(mAbout);
     }
 
-
-
+    /**
+     * ItemListener register.
+     * @param controler
+     */
     public void registerItemListener(ItemListener controler){
         this.mE_cbEdit.addItemListener(controler);
 
     }
 
+    /**
+     * ActionListener register.
+     * @param controler
+     */
     public void registerActionListener(ActionListener controler){
         this.mE_cbEdit.addActionListener(controler);
         this.mF_quit.addActionListener(controler);

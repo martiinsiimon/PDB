@@ -9,15 +9,16 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for soil from DB. Java objekt pro zeminu na mape. Prostorovy
- * objekt je navic rozsiren o typ zeminy (soil_type - black soil, brown soil,
- * sand) a prislusne metody.
+ * Java object for soil from DB.
  *
  * @author martin
  */
 public class SoilObject extends SpatialObject {
     private int soilType;
 
+    /**
+     * Initialization function of SoilObject class.
+     */
     public SoilObject() {
         super();
         this.tableName = "soil";
@@ -25,6 +26,11 @@ public class SoilObject extends SpatialObject {
         this.soilType = -1;
     }
 
+    /**
+     * SoilObject Exception
+     * @param rset
+     * @throws Exception
+     */
     public SoilObject(OracleResultSet rset) throws Exception {
         super(rset);
         this.tableName = "soil";
@@ -32,14 +38,26 @@ public class SoilObject extends SpatialObject {
         this.soilType = rset.getInt("soil_type");
     }
 
+    /**
+     * SoilType setter.
+     * @param _soilType
+     */
     public void setSoilType(int _soilType) {
         this.soilType = _soilType;
     }
 
+    /**
+     * SoilType getter.
+     * @return
+     */
     public int getSoilType() {
         return this.soilType;
     }
 
+    /**
+     * Returns update SQL command.
+     * @return SQL command
+     */
     @Override
     public String getUpdateSQL() {
         String query;
@@ -51,6 +69,10 @@ public class SoilObject extends SpatialObject {
         return query;
     }
 
+    /**
+     * Returns insert SQL command.
+     * @return SQL command
+     */
     @Override
     public String getInsertSQL() {
         String query;
@@ -58,16 +80,25 @@ public class SoilObject extends SpatialObject {
                 + this.id + ", "
                 + "(SELECT id FROM layers WHERE name = 'soil')" + ", "
                 + this.soilType + ", "
-                + "'" + this.geometry + "')";
+                + "?)";
         return query;
     }
 
+    /**
+     * Returns delete SQL command.
+     * @return SQL command
+     */
     @Override
     public String getDeleteSQL() {
         String query = "DELETE FROM soil WHERE id = " + this.id;
         return query;
     }
 
+    /**
+     * Returns select SQL command.
+     * @param id SoilObject ID
+     * @return SQL command
+     */
     @Override
     public String getSelectSQL(int id) {
         String query = "SELECT * FROM soil WHERE id = " + id;

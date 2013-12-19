@@ -25,7 +25,8 @@ import oracle.spatial.geometry.JGeometry;
 
 
 /**
- *
+ * MapPanel class.
+ * Displays the panel showing map.
  * @author casey
  */
 public class MapPanel extends JPanel{
@@ -37,41 +38,71 @@ public class MapPanel extends JPanel{
 
     private Shape editBox;
 
+    /**
+     * Initialization function for MapPanel class.
+     */
     public MapPanel(){
         super();
 
     }
 
+    /**
+     * Initialization function for MapPanel class.
+     * @param sc SpatialContainer object
+     */
     public MapPanel(SpatialContainer sc){
         super();
         this.sc = sc;
         this.most_big_object = sc.getBiggestObjectBoundaries();
     }
 
+    /**
+     * MouseInputListener register.
+     * @param ml MouseInputListener object
+     */
     public void registerListener(MouseInputListener ml){
         this.addMouseListener(ml);
         this.addMouseMotionListener(ml);
 
     }
 
-
+    /**
+     * EditShape setter.
+     * @param r shape
+     */
     public void setEditShape(Shape r){
         this.editBox = r;
     }
 
+    /**
+     * SpatialContainer register.
+     * @param sc SpatialContainer object
+     */
     public void registerSpatialContainer(SpatialContainer sc){
         this.sc = sc;
         this.most_big_object = sc.getBiggestObjectBoundaries();
     }
 
+    /**
+     * SpatialContainer getter.
+     * @return
+     */
     public SpatialContainer getSpatialContainer(){
         return this.sc;
     }
 
+    /**
+     * AffineTransform getter.
+     * @return
+     */
     public AffineTransform getAffineTransform(){
         return this.at;
     }
 
+    /**
+     * Painting function.
+     * @param g Graphics object
+     */
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -88,6 +119,9 @@ public class MapPanel extends JPanel{
         }
     }
 
+    /**
+     * Function calculating the resize of objects.
+     */
     public void calculateResize() {
         Dimension screen = this.getSize();
         this.at = new AffineTransform();

@@ -20,8 +20,7 @@ import oracle.jdbc.OracleResultSet;
 import oracle.ord.im.OrdImage;
 
 /**
- * Java object for plant from DB. Datovy Java objekt pro jednotlive rostliny.
- * Datovy objekt rozsiruje o grafickou informaci (TODO)
+ * Java object for plant from DB.
  *
  * @author martin
  */
@@ -31,7 +30,9 @@ public class PlantsObject extends DataObject {
     private int plant_type;
     private static final String THRES = "200 200";
 
-
+    /**
+     * Initialization function of PlantsObject class.
+     */
     public PlantsObject() {
         super();
         this.tableName = "plants";
@@ -40,6 +41,11 @@ public class PlantsObject extends DataObject {
         this.image = null;
     }
 
+    /**
+     * PlantsObject Exception.
+     * @param rset
+     * @throws Exception
+     */
     public PlantsObject(OracleResultSet rset) throws Exception {
         super(rset);
         this.tableName = "plants";
@@ -48,23 +54,42 @@ public class PlantsObject extends DataObject {
         this.image = null;
     }
 
+    /**
+     * IsImgChanged getter.
+     * @return True/False
+     */
     public Boolean isImgChanged() {
         return this.imgChanged;
     }
 
+    /**
+     * ImgChanged setter.
+     */
     public void setImgChanged() {
         this.imgChanged = true;
     }
 
+    /**
+     * ImgChanged unsetter.
+     */
     public void unsetImgChanged() {
         this.imgChanged = false;
     }
 
+    /**
+     * Image setter.
+     * @param img BufferedImage to be set.
+     */
     public void setImage(BufferedImage img) {
         this.image = img;
         this.setImgChanged();
     }
 
+    /**
+     * Conditional image setter.
+     * @param img image to be set
+     * @param change True/False
+     */
     public void setImage(BufferedImage img, Boolean change) {
         this.image = img;
         if (change) {
@@ -72,19 +97,34 @@ public class PlantsObject extends DataObject {
         }
     }
 
+    /**
+     * Image getter.
+     * @return image
+     */
     public BufferedImage getImage() {
         return this.image;
     }
 
+    /**
+     * Deletes image.
+     */
     public void delImage() {
         this.image = null;
         this.setImgChanged();
     }
 
+    /**
+     * plantType setter.
+     * @param _plantType
+     */
     public void setPlantType(int _plantType) {
         this.plant_type = _plantType;
     }
 
+    /**
+     * PlantType getter.
+     * @return
+     */
     public int getPlantType() {
         return this.plant_type;
     }
@@ -109,15 +149,26 @@ public class PlantsObject extends DataObject {
         return query;
     }
 
+    /**
+     * Returns SQL command for getting image from DB
+     * @return SQL command
+     */
     public String getImageSQL() {
         return "SELECT photo FROM " + this.tableName + " WHERE id = " + this.id;
     }
 
+    /**
+     * Returns SQL command for getting image thumbnail from DB
+     * @return SQL command
+     */
     public String getImageThumbSQL() {
         return "SELECT photo_thumb photo FROM " + this.tableName + " WHERE id = " + this.id;
     }
 
-
+    /**
+     * Returns SQL command for getting similar pictures.
+     * @return SQL command
+     */
     public String getImageSimilarSQL() {
         String query
                 = "SELECT dst.id, SI_ScoreByFtrList("
@@ -129,6 +180,13 @@ public class PlantsObject extends DataObject {
         return query;
     }
 
+    /**
+     * Function for loading photo from file.
+     * @param connection Connection object
+     * @param filename filename of the photo
+     * @throws SQLException
+     * @throws IOException
+     */
     public void loadPhotoFromFile(Connection connection, String filename) throws SQLException, IOException {
         boolean autoCommit = connection.getAutoCommit();
         connection.setAutoCommit(false);

@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * InfoPanel class.
  * @author casey
  */
 public class InfoPanel extends javax.swing.JPanel {
@@ -113,54 +113,102 @@ public class InfoPanel extends javax.swing.JPanel {
 
     private ImagePanel photoPanel = new ImagePanel(null);
     
+    /**
+     * TypeLabel setter.
+     * @param type_label
+     */
     public void setTypeLabel(String type_label) {
         this.jLabel1.setText(type_label);
     }
     
+    /**
+     * NameLabel setter.
+     * @param name_label
+     */
     public void setNameLabel(String name_label) {
         this.jLabel2.setText(name_label);
     }
     
+    /**
+     * DescLabel setter.
+     * @param desc_label
+     */
     public void setDescLabel(String desc_label) {
         this.jLabel3.setText(desc_label);
     }
     
+    /**
+     * DescField setter.
+     * @param desc
+     */
     public void setDescField(String desc){
         this.jTextFieldDesc.setText(desc);
     }
     
+    /**
+     * TypeField setter.
+     * @param type
+     */
     public void setTypeField(String type){
         this.jTextFieldType.setText(type);
     }
     
+    /**
+     * NameField setter.
+     * @param name
+     */
     public void setNameField(String name){
         this.jTextFieldName.setText(name);
     }
     
+    /**
+     * Sets name field as shown.
+     */ 
     public void setNameFieldShown() {
         this.jTextFieldName.show();
     }
     
+    /**
+     * Sets name field as hidden.
+     */
     public void setNameFieldHidden() {
         this.jTextFieldName.hide();
     }
     
+    /**
+     * Sets desc field as shown.
+     */
     public void setDescFieldShown() {
         this.jTextFieldDesc.show();
     }
     
+    /** 
+     * Sets desc field as hidden.
+     */
     public void setDescFieldHidden() {
         this.jTextFieldDesc.hide();
     }
     
+    /**
+     * Sets image to info panel.
+     * @param img image to be shown
+     */
     public void setImage(BufferedImage img){
         this.photoPanel.setImage(img);
     }
     
+    /**
+     * Mouse listener register.
+     * @param ml MouseListener object
+     */
     public void registerMouseListener(MouseListener ml){
         this.photoPanel.addMouseListener(ml);
     }
     
+    /**
+     * Mouse listener unregister.
+     * @param ml MouseListener object
+     */
     public void unregisterMouseListener(MouseListener ml){
     
     

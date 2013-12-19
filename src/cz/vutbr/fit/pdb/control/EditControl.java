@@ -34,7 +34,7 @@ import javax.swing.event.ChangeListener;
 import oracle.spatial.geometry.JGeometry;
 
 /**
- *
+ * Class for controlling of editing part of application.
  * @author casey
  */
 public class EditControl {
@@ -51,7 +51,15 @@ public class EditControl {
     EditMapControl chl;
     DatabaseAPI dapi;
 
-
+    /**
+     * Initialization function for EditControl class.
+     * @param ep EditPanel object
+     * @param mp MapPanel object
+     * @param ip InfoPanel object
+     * @param sc SpatialContainer object
+     * @param dc DataContainer object
+     * @param api DatabaseAPI object
+     */
     public EditControl(EditPanel ep, MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc, DatabaseAPI api){
         this.ep = ep;
         this.mp = mp;
@@ -62,7 +70,11 @@ public class EditControl {
         this.ep.registerActionListener(chl);
         this.dapi = api;
     }
-
+    
+    /**
+     * Moves given point to coordinates from GUI.
+     * @param p point to be moved
+     */
     public void moveTo(Point p){
         if(this.selected != null){
             AffineTransform atmp = this.mp.getAffineTransform();
@@ -77,7 +89,12 @@ public class EditControl {
 
         }
     }
-
+    
+    /**
+     * Sets given object as selected.
+     * @param so SpatialObject to hold the selection information
+     * @param od DataObject to be selected
+     */
     public void setSelected(SpatialObject so, DataObject od){
         this.selected = so;
         this.selectedData = od;
@@ -108,6 +125,10 @@ public class EditControl {
         this.mp.updateUI();
     }
 
+    /**
+     * Function ensures that the bounding rectangle is updated on change of
+     * coordinates in GUI.
+     */
     public void updateOnChange(){
         Rectangle r;
         this.ep.removeChangeListener(this.chl);
@@ -168,11 +189,16 @@ public class EditControl {
 
     }
 
-
+    /**
+     * Enables editing mode.
+     */
     public void editEnable(){
 
     }
-
+    
+    /**
+     * Disables editing mode.
+     */
     public void editDisable(){
 
     }

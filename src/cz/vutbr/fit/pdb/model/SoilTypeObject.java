@@ -9,17 +9,25 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for soil types from DB. Datovy Java objekt pro typy zeminy.
+ * Java object for soil types from DB.
  *
  * @author martin
  */
 public class SoilTypeObject extends DataObject {
 
+    /**
+     * Initialization function for SoilTypeObject class.
+     */
     public SoilTypeObject() {
         super();
         this.tableName = "soil_type";
     }
 
+    /**
+     * SoilTypeObject Exception.
+     * @param rset
+     * @throws Exception
+     */
     public SoilTypeObject(OracleResultSet rset) throws Exception {
         super(rset);
         this.tableName = "soil_type";

@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 /**
- *
+ * RootPanel class.
  * @author casey
  */
 public class RootPanel extends JPanel{
@@ -24,6 +24,12 @@ public class RootPanel extends JPanel{
     private EditPanel ePanel;
     private boolean editMode = false;
     
+    /**
+     * Initialization function of RootPanel class.
+     * @param mp MapPanel object
+     * @param ip InfoPanel object
+     * @param ep EditPanel object
+     */
     public RootPanel(MapPanel mp, InfoPanel ip, EditPanel ep){
     gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.BOTH;
@@ -34,6 +40,9 @@ public class RootPanel extends JPanel{
     ePanel = ep;
     }
     
+    /**
+     * Reinitialize the contents of panel.
+     */
     public void rebake(){
         removeAll();
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -61,26 +70,44 @@ public class RootPanel extends JPanel{
     
     }
     
+    /**
+     * MapPanel setter.
+     * @param mp 
+     */
     public void setMapPanel(MapPanel mp){
         this.mPanel = mp;
     }
     
+    /**
+     * InfoPanel setter.
+     * @param ip
+     */
     public void setInfoPanel(InfoPanel ip){
         this.iPanel = ip;
     }
     
+    /**
+     * Enables edit mode.
+     */
     public void enableEditMode(){
         this.editMode = true;
         this.rebake();
     
     }
     
+    /**
+     * Disables edit mode.
+     */
     public void disableEditMode(){
         this.editMode = false;
         this.rebake();
     
     }
     
+    /**
+     * EditPanel getter.
+     * @return
+     */
     public EditPanel getEPanel(){
         return this.ePanel;
     }
