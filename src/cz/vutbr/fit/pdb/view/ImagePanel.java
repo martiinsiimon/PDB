@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package cz.vutbr.fit.pdb30.gui;
+package cz.vutbr.fit.pdb.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -62,7 +62,8 @@ public class ImagePanel extends JPanel implements MouseListener {
         //this.setBackground(Color.BLACK);
         g2.setColor(Color.black);
         if (image != null) {
-            if (resize) {
+            boolean need_scale = (image.getWidth() > dm.width || image.getHeight() > dm.height);
+            if (resize && need_scale) {
                 Image dimg;
                 if (image.getWidth() > image.getHeight()) {
                     dimg = image.getScaledInstance(dm.width, -1, Image.SCALE_SMOOTH);
@@ -73,10 +74,10 @@ public class ImagePanel extends JPanel implements MouseListener {
                 int y = (dm.height - dimg.getHeight(this)) / 2;
                 g2.drawImage(dimg, x, y, null);
             } else {
-                g2.drawImage(image, 0, 0, null);
-                
+                int x = (dm.width - image.getWidth(this)) / 2;
+                int y = (dm.height - image.getHeight(this)) / 2;
+                g2.drawImage(image, x, y, null);
             }
-
         } else {
             g2.drawString("No photo included", 10, dm.height / 2);
         }
