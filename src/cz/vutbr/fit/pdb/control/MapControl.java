@@ -34,7 +34,7 @@ import javax.swing.event.MouseInputListener;
 import oracle.ord.im.OrdImage;
 
 /**
- *
+ * Class for controlling map events.
  * @author casey
  */
 public class MapControl{
@@ -47,6 +47,13 @@ public class MapControl{
     private MapMouseControl mmc;
     private SpatialObject so2;
 
+    /**
+     * Initialization function for MapControl class
+     * @param mp MapPanel object
+     * @param ip InfoPanel object
+     * @param sc SpatialContainer object
+     * @param dc DataContainer object
+     */
     public MapControl(MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc){
         this.mmc = new MapMouseControl();
         this.map_view = mp;
@@ -57,8 +64,12 @@ public class MapControl{
         this.info_view.registerMouseListener(this.mmc);
         this.so2 = null;
     }
-    
-    
+
+    /**
+     * Function for converting OrdImage to BufferdImage
+     * @param image image of OrdImage type
+     * @return image of BufferedImage type
+     */
     public BufferedImage convert(OrdImage image){
         if(image == null){
             return null;
@@ -79,16 +90,28 @@ public class MapControl{
         return bimage;
     }
 
+    /**
+     * Function enabling editing mode.
+     * @param ec EditControl object
+     */
     public void enableEdit(EditControl ec){
         this.editControl = ec;
     
     }
+
+    /**
+     * Function disabling editing mode.
+     */
     public void disableEdit(){
         this.editControl = null;
         this.map_view.setEditShape(null);
     
     }
     
+    /**
+     * Function returns second selected object on map.
+     * @return second selected object
+     */
     public SpatialObject getSecondSelected() {
         return so2;
     }

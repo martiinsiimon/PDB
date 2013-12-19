@@ -36,9 +36,6 @@ import oracle.sql.STRUCT;
 
 /**
  * Class representing connection to the database and git-like system.
- *
- * TODO: edit class to run in separate thread
- *
  * @author Martin Simon
  */
 public class Connector {
@@ -49,6 +46,11 @@ public class Connector {
     private Stack<String> queries;
     private static final String predefinedPath = "assets/db_init.sql";
 
+    /**
+     * Initializaton function for the Connector class
+     * @param login user login
+     * @param password user password
+     */
     public Connector(String login, String password) {
         this.login = login;
         this.password = password;
@@ -628,15 +630,11 @@ public class Connector {
             System.out.println("SQLException: " + e.getMessage());
         }
     }
-//
-//    public void updasteImage(PlantsObject o) {
-//        if (o.getImage() == null) {
-//            this.deleteImage(o);
-//        } else {
-//            this.insertImage(o, null);
-//        }
-//    }
 
+    /**
+     *
+     * @param o
+     */
     public void deleteImage(PlantsObject o) {
         /* Execute query */
         try {
@@ -896,6 +894,11 @@ public class Connector {
         }
     }
 
+    /**
+     * Returns array of trees growing on multiple different soil types.
+     * @param query SQL query
+     * @return array of trees growing on multiple different soil types
+     */
     public ArrayList<DataObject> getMultisoilTrees(String query) {
         /* Execute query in parameter and return ResultSet */
         ResultSet rs;

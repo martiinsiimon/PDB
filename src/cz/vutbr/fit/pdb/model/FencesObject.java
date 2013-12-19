@@ -3,21 +3,34 @@ package cz.vutbr.fit.pdb.model;
 import oracle.jdbc.OracleResultSet;
 
 /**
- * Java object for fences from DB. Java objekt pro ploty na mape.
+ * Java object for fences from DB.
  *
  * @author martin
  */
 public class FencesObject extends SpatialObject {
+
+    /**
+     * Initialization function of FencesObject class.
+     */
     public FencesObject() {
         super();
         this.tableName = "fences";
     }
 
+    /**
+     * FencesObject Exception.
+     * @param rset
+     * @throws Exception
+     */
     public FencesObject(OracleResultSet rset) throws Exception {
         super(rset);
         this.tableName = "fences";
     }
 
+    /**
+     * Returns update SQL command.
+     * @return update SQL command
+     */
     @Override
     public String getUpdateSQL() {
         String query = "UPDATE fences"
@@ -27,6 +40,10 @@ public class FencesObject extends SpatialObject {
         return query;
     }
 
+    /**
+     * Returns insert SQL command.
+     * @return insert SQL command
+     */
     @Override
     public String getInsertSQL() {
         String query = "INSERT INTO fences VALUES ("
@@ -38,6 +55,10 @@ public class FencesObject extends SpatialObject {
         return query;
     }
 
+    /**
+     * Returns delete SQL command.
+     * @return delete SQL command
+     */
     @Override
     public String getDeleteSQL() {
         String query = "UPDATE fences"
@@ -46,6 +67,11 @@ public class FencesObject extends SpatialObject {
         return query;
     }
 
+    /**
+     * Returns select SQL command.
+     * @param id FencesObject ID
+     * @return select SQL command
+     */
     @Override
     public String getSelectSQL(int id) {
         String query = "SELECT * FROM fences WHERE id = "

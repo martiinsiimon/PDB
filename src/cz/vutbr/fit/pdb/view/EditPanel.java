@@ -17,7 +17,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 
 /**
- *
+ * EditPanel class.
  * @author casey
  */
 public class EditPanel extends javax.swing.JPanel {
@@ -263,44 +263,80 @@ public class EditPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
-public void updateXY(int x, int y){
+    /**
+     * XY Spinner updater.
+     * @param x x coordinate
+     * @param y y coordinate
+     */
+    public void updateXY(int x, int y){
     this.jSpinner1.setValue(x);
     this.jSpinner2.setValue(y);
 }
 
-public Point getXY(){
+    /**
+     * X,Y coordinates getter.
+     * @return (x,y) coordinates
+     */
+    public Point getXY(){
     return new Point((Integer)this.jSpinner1.getValue(), (Integer)this.jSpinner2.getValue());
 }
 
-public void updateLayer(int l){
+    /**
+     * Layer updater.
+     * @param l layer to be updated to
+     */
+    public void updateLayer(int l){
     this.jComboBox1.setSelectedIndex(l-1);
 }
 
-public Point2D.Double getScale(){
+    /**
+     * Scale getter.
+     * @return scale
+     */
+    public Point2D.Double getScale(){
     return new Point2D.Double(((Double)this.jSpinner3.getValue()).doubleValue(), ((Double)this.jSpinner4.getValue()).doubleValue());
 }
 
-public int getRotate(){
+    /**
+     * Rotation getter.
+     * @return rotation
+     */
+    public int getRotate(){
     return (Integer)this.jSpinner5.getValue();
 }
 
-public void setNameField(String name){
+    /**
+     * Name field setter.
+     * @param name name to be set
+     */
+    public void setNameField(String name){
     this.jTextField1.setText(name);
     
 }
 
-public void nameFieldEnableState(boolean b){
+    /**
+     * Enables nameField.
+     * @param b True/False
+     */
+    public void nameFieldEnableState(boolean b){
     this.jTextField1.setEnabled(b);
 }
 
-public void resetRest(){
+    /**
+     * Resetting function for other fields.
+     */
+    public void resetRest(){
     this.jSpinner3.setValue(new Double(1.0));
     this.jSpinner4.setValue(new Double(1.0));
     this.jSpinner5.setValue(0);
     
 }
 
-public void registerChangeListener(ChangeListener chl){
+    /**
+     * ChangeListener register.
+     * @param chl ChangeListener object
+     */
+    public void registerChangeListener(ChangeListener chl){
     this.jSpinner1.addChangeListener(chl);
     this.jSpinner2.addChangeListener(chl);
     this.jSpinner3.addChangeListener(chl);
@@ -309,7 +345,11 @@ public void registerChangeListener(ChangeListener chl){
 
 }
 
-public void removeChangeListener(ChangeListener chl){
+    /**
+     * ChangeListener remover.
+     * @param chl ChangeListener object
+     */
+    public void removeChangeListener(ChangeListener chl){
     this.jSpinner1.removeChangeListener(chl);
     this.jSpinner2.removeChangeListener(chl);
     this.jSpinner3.removeChangeListener(chl);
@@ -318,7 +358,11 @@ public void removeChangeListener(ChangeListener chl){
 
 }
 
-public void registerActionListener(ActionListener al){
+    /**
+     * ActionListener register.
+     * @param al ActionListener object
+     */
+    public void registerActionListener(ActionListener al){
     this.jButton1.addActionListener(al);
     this.jButton2.addActionListener(al);
     this.jButton3.addActionListener(al);
