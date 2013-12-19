@@ -560,19 +560,14 @@ public class SpatialContainer {
      * @param _obj Object to add
      */
     public void store(BedsObject _obj) {
-        if (!this.spatialBedsList.containsKey(_obj.getId())) {
-            /* New object wothout id */
-            Integer maxId = -1;
-            for (Integer i : this.spatialBedsList.keySet()) {
-                if (i > maxId) {
-                    maxId = i;
-                }
-            }
-            maxId++;
-            _obj.setId(maxId);
+        if (_obj.getId() != -1) {
+            this.db.delete(_obj);
+            this.spatialBedsList.remove(_obj.getId());
+            _obj.setId(-1);
         }
-        this.spatialBedsList.put(_obj.getId(), _obj);
+
         this.db.insert(_obj);
+        this.spatialBedsList.put(_obj.getId(), _obj);
     }
 
     /**
@@ -581,19 +576,14 @@ public class SpatialContainer {
      * @param _obj Object to add
      */
     public void store(FencesObject _obj) {
-        if (!this.spatialFencesList.containsKey(_obj.getId())) {
-            /* New object wothout id */
-            Integer maxId = -1;
-            for (Integer i : this.spatialFencesList.keySet()) {
-                if (i > maxId) {
-                    maxId = i;
-                }
-            }
-            maxId++;
-            _obj.setId(maxId);
+        if (_obj.getId() != -1) {
+            this.db.delete(_obj);
+            this.spatialFencesList.remove(_obj.getId());
+            _obj.setId(-1);
         }
-        this.spatialFencesList.put(_obj.getId(), _obj);
+
         this.db.insert(_obj);
+        this.spatialFencesList.put(_obj.getId(), _obj);
     }
 
     /**
@@ -602,19 +592,12 @@ public class SpatialContainer {
      * @param _obj Object to add
      */
     public void store(PathObject _obj) {
-        if (!this.spatialPathsList.containsKey(_obj.getId())) {
-            /* New object wothout id */
-            Integer maxId = -1;
-            for (Integer i : this.spatialPathsList.keySet()) {
-                if (i > maxId) {
-                    maxId = i;
-                }
-            }
-            maxId++;
-            _obj.setId(maxId);
+        if (_obj.getId() != -1) {
+            this.db.update(_obj);
+        } else {
+            this.db.insert(_obj);
         }
         this.spatialPathsList.put(_obj.getId(), _obj);
-        this.db.insert(_obj);
     }
 
     /**
@@ -623,19 +606,14 @@ public class SpatialContainer {
      * @param _obj Object to add
      */
     public void store(SignObject _obj) {
-        if (!this.spatialSignsList.containsKey(_obj.getId())) {
-            /* New object wothout id */
-            Integer maxId = -1;
-            for (Integer i : this.spatialSignsList.keySet()) {
-                if (i > maxId) {
-                    maxId = i;
-                }
-            }
-            maxId++;
-            _obj.setId(maxId);
+        if (_obj.getId() != -1) {
+            this.db.delete(_obj);
+            this.spatialBedsList.remove(_obj.getId());
+            _obj.setId(-1);
         }
-        this.spatialSignsList.put(_obj.getId(), _obj);
+
         this.db.insert(_obj);
+        this.spatialSignsList.put(_obj.getId(), _obj);
     }
 
     /**
@@ -644,19 +622,13 @@ public class SpatialContainer {
      * @param _obj Object to add
      */
     public void store(SoilObject _obj) {
-        if (!this.spatialSoilList.containsKey(_obj.getId())) {
-            /* New object wothout id */
-            Integer maxId = -1;
-            for (Integer i : this.spatialSoilList.keySet()) {
-                if (i > maxId) {
-                    maxId = i;
-                }
-            }
-            maxId++;
-            _obj.setId(maxId);
+        if (_obj.getId() != -1) {
+            this.db.update(_obj);
+        } else {
+            this.db.insert(_obj);
         }
+
         this.spatialSoilList.put(_obj.getId(), _obj);
-        this.db.insert(_obj);
     }
 
     /**
@@ -665,19 +637,13 @@ public class SpatialContainer {
      * @param _obj Object to add
      */
     public void store(WaterObject _obj) {
-        if (!this.spatialWaterList.containsKey(_obj.getId())) {
-            /* New object wothout id */
-            Integer maxId = -1;
-            for (Integer i : this.spatialWaterList.keySet()) {
-                if (i > maxId) {
-                    maxId = i;
-                }
-            }
-            maxId++;
-            _obj.setId(maxId);
+        if (_obj.getId() != -1) {
+            this.db.update(_obj);
+        } else {
+            this.db.insert(_obj);
         }
+
         this.spatialWaterList.put(_obj.getId(), _obj);
-        this.db.insert(_obj);
     }
 
     /**
@@ -773,38 +739,5 @@ public class SpatialContainer {
                 allItems.get(j).setHovering(false);
             }
         }
-        return;
-        /*
-         for (Integer i : this.spatialBedsList.keySet()) {
-         this.spatialBedsList.get(i).hoverIfMouseOver(p, at);
-         }
-
-
-         for (Integer i : this.spatialFencesList.keySet()) {
-         this.spatialFencesList.get(i).hoverIfMouseOver(p, at);
-         }
-
-
-
-         for (Integer i : this.spatialPathsList.keySet()) {
-         this.spatialPathsList.get(i).hoverIfMouseOver(p, at);
-         }
-
-
-         for (Integer i : this.spatialSignsList.keySet()) {
-         this.spatialSignsList.get(i).hoverIfMouseOver(p, at);
-         }
-
-
-         for (Integer i : this.spatialSoilList.keySet()) {
-         this.spatialSoilList.get(i).hoverIfMouseOver(p, at);
-         }
-
-
-         for (Integer i : this.spatialWaterList.keySet()) {
-         this.spatialWaterList.get(i).hoverIfMouseOver(p, at);
-         }
-         */
-
     }
 }

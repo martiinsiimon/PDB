@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.vutbr.fit.pdb.model;
 
 import oracle.jdbc.OracleResultSet;
@@ -43,12 +38,11 @@ public class BedsObject extends SpatialObject {
     @Override
     public String getUpdateSQL() {
         String query = "UPDATE beds"
-                + " SET geometry = '" + this.geometry + "', "
-                + " plant = " + this.plant
-                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
-
+                + " SET date_to = (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual)"
+                + " WHERE id = " + this.id;
         return query;
     }
+
 
     @Override
     public String getInsertSQL() {
@@ -57,16 +51,16 @@ public class BedsObject extends SpatialObject {
                 + "(SELECT id FROM layers WHERE name = 'beds')" + ", "
                 + "'" + this.geometry + "'" + ", "
                 + this.plant + ", "
-                + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
-                + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
+                + "(SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual)" + ", "
+                + "TO_DATE('12-31-9999','MM-DD-YYYY'))";
         return query;
     }
 
     @Override
     public String getDeleteSQL() {
         String query = "UPDATE bed"
-                + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
-                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+                + " SET date_to = (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual)"
+                + " WHERE id = " + this.id;
         return query;
     }
 

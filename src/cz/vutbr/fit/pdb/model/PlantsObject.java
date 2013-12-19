@@ -95,7 +95,7 @@ public class PlantsObject extends DataObject {
     @Override
     public String getUpdateSQL() {
         String query;
-        if (this.image == null) {
+        if (this.image != null) {
             query = "UPDATE " + this.tableName
                     + " SET name = '" + this.name + "',"
                     + " plant_type = " + this.plant_type
