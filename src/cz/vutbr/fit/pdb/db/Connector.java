@@ -627,14 +627,14 @@ public class Connector {
             System.out.println("SQLException: " + e.getMessage());
         }
     }
-
-    public void updateImage(PlantsObject o) {
-        if (o.getImage() == null) {
-            this.deleteImage(o);
-        } else {
-            this.insertImage(o, null);
-        }
-    }
+//
+//    public void updasteImage(PlantsObject o) {
+//        if (o.getImage() == null) {
+//            this.deleteImage(o);
+//        } else {
+//            this.insertImage(o, null);
+//        }
+//    }
 
     public void deleteImage(PlantsObject o) {
         /* Execute query */
