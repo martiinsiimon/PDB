@@ -903,14 +903,13 @@ public class DatabaseAPI {
     }
 
     /**
-     * Get SpatialObject array of plants that were in database on any bed in
-     * given period
+     * Get DataObject array of plants that were in database on any bed in     * given period
      *
      * @param dateFrom Start of the period in string formatted MM-DD-YYYY
      * @param dateTo End of the period in string formatted MM-DD-YYYY
-     * @return ArrayList of SpatialObject
+     * @return ArrayList of DataObject
      */
-    public ArrayList<SpatialObject> getPlantsInTimePeriod(String dateFrom, String dateTo) {
+    public ArrayList<DataObject> getPlantsInTimePeriod(String dateFrom, String dateTo) {
         String query
                 = "SELECT *"
                 + " FROM plants"
@@ -918,7 +917,7 @@ public class DatabaseAPI {
                 + " SELECT 1 FROM beds WHERE beds.plant = plants.id"
                 + " AND date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY')"
                 + " AND date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY'))";
-        return this.connector.executeQueryWithResultsSign(query);
+        return this.connector.executeQueryWithResultsPlants(query);
     }
 
     /**
