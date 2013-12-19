@@ -21,6 +21,7 @@ public class MainMenu extends JMenuBar{
     private JMenu mFile, mAbout, mEdit, mDatabase, mSpatial, mMultimedial, mTemporal;
     private JMenuItem mF_quit, mD_Connect, mD_Init, mA_Help, mA_About;
     private JMenuItem mS_BedBySoil, mS_BedsWithFences, mS_DistBtwBeds, mS_BiggestBed, mS_SmallestBed;
+    private JMenuItem mM_FindSimilar;
     private JCheckBoxMenuItem mE_cbEdit;
     
     
@@ -45,16 +46,19 @@ public class MainMenu extends JMenuBar{
         mD_Init = new JMenuItem("Init");
         mD_Init.setActionCommand("db_init");
         
-        mS_BedBySoil = new JMenuItem("List beds on given soil");
+        mS_BedBySoil = new JMenuItem("Show beds on given soil");
         mS_BedBySoil.setActionCommand("s_bed_by_soil");
-        mS_BedsWithFences = new JMenuItem("List beds bordered by fences");
+        mS_BedsWithFences = new JMenuItem("Show beds bordered by fences");
         mS_BedsWithFences.setActionCommand("s_beds_with_fences");
         mS_DistBtwBeds = new JMenuItem("Print distance between given beds");
         mS_DistBtwBeds.setActionCommand("s_dist_btw_beds");
-        mS_BiggestBed = new JMenuItem("List biggest beds");
+        mS_BiggestBed = new JMenuItem("Show biggest beds");
         mS_BiggestBed.setActionCommand("s_biggest_bed");
-        mS_SmallestBed = new JMenuItem("List smallest beds");
+        mS_SmallestBed = new JMenuItem("Show smallest beds");
         mS_SmallestBed.setActionCommand("s_smallest_bed");
+        
+        mM_FindSimilar = new JMenuItem("Find the most similar by picture");
+        mM_FindSimilar.setActionCommand("m_find_similar");
         
         mA_Help = new JMenuItem("Help");
         mA_Help.setActionCommand("a_help");
@@ -74,6 +78,8 @@ public class MainMenu extends JMenuBar{
         mSpatial.add(mS_DistBtwBeds);
         mSpatial.add(mS_BiggestBed);
         mSpatial.add(mS_SmallestBed);
+        
+        mMultimedial.add(mM_FindSimilar);
         
         mAbout.add(mA_Help);
         mAbout.add(mA_About);
@@ -104,6 +110,7 @@ public class MainMenu extends JMenuBar{
         this.mS_DistBtwBeds.addActionListener(controler);
         this.mS_BiggestBed.addActionListener(controler);
         this.mS_SmallestBed.addActionListener(controler);
+        this.mM_FindSimilar.addActionListener(controler);
         this.mA_About.addActionListener(controler);
         this.mA_Help.addActionListener(controler);
     }

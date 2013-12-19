@@ -10,6 +10,7 @@ import cz.vutbr.fit.pdb.control.MapControl;
 import cz.vutbr.fit.pdb.control.RootControl;
 import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.DataObject;
+import cz.vutbr.fit.pdb.model.PlantsObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MainMenu;
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,7 +32,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 
 /**
  *
@@ -101,8 +102,7 @@ public class Core {
         mainWindow.setLocation(screenSize.width / 2 -frameSize.width / 2, screenSize.height /2 - frameSize.height / 2);
 
     }
-    
-    
+
     class MenuControl implements ActionListener,ItemListener{
     
         @Override
@@ -123,7 +123,16 @@ public class Core {
                }
            } else if ("s_bed_by_soil".equals(e.getActionCommand())) {
                getBedBySoilDialog();
-               
+           } else if ("s_beds_with_fences".equals(e.getActionCommand())) {
+               getBedsWithFencesDialog();
+           } else if ("s_dist_btw_beds".equals(e.getActionCommand())) {
+               getDistBtwBedsDialog();
+           }else if ("s_biggest_bed".equals(e.getActionCommand())) {
+               getBiggestBedDialog();
+           } else if ("s_smallest_bed".equals(e.getActionCommand())) {
+               getSmallestBedDialog();
+           } else if ("m_find_similar".equals(e.getActionCommand())) {
+               getSimilarDialog();           
            } else if("a_help".equals(e.getActionCommand())){
                
            }else if("a_about".equals(e.getActionCommand())){
@@ -196,8 +205,6 @@ public class Core {
        };
        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select soil type", JOptionPane.OK_CANCEL_OPTION);
        if (a == JOptionPane.OK_OPTION) {
-           System.out.println("Index soil_type: " + soil_type_list.getSelectedIndex());
-           System.out.println("Index plant_type: " + plant_type_list.getSelectedIndex());
            ArrayList<Integer> bedsID = dbAPI.getBedsBySoil(plant_type_list.getSelectedIndex()+1, soil_type_list.getSelectedIndex()+1);
            ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
            for (Integer i: bedsID) {
@@ -207,7 +214,81 @@ public class Core {
            mp.updateUI();
         }
     } 
+   
+   public void getBedsWithFencesDialog() {
+       ArrayList<Integer> bedsID = dbAPI.getBedsBorderedWithFence();
+       ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+       for (Integer i : bedsID) {
+           bedsSpatial.add(sc.getBed(i));
+       }
+       sc.setTheseAsSelected(bedsSpatial);
+       mp.updateUI();
+   }
+   
+   public void getDistBtwBedsDialog() {
+//       final JComponent[] inputs = new JComponent[]{
+//           new JLabel("?? TODO")
+//       };
+       //int a = JOptionPane.showConfirmDialog(mainMenu, inputs, "Select beds to measure distance between", JOptionPane.OK_CANCEL_OPTION);
+       //if (a == JOptionPane.OK_OPTION) {
+//           ArrayList<Integer> bedsID = dbAPI.getBedsBySoil(plant_type_list.getSelectedIndex()+1, soil_type_list.getSelectedIndex()+1);
+//           ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+//           for (Integer i: bedsID) {
+//               bedsSpatial.add(sc.getBed(i));
+//           }
+//           sc.setTheseAsSelected(bedsSpatial);
+//           mp.updateUI();
+        //}
+   }
+   
+   public void getBiggestBedDialog() {
+       ArrayList<Integer> bedsID = dbAPI.getBiggestBed();
+       ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+       for (Integer i : bedsID) {
+           bedsSpatial.add(sc.getBed(i));
+       }
+       sc.setTheseAsSelected(bedsSpatial);
+       mp.updateUI();
+   }
 
+   public void getSmallestBedDialog() {
+       ArrayList<Integer> bedsID = dbAPI.getSmallestBed();
+       ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
+       for (Integer i : bedsID) {
+           bedsSpatial.add(sc.getBed(i));
+       }
+       sc.setTheseAsSelected(bedsSpatial);
+       mp.updateUI();
+   }
+   
+   public void getSimilarDialog() {
+       ArrayList<String> plant_names = new ArrayList<String>();
+       for (DataObject o: dc.getPlants()) {
+           plant_names.add(o.getName());
+       }
+       Collections.sort(plant_names);
+
+       JList plant_name_list = new JList(plant_names.toArray());
+       plant_name_list.setSelectedIndex(0);
+       final JComponent[] inputs = new JComponent[]{
+           new JLabel("Plant name"), plant_name_list
+       };
+       int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select plant name", JOptionPane.OK_CANCEL_OPTION);
+       if (a == JOptionPane.OK_OPTION) {
+           String selected_plant_name = (String) plant_name_list.getSelectedValue();
+           DataObject selected_plant = dc.getPlants(selected_plant_name);
+           
+           Integer similarPlantID = dbAPI.getMostSimilar((PlantsObject)selected_plant);
+
+           DataObject similar_plant = dc.getPlants(similarPlantID);
+           JLabel sim_plant_name = new JLabel(similar_plant.getName());
+           final JComponent[] outputs = new JComponent[]{
+               sim_plant_name
+               // TODO: Pridat do outputs obrazek podobne rostliny
+           };
+           JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Similar plant", JOptionPane.OK_OPTION);
+        }
+   }
 
     public static void main(String[] args){
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

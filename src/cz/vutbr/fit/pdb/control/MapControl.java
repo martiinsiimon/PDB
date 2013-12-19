@@ -18,8 +18,16 @@ import cz.vutbr.fit.pdb.model.WaterObject;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MapPanel;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.event.MouseInputListener;
-import sun.awt.SunToolkit.InfiniteLoop;
+import oracle.ord.im.OrdImage;
 
 /**
  *
@@ -39,7 +47,26 @@ public class MapControl{
         this.info_model = dc;
         this.info_view = ip;
     }
-
+    
+    
+    public BufferedImage convert(OrdImage image){
+        if(image == null){
+            return null;
+        }
+        Blob blob;
+        InputStream in;
+        BufferedImage bimage = null;
+        try {
+            blob = image.getBlobContent();
+            in = blob.getBinaryStream();
+            bimage = ImageIO.read(in);
+        } catch (SQLException ex) {
+            Logger.getLogger(MapControl.class.getName()).log(Level.SEVERE, null, ex);
+        }catch (IOException e) {
+        }
+        
+        return bimage;
+    }
 
 
     class MapMouseControl implements MouseInputListener{
@@ -71,6 +98,7 @@ public class MapControl{
                 PlantTypeObject pto = info_model.getPlantType(po.getPlantType());
                 info_view.setNameField(po.getName());
                 info_view.setTypeField(pto.getName());
+                info_view.setImage(convert(null));
             } else if (o instanceof FencesObject) {
                 info_view.setTypeField("Fence");
             } else if (o instanceof PathObject) {
