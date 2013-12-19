@@ -155,7 +155,7 @@ public class Core {
         public void itemStateChanged(ItemEvent e) {
             if(((JMenuItem)(e.getSource())).isSelected()){
                 rootControl.enableEdit();
-                ec = new EditControl(ep, mp);
+                ec = new EditControl(ep, mp, sc);
                 mapControl.enableEdit(ec);
             }else{
                 rootControl.disableEdit();

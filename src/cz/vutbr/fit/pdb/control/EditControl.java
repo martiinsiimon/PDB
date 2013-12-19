@@ -4,6 +4,7 @@
  */
 package cz.vutbr.fit.pdb.control;
 
+import cz.vutbr.fit.pdb.containers.SpatialContainer;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.view.EditPanel;
 import cz.vutbr.fit.pdb.view.MapPanel;
@@ -29,14 +30,16 @@ public class EditControl {
     
    
     SpatialObject selected;
+    SpatialContainer sc;
     EditPanel ep;
     MapPanel mp;
     AffineTransform at;
     ChangeListener chl;
     
-    public EditControl(EditPanel ep, MapPanel mp){
+    public EditControl(EditPanel ep, MapPanel mp, SpatialContainer sc){
         this.ep = ep;
         this.mp = mp;
+        this.sc = sc;
         this.chl = new EditMapControl();
     }
     
@@ -127,7 +130,9 @@ public class EditControl {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            if("update".equals(e.getActionCommand())){
+                //TODO - store that shit
+            }
         }
 
         @Override
