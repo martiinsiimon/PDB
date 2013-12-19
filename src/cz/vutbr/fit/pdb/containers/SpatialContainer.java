@@ -178,9 +178,21 @@ public class SpatialContainer {
      * @param obj Object to add
      */
     public void addObject(SpatialObject obj) {
-        if (obj instanceof SignObject) {
+         if (obj instanceof BedsObject) {
+            this.spatialBedsList.put(obj.getId(), obj);
+        } else if (obj instanceof FencesObject) {
+            this.spatialFencesList.put(obj.getId(), obj);
+        } else if (obj instanceof PathObject) {
+            this.spatialPathsList.put(obj.getId(), obj);
+        } else if (obj instanceof SignObject) {
             this.spatialSignsList.put(obj.getId(), obj);
+        } else if (obj instanceof SoilObject) {
+            this.spatialSoilList.put(obj.getId(), obj);
+        } else if (obj instanceof WaterObject) {
+            this.spatialWaterList.put(obj.getId(), obj);
         }
+        
+       
     }
 
     public void delObject(SpatialObject obj) {

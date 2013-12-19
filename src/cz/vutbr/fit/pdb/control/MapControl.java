@@ -190,7 +190,10 @@ public class MapControl{
                     info_view.setTypeField("Sign");
                     info_view.setNameLabel("Plant: ");
                     int plant_id = ((SignObject)o).getPlant();
-                    info_view.setNameField(info_model.getPlants(plant_id).getName());
+                    po = info_model.getPlants(plant_id);
+                    if(po != null){
+                    info_view.setNameField(po.getName());
+                    }
                     info_view.setDescFieldShown();
                     info_view.setDescLabel("Description: ");
                     info_view.setDescField(((SignObject)o).getDescription());
@@ -249,8 +252,10 @@ public class MapControl{
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            editControl.moveTo(e.getPoint());
-            //System.out.println(e.getPoint());
+            if(editControl != null){
+                editControl.moveTo(e.getPoint());
+                //System.out.println(e.getPoint());
+            }
         }
 
         @Override

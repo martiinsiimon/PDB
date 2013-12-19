@@ -40,11 +40,11 @@ public class EditPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        //jButton3 = new javax.swing.JButton();
-        //jButton4 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        // jButton6 = new javax.swing.JButton();
-        //jButton7 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -69,48 +69,73 @@ public class EditPanel extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("New Item"));
         jPanel1.setPreferredSize(new java.awt.Dimension(488, 0));
-        jPanel1.setLayout(null);
 
         jButton1.setText("Bed");
         jButton1.setActionCommand("add_bed_object");
-        jPanel1.add(jButton1);
-        jButton1.setBounds(17, 32, 78, 25);
 
         jButton2.setText("Fence");
         jButton2.setActionCommand("add_fence_object");
-        jPanel1.add(jButton2);
-        jButton2.setBounds(101, 32, 78, 25);
+
+        jButton3.setText("Path");
+        jButton3.setActionCommand("add_path_object");
+
+        jButton4.setText("Plant");
+        jButton4.setActionCommand("add_plant_object");
 
         jButton5.setText("Sign");
         jButton5.setActionCommand("add_sign_object");
-        jPanel1.add(jButton5);
-        jButton5.setBounds(185, 32, 78, 25);
 
-//        jButton3.setText("Path");
-//        jButton3.setActionCommand("add_path_object");
-//        jPanel1.add(jButton3);
-//        jButton3.setBounds(101, 32, 78, 25);
+        jButton6.setText("Soil");
+        jButton6.setActionCommand("add_soil_object");
 
-//        jButton4.setText("Plant");
-//        jButton4.setActionCommand("add_plant_object");
-//        jPanel1.add(jButton4);
-//        jButton4.setBounds(101, 94, 78, 25);
+        jButton7.setText("Water");
+        jButton7.setActionCommand("add_water_object");
 
-
-//        jButton6.setText("Soil");
-//        jButton1.setActionCommand("add_bed_object");
-//        jPanel1.add(jButton6);
-//        jButton6.setBounds(17, 94, 78, 25);
-//
-//        jButton7.setText("Water");
-//        jPanel1.add(jButton7);
-//        jButton7.setBounds(185, 32, 78, 25);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton7))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3)
+                    .addComponent(jButton7))
+                .addGap(9, 9, 9)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6)
+                .addGap(25, 25, 25))
+        );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 3.0;
+        gridBagConstraints.weighty = 10.0;
         add(jPanel1, gridBagConstraints);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Selected Item"));
@@ -238,7 +263,7 @@ public class EditPanel extends javax.swing.JPanel {
                 .addComponent(jButton9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton8)
@@ -257,11 +282,11 @@ public class EditPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
-    //private javax.swing.JButton jButton3;
-    //private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    //private javax.swing.JButton jButton6;
-    //private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox jComboBox1;
@@ -384,11 +409,11 @@ public class EditPanel extends javax.swing.JPanel {
     public void registerActionListener(ActionListener al){
     this.jButton1.addActionListener(al);
     this.jButton2.addActionListener(al);
-    //this.jButton3.addActionListener(al);
-    //this.jButton4.addActionListener(al);
+    this.jButton3.addActionListener(al);
+    this.jButton4.addActionListener(al);
     this.jButton5.addActionListener(al);
-    //this.jButton6.addActionListener(al);
-    //this.jButton7.addActionListener(al);
+    this.jButton6.addActionListener(al);
+    this.jButton7.addActionListener(al);
     this.jButton8.addActionListener(al);
     this.jButton9.addActionListener(al);
     this.jButton10.addActionListener(al);

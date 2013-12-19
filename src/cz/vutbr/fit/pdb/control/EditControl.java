@@ -151,20 +151,19 @@ public class EditControl {
         JGeometry  qq= this.selected.getGeometry();
         if(rotate != 0){
             //at.rotate(Math.toRadians(rotate));
-            System.out.println("rotate");
+            //System.out.println("rotate");
             double[] d = {(double)r.x, (double)r.y};
             qq = qq.affineTransforms(false, 0.0, 0.0, 0.0, false, null, 0, 0, 0, true, JGeometry.createPoint(d,2,0), null, Math.toRadians(rotate), -1, false, 0, 0, 0, 0, 0, 0, false, null, null, 0, false, null, null);
         }
 
         if(s.x != 1 || s.y != 1){
             //at.scale(s.x, s.y);
-            System.out.println("scale");
+            //System.out.println("scale");
             qq = qq.affineTransforms(false, 0, 0, 0, true, new JGeometry((double)r.x+(r.width/2), (double)r.y + (r.height/2), 0), s.x, s.y, 0, false, null, null, 0, 0, false, 0, 0, 0, 0, 0, 0, false, null, null, 0, false, null, null);
         }
 
 
         if(p.x - r.x != 0 || p.y - r.y != 0){
-            System.out.println("move");
             qq = qq.affineTransforms(true, pchange.x, pchange.y, 0.0, false, null, 0, 0, 0, false, null, null, 0, 0, false, 0, 0, 0, 0, 0, 0, false, null, null, 0, false, null, null);
 
         }
@@ -176,9 +175,9 @@ public class EditControl {
 
 
             this.selected.setGeometry(qq);
-            System.out.println(qq.createShape().getBounds());
+            //System.out.println(qq.createShape().getBounds());
         } catch (Exception ex) {
-            System.out.println(ex.toString());
+            System.out.println("aa " + ex.toString());
         }
 
 
@@ -260,21 +259,68 @@ public class EditControl {
                 ip.updateUI();
             } else if ("add_bed_object".equals(e.getActionCommand())) {
                 System.out.println("add bed object");
+                BedsObject obj = new BedsObject();
+                obj.setId(dapi.getHighestId(obj) + 1);
+                this.lastId = obj.getId();
+                obj.setLayer(4);
+                obj.setPlant(1);
+                obj.setGeometry(new JGeometry(0.0,0.0,30.0,30,0));
+                sc.addObject(obj);
+                sc.setSelected(obj);
+                setSelected(obj, dc.getPlants(1));
+                
             } else if ("add_sign_object".equals(e.getActionCommand())) {
                 System.out.println("add sign object");
                 SignObject obj = new SignObject();
                 obj.setId(dapi.getHighestId(obj) + 1);
                 this.lastId = obj.getId();
-                double coord[] = {10.0, 10.0};
-                obj.setGeometry(JGeometry.createPoint(coord, 5, 1));
+                obj.setLayer(6);
+                obj.setPlant(1);
+                obj.setGeometry(new JGeometry(10.0,20.0,0));
                 sc.addObject(obj);
                 sc.setSelected(obj);
-                selected = obj;
-                //ip.updateUI();
-                mp.updateUI();
-            } else if ("add_fence_object".equals(e.getActionCommand())) {
+                setSelected(obj, null);
+                
+            }else if ("add_fence_object".equals(e.getActionCommand())) {
                 System.out.println("add fence object");
+            }else if ("add_path_object".equals(e.getActionCommand())) {
+                System.out.println("add path object");
+                PathObject obj = new PathObject();
+                obj.setId(dapi.getHighestId(obj) + 1);
+                this.lastId = obj.getId();
+                obj.setLayer(3);
+                obj.setGeometry(new JGeometry(0.0,0.0,200.0,20,0));
+                sc.addObject(obj);
+                sc.setSelected(obj);
+                setSelected(obj, null);
+            }else if ("add_water_object".equals(e.getActionCommand())) {
+                System.out.println("add water object");
+                WaterObject obj = new WaterObject();
+                obj.setId(dapi.getHighestId(obj) + 1);
+                this.lastId = obj.getId();
+                obj.setLayer(2);
+                obj.setGeometry(JGeometry.createCircle(-10.0, 30.0, 50.0, 0));
+                sc.addObject(obj);
+                sc.setSelected(obj);
+                setSelected(obj, null);
+            }else if ("add_soil_object".equals(e.getActionCommand())) {
+                System.out.println("add soil object");
+                SoilObject obj = new SoilObject();
+                obj.setId(dapi.getHighestId(obj) + 1);
+                this.lastId = obj.getId();
+                obj.setLayer(1);
+                obj.setSoilType(1);
+                obj.setGeometry(new JGeometry(0.0,0.0,100.0,100,0));
+                sc.addObject(obj);
+                sc.setSelected(obj);
+                setSelected(obj, null);
+            }else if ("add_plant_object".equals(e.getActionCommand())) {
+                System.out.println("add plant object");
             }
+            
+            ip.updateUI();
+            mp.updateUI();
+            ep.updateUI();
         }
 
         @Override
