@@ -37,6 +37,8 @@ public class InfoPanel extends javax.swing.JPanel {
         jTextFieldType = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jTextFieldName = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldDesc = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
 
         setLayout(new java.awt.GridLayout(1, 0));
@@ -50,6 +52,10 @@ public class InfoPanel extends javax.swing.JPanel {
         jLabel2.setText("Name: ");
 
         jTextFieldName.setEditable(false);
+        
+        jLabel3.setText("Description: ");
+        
+        jTextFieldDesc.setEditable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -59,11 +65,13 @@ public class InfoPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextFieldName)
-                    .addComponent(jTextFieldType, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE))
+                    .addComponent(jTextFieldType, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                    .addComponent(jTextFieldDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -76,6 +84,10 @@ public class InfoPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextFieldDesc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(231, Short.MAX_VALUE))
         );
 
@@ -91,13 +103,31 @@ public class InfoPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextFieldName;
     private javax.swing.JTextField jTextFieldType;
+    private javax.swing.JTextField jTextFieldDesc;
     // End of variables declaration//GEN-END:variables
 
     private ImagePanel photoPanel = new ImagePanel(null);
+    
+    public void setTypeLabel(String type_label) {
+        this.jLabel1.setText(type_label);
+    }
+    
+    public void setNameLabel(String name_label) {
+        this.jLabel2.setText(name_label);
+    }
+    
+    public void setDescLabel(String desc_label) {
+        this.jLabel3.setText(desc_label);
+    }
+    
+    public void setDescField(String desc){
+        this.jTextFieldDesc.setText(desc);
+    }
     
     public void setTypeField(String type){
         this.jTextFieldType.setText(type);
@@ -107,6 +137,21 @@ public class InfoPanel extends javax.swing.JPanel {
         this.jTextFieldName.setText(name);
     }
     
+    public void setNameFieldShown() {
+        this.jTextFieldName.show();
+    }
+    
+    public void setNameFieldHidden() {
+        this.jTextFieldName.hide();
+    }
+    
+    public void setDescFieldShown() {
+        this.jTextFieldDesc.show();
+    }
+    
+    public void setDescFieldHidden() {
+        this.jTextFieldDesc.hide();
+    }
     
     public void setImage(BufferedImage img){
         this.photoPanel.setImage(img);
