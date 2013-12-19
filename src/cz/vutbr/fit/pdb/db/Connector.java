@@ -12,10 +12,13 @@ import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.model.WaterObject;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -23,10 +26,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import oracle.jdbc.OracleResultSet;
 
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.ord.im.OrdImage;
+import oracle.spatial.geometry.JGeometry;
+import oracle.sql.STRUCT;
 
 /**
  * Class representing connection to the database and git-like system.
@@ -598,10 +604,10 @@ public class Connector {
      * Store image to the object in parameter to the database.
      *
      * @param o Object to which the object should be stored
-     * @param path Path to the image. If null, image from object properties
-     * should be stored
+     * @param path Path to the image. If null, object stored in cache shoull be
+     * uploaded
      */
-    public void storeImage(PlantsObject o, String path) {
+    public void insertImage(PlantsObject o, String path) {
         try {
             /* Connect to the database */
             Connection conn = this.getConnection();
@@ -622,18 +628,17 @@ public class Connector {
             System.out.println("SQLException: " + e.getMessage());
         }
     }
+//
+//    public void updasteImage(PlantsObject o) {
+//        if (o.getImage() == null) {
+//            this.deleteImage(o);
+//        } else {
+//            this.insertImage(o, null);
+//        }
+//    }
 
-    /**
-     * Get image which belongs to the object in parameter. Image transformations
-     * are determined by given sql query.
-     *
-     * @param query SQL query
-     * @return Image of determined object or null if there is no such a object
-     * stored in database
-     */
-    public OrdImage getImage(String query) {
-        OrdImage img = null;
-        OracleResultSet rs;
+    public void deleteImage(PlantsObject o) {
+        /* Execute query */
         try {
             /* Connect to the database */
             Connection conn = this.getConnection();
@@ -641,12 +646,17 @@ public class Connector {
                 Statement stm = conn.createStatement();
 
                 /* Execute query */
-                rs = (OracleResultSet) stm.executeQuery(query);
+                stm.executeUpdate(
+                        "UPDATE " + o.getTableName()
+                        + " photo = ordsys.ordimage.init(),"
+                        + " photo_thumb = ordsys.ordimage.init(),"
+                        + " photo_si = NULL,"
+                        + " photo_ac = NULL,"
+                        + " photo_ch = NULL,"
+                        + " photo_pc = NULL,"
+                        + " photo_tx = NULL"
+                        + " WHERE id = " + o.getId());
 
-                /* Copy the result to array */
-                if (rs.next()) {
-                    img = (OrdImage) rs.getORAData("photo", OrdImage.getORADataFactory());
-                }
 
                 /* Close statement */
                 stm.close();
@@ -662,8 +672,63 @@ public class Connector {
             System.out.println("SQLException: " + e.getMessage());
         }
 
+    }
+
+    /**
+     * Get image which belongs to the object in parameter. Image transformations
+     * are determined by given sql query.
+     *
+     * @param query SQL query
+     * @return Image of determined object or null if there is no such a object
+     * stored in database
+     */
+    public BufferedImage getImage(String query) {
+        OrdImage img = null;
+        BufferedImage res = null;
+        OracleResultSet rs;
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = (OracleResultSet) stm.executeQuery(query);
+
+                /* Copy the result to array */
+                if (rs.next()) {
+                    img = (OrdImage) rs.getORAData("photo", OrdImage.getORADataFactory());
+                }
+
+                if (img == null) {
+                    return null;
+                }
+                Blob blob;
+                InputStream in;
+
+                blob = img.getBlobContent();
+                in = blob.getBinaryStream();
+                res = ImageIO.read(in);
+
+                /* Close statement */
+                stm.close();
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.err.println("SQLException: " + e.getMessage());
+            } catch (IOException e) {
+                Logger.getLogger(e.getMessage());
+                System.err.println("IOException: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.err.println("SQLException: " + e.getMessage());
+        }
+
         /* Return result */
-        return img;
+            return res;
     }
 
     /**
@@ -866,4 +931,47 @@ public class Connector {
         /* Return result */
         return result;
     }
+
+    /**
+     * Get geometry from database (only single one in a time)
+     *
+     * @param query SQL query to get geometry
+     * @return JGeometry object or null if no such an object
+     */
+    public JGeometry getGeometry(String query) {
+        JGeometry geo = null;
+        OracleResultSet rs;
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = (OracleResultSet) stm.executeQuery(query);
+
+                /* Get result */
+                if (rs.next()) {
+                    STRUCT st = (STRUCT) rs.getObject("geometry");
+                    geo = JGeometry.load(st);
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("SQLException: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return geo;
+    }
+
 }

@@ -26,7 +26,7 @@ public class ImagePanel extends JPanel implements MouseListener {
         super();
         this.image = image;
         //updateSize();
-        this.setBorder(BorderFactory.createLineBorder(Color.black));
+        //this.setBorder(BorderFactory.createLineBorder(Color.black));
        
     }
 
@@ -59,14 +59,22 @@ public class ImagePanel extends JPanel implements MouseListener {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         Dimension dm = this.getSize();
-        //this.setBackground(Color.yellow);
+        //this.setBackground(Color.BLACK);
         g2.setColor(Color.black);
         if (image != null) {
             if (resize) {
-                Image dimg = image.getScaledInstance(dm.width, dm.height, Image.SCALE_SMOOTH);
-                g2.drawImage(dimg, 0, 0, null);
+                Image dimg;
+                if (image.getWidth() > image.getHeight()) {
+                    dimg = image.getScaledInstance(dm.width, -1, Image.SCALE_SMOOTH);
+                } else {
+                    dimg = image.getScaledInstance(-1, dm.height, Image.SCALE_SMOOTH);
+                }
+                int x = (dm.width - dimg.getWidth(this)) / 2;
+                int y = (dm.height - dimg.getHeight(this)) / 2;
+                g2.drawImage(dimg, x, y, null);
             } else {
                 g2.drawImage(image, 0, 0, null);
+                
             }
 
         } else {

@@ -104,6 +104,7 @@ public class MapControl{
             
             info_view.setNameField("");
             info_view.setTypeField("");
+            info_view.setImage(null);
             
             if (o instanceof BedsObject) {
                 int plantid = ((BedsObject)o).getPlant();
@@ -111,7 +112,11 @@ public class MapControl{
                 PlantTypeObject pto = info_model.getPlantType(po.getPlantType());
                 info_view.setNameField(po.getName());
                 info_view.setTypeField(pto.getName());
+
                 //info_view.setImage(info_model.getImageThumbnail(plantid));
+
+                info_view.setImage(info_model.getImageThumbnail(po));
+
             } else if (o instanceof FencesObject) {
                 info_view.setTypeField("Fence");
             } else if (o instanceof PathObject) {

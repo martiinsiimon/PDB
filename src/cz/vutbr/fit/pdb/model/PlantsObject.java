@@ -5,9 +5,16 @@
  */
 package cz.vutbr.fit.pdb.model;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import oracle.ord.im.OrdImage;
@@ -20,7 +27,7 @@ import oracle.ord.im.OrdImage;
  */
 public class PlantsObject extends DataObject {
     private Boolean imgChanged;
-    private OrdImage image;
+    private BufferedImage image;
     private int plant_type;
     private static final String THRES = "200 200";
 
@@ -53,24 +60,25 @@ public class PlantsObject extends DataObject {
         this.imgChanged = false;
     }
 
-    public void setImage(OrdImage img) {
+    public void setImage(BufferedImage img) {
         this.image = img;
         this.setImgChanged();
     }
 
-    public void setImage(OrdImage img, Boolean change) {
+    public void setImage(BufferedImage img, Boolean change) {
         this.image = img;
         if (change) {
             this.setImgChanged();
         }
     }
 
-    public OrdImage getImage() {
+    public BufferedImage getImage() {
         return this.image;
     }
 
     public void delImage() {
         this.image = null;
+        this.setImgChanged();
     }
 
     public void setPlantType(int _plantType) {
@@ -94,20 +102,10 @@ public class PlantsObject extends DataObject {
 
     @Override
     public String getUpdateSQL() {
-        String query;
-        if (this.image != null) {
-            query = "UPDATE " + this.tableName
+        String query = "UPDATE " + this.tableName
                     + " SET name = '" + this.name + "',"
                     + " plant_type = " + this.plant_type
                     + " WHERE id = " + this.id;
-        } else {
-            query = "UPDATE " + this.tableName
-                    + " SET name = '" + this.name + "',"
-                    + " plant_type = " + this.plant_type + ","
-                    + " photo = ordsys.ordimage.init(), "
-                    + " photo_thumb = ordsys.ordimage.init()"
-                    + " WHERE id = " + this.id;
-        }
         return query;
     }
 
@@ -116,7 +114,7 @@ public class PlantsObject extends DataObject {
     }
 
     public String getImageThumbSQL() {
-        return "SELECT photo_thumb FROM " + this.tableName + " WHERE id = " + this.id;
+        return "SELECT photo_thumb photo FROM " + this.tableName + " WHERE id = " + this.id;
     }
 
 
@@ -162,13 +160,11 @@ public class PlantsObject extends DataObject {
                 connection.setAutoCommit(autoCommit);
                 return;
             }
-            if (filename == null) {
-                imgProxy = this.image;
-                this.unsetImgChanged();
-            } else {
+
                 System.out.println("File " + filename);
                 imgProxy.loadDataFromFile(filename);
-            }
+
+
             imgProxy.processCopy("maxScale =" + PlantsObject.THRES, thProxy);
             imgProxy.setProperties();
 
