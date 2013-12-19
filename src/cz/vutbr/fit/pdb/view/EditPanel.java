@@ -10,6 +10,11 @@
  */
 package cz.vutbr.fit.pdb.view;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeListener;
+
 /**
  *
  * @author casey
@@ -52,6 +57,7 @@ public class EditPanel extends javax.swing.JPanel {
         jSpinner3 = new javax.swing.JSpinner();
         jSpinner4 = new javax.swing.JSpinner();
         jSpinner5 = new javax.swing.JSpinner();
+        jButton8 = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -100,6 +106,10 @@ public class EditPanel extends javax.swing.JPanel {
 
         jLabel2.setText("y");
 
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel());
+
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel());
+
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
 
         jLabel3.setText("Layer");
@@ -109,6 +119,14 @@ public class EditPanel extends javax.swing.JPanel {
         jLabel5.setText("Scale Y");
 
         jLabel6.setText("Rotate");
+
+        jSpinner3.setModel(new SpinnerNumberModel(1.0,-10.0,10.0,0.01));
+
+        jSpinner4.setModel(new SpinnerNumberModel(1.0,-10.0,10.0,0.01));
+
+        jSpinner5.setModel(new javax.swing.SpinnerNumberModel());
+
+        jButton8.setText("Update");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -141,8 +159,11 @@ public class EditPanel extends javax.swing.JPanel {
                             .addComponent(jSpinner3, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(122, 122, 122)
-                        .addComponent(jLabel6)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +192,9 @@ public class EditPanel extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jSpinner5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))))
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 149, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addContainerGap())
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -189,6 +212,7 @@ public class EditPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -204,4 +228,54 @@ public class EditPanel extends javax.swing.JPanel {
     private javax.swing.JSpinner jSpinner4;
     private javax.swing.JSpinner jSpinner5;
     // End of variables declaration//GEN-END:variables
+
+public void updateXY(int x, int y){
+    this.jSpinner1.setValue(x);
+    this.jSpinner2.setValue(y);
 }
+
+public Point getXY(){
+    return new Point((Integer)this.jSpinner1.getValue(), (Integer)this.jSpinner2.getValue());
+}
+
+public void updateLayer(int l){
+    this.jComboBox1.setSelectedIndex(l-1);
+}
+
+public Point2D.Double getScale(){
+    return new Point2D.Double(((Double)this.jSpinner3.getValue()).doubleValue(), ((Double)this.jSpinner4.getValue()).doubleValue());
+}
+
+public int getRotate(){
+    return (Integer)this.jSpinner5.getValue();
+}
+
+public void resetRest(){
+    this.jSpinner3.setValue(new Double(1.0));
+    this.jSpinner4.setValue(new Double(1.0));
+    this.jSpinner5.setValue(0);
+    
+}
+
+public void registerChangeListener(ChangeListener chl){
+    this.jSpinner1.addChangeListener(chl);
+    this.jSpinner2.addChangeListener(chl);
+    this.jSpinner3.addChangeListener(chl);
+    this.jSpinner4.addChangeListener(chl);
+    this.jSpinner5.addChangeListener(chl);
+
+}
+
+public void removeChangeListener(ChangeListener chl){
+    this.jSpinner1.removeChangeListener(chl);
+    this.jSpinner2.removeChangeListener(chl);
+    this.jSpinner3.removeChangeListener(chl);
+    this.jSpinner4.removeChangeListener(chl);
+    this.jSpinner5.removeChangeListener(chl);
+
+}
+
+
+}
+
+

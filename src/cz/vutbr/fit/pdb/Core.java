@@ -6,11 +6,13 @@ package cz.vutbr.fit.pdb;
 
 import cz.vutbr.fit.pdb.containers.DataContainer;
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
+import cz.vutbr.fit.pdb.control.EditControl;
 import cz.vutbr.fit.pdb.control.MapControl;
 import cz.vutbr.fit.pdb.control.RootControl;
 import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
+import cz.vutbr.fit.pdb.view.EditPanel;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MainMenu;
 import cz.vutbr.fit.pdb.view.MapPanel;
@@ -43,6 +45,9 @@ public class Core {
     private RootControl rootControl;
     private MapControl mapControl;
     private MapPanel mp;
+    private InfoPanel ip;
+    private EditPanel ep;
+    private EditControl ec;
 
     private DatabaseAPI dbAPI;
     
@@ -76,10 +81,11 @@ public class Core {
         dc = new DataContainer(dbAPI);
         dc.initialize();
 
-        InfoPanel ip = new InfoPanel();
+        ip = new InfoPanel();
         mp = new MapPanel(sc);
+        ep = new EditPanel();
        
-        rootPanel = new RootPanel(mp, ip);
+        rootPanel = new RootPanel(mp, ip, ep);
         rootControl = new RootControl(rootPanel);
         mapControl = new MapControl(mp, ip, sc, dc);
         rootPanel.rebake();
@@ -149,6 +155,8 @@ public class Core {
         public void itemStateChanged(ItemEvent e) {
             if(((JMenuItem)(e.getSource())).isSelected()){
                 rootControl.enableEdit();
+                ec = new EditControl(ep, mp);
+                mapControl.enableEdit(ec);
             }else{
                 rootControl.disableEdit();
             }

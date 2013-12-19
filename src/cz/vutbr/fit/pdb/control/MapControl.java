@@ -39,6 +39,8 @@ public class MapControl{
     private SpatialContainer map_model;
     private InfoPanel info_view;
     private DataContainer info_model;
+    private EditControl editControl;
+    
 
     public MapControl(MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc){
         this.map_view = mp;
@@ -60,14 +62,19 @@ public class MapControl{
             blob = image.getBlobContent();
             in = blob.getBinaryStream();
             bimage = ImageIO.read(in);
-        } catch (SQLException ex) {
-            Logger.getLogger(MapControl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            
         }catch (IOException e) {
+            
         }
         
         return bimage;
     }
 
+    public void enableEdit(EditControl ec){
+        this.editControl = ec;
+    
+    }
 
     class MapMouseControl implements MouseInputListener{
 
@@ -84,9 +91,15 @@ public class MapControl{
                 return;
             }
             o.setSelection(true);
+            
+            
             map_model.setSelected(o);
 
             map_model.checkHovering(e.getPoint(), map_view.getAffineTransform());
+            
+             if(editControl != null){
+                editControl.setSelected(o);
+            }
            
             
             info_view.setNameField("");
@@ -98,21 +111,26 @@ public class MapControl{
                 PlantTypeObject pto = info_model.getPlantType(po.getPlantType());
                 info_view.setNameField(po.getName());
                 info_view.setTypeField(pto.getName());
-                info_view.setImage(convert(null));
+                //info_view.setImage(info_model.getImageThumbnail(plantid));
             } else if (o instanceof FencesObject) {
                 info_view.setTypeField("Fence");
             } else if (o instanceof PathObject) {
                 info_view.setTypeField("Path");
             } else if (o instanceof SignObject) {
                 info_view.setTypeField("Sign");
+                
             } else if (o instanceof SoilObject) {
                 info_view.setTypeField("Soil");
             } else if (o instanceof WaterObject) {
                 info_view.setTypeField("Water");
             }
+             
+            //map_view.setEditShape(null);
+            map_view.updateUI();
+            info_view.updateUI();
             
-             map_view.updateUI();
-             info_view.updateUI();
+
+            
         }
 
         @Override
@@ -132,7 +150,8 @@ public class MapControl{
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            //throw new UnsupportedOperationException("Not supported yet.");
+            editControl.moveTo(e.getPoint());
+            //System.out.println(e.getPoint());
         }
 
         @Override
