@@ -9,11 +9,8 @@
  * Created on 21.10.2013, 1:05:21
  */
 package cz.vutbr.fit.pdb.view;
-
-import cz.vutbr.fit.pdb30.gui.ImagePanel;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import javax.swing.JLabel;
 
 /**
  *

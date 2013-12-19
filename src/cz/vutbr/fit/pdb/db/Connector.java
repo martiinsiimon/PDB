@@ -648,7 +648,7 @@ public class Connector {
                 /* Execute query */
                 stm.executeUpdate(
                         "UPDATE " + o.getTableName()
-                        + " photo = ordsys.ordimage.init(),"
+                        + " SET photo = ordsys.ordimage.init(),"
                         + " photo_thumb = ordsys.ordimage.init(),"
                         + " photo_si = NULL,"
                         + " photo_ac = NULL,"
