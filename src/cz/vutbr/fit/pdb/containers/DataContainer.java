@@ -6,6 +6,7 @@ import cz.vutbr.fit.pdb.model.LayersObject;
 import cz.vutbr.fit.pdb.model.PlantTypeObject;
 import cz.vutbr.fit.pdb.model.PlantsObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -255,7 +256,7 @@ public class DataContainer {
      * @param obj PlantObject which is looking for image
      * @return OrdImage of given object or null if fail
      */
-    public OrdImage getImage(PlantsObject obj) {
+    public BufferedImage getImage(PlantsObject obj) {
         if (obj == null) {
             return null;
         } else {
@@ -270,7 +271,7 @@ public class DataContainer {
      * @param id ID of PlantsObject
      * @return OrdImage of given object or null if fail
      */
-    public OrdImage getImage(Integer id) {
+    public BufferedImage getImage(Integer id) {
         DataObject obj = this.getPlants(id);
         if (obj == null || !(obj instanceof PlantsObject)) {
             /* There's no such and object */
@@ -283,7 +284,7 @@ public class DataContainer {
         }
 
         /* Get the object from db */
-        OrdImage img = db.getPlantsImage((PlantsObject) obj);
+        BufferedImage img = db.getPlantsImage((PlantsObject) obj);
 
         /* Return result */
         return img;
@@ -296,7 +297,7 @@ public class DataContainer {
      * @param obj PlantObject which is looking for image
      * @return OrdImage of given object or null if fail
      */
-    public OrdImage getImageThumbnail(PlantsObject obj) {
+    public BufferedImage getImageThumbnail(PlantsObject obj) {
         if (obj == null) {
             return null;
         } else {
@@ -311,7 +312,7 @@ public class DataContainer {
      * @param id ID of PlantsObject
      * @return OrdImage of given object or null if fail
      */
-    public OrdImage getImageThumbnail(Integer id) {
+    public BufferedImage getImageThumbnail(Integer id) {
         DataObject obj = this.getPlants(id);
         if (obj == null || !(obj instanceof PlantsObject)) {
             /* There's no such and object */
@@ -319,7 +320,7 @@ public class DataContainer {
         }
 
         /* Get the object from db */
-        OrdImage img = db.getPlantsImage((PlantsObject) obj);
+        BufferedImage img = db.getPlantsImage((PlantsObject) obj);
 
         /* Return result */
         return img;
@@ -379,7 +380,6 @@ public class DataContainer {
                         this.db.update((SoilTypeObject) _obj);
                     } else if (_obj instanceof PlantsObject) {
                         ((PlantsObject) this.dataObjectList.get(id).get(lst.indexOf(obj))).setPlantType(((PlantsObject) _obj).getPlantType());
-                        //TODO update photos
                         this.db.update((PlantsObject) _obj);
                     } else if (_obj instanceof PlantTypeObject) {
                         this.db.update((PlantTypeObject) _obj);

@@ -12,10 +12,10 @@ import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.model.WaterObject;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
-import oracle.ord.im.OrdImage;
 
 /**
  * Database application program interface. Contains methods to access the DB and
@@ -63,7 +63,7 @@ public class DatabaseAPI {
             File f = new File("assets/pict/" + o.getName() + ".jpg");
             if (f.exists()) {
                 /* Add image */
-                this.connector.storeImage((PlantsObject) o, f.getPath());
+                this.connector.insertImage((PlantsObject) o, f.getPath());
             } else {
                 System.out.println("File assets/pict/" + o.getName() + ".jpg not found (" + f.getPath() + ")");
             }
@@ -85,7 +85,7 @@ public class DatabaseAPI {
             File f = new File("assets/pict/" + o.getName() + ".jpg");
             if (f.exists()) {
                 /* Add image */
-                this.connector.storeImage((PlantsObject) o, f.getPath());
+                this.connector.insertImage((PlantsObject) o, f.getPath());
             } else {
                 System.out.println("File assets/pict/" + o.getName() + ".jpg not found (" + f.getPath() + ")");
             }
@@ -164,7 +164,7 @@ public class DatabaseAPI {
         this.addQuery(_obj.getUpdateSQL());
 
         if (_obj.isImgChanged()) {
-            this.connector.storeImage(_obj, null);
+            this.connector.updateImage(_obj);
         }
     }
 
@@ -293,7 +293,8 @@ public class DatabaseAPI {
         this.addQuery(_obj.getInsertSQL());
 
         if (_obj.isImgChanged()) {
-            this.connector.storeImage(_obj, null);
+            this.commit();
+            this.connector.updateImage(_obj);
         }
     }
 
@@ -311,6 +312,14 @@ public class DatabaseAPI {
         }
         _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
+    }
+
+    public void insertImage(PlantsObject _obj) {
+        this.connector.updateImage(_obj);
+    }
+
+    public void insertImage(PlantsObject _obj, String path) {
+        this.connector.insertImage(_obj, path);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -649,8 +658,8 @@ public class DatabaseAPI {
      * @return Image which belongs to the object or null if there is no such an
      * object. The object is stored too, if it is not null
      */
-    public OrdImage getPlantsImage(PlantsObject o) {
-        OrdImage img = this.connector.getImage(o.getImageSQL());
+    public BufferedImage getPlantsImage(PlantsObject o) {
+        BufferedImage img = this.connector.getImage(o.getImageSQL());
         if (img != null) {
             o.setImage(img);
         }
@@ -664,7 +673,7 @@ public class DatabaseAPI {
      * @return Thumbnailed image of determined object or null if there is no
      * such a object * stored in database
      */
-    public OrdImage getPlantsImageThumb(PlantsObject o) {
+    public BufferedImage getPlantsImageThumb(PlantsObject o) {
         return this.connector.getImage(o.getImageThumbSQL());
     }
 
