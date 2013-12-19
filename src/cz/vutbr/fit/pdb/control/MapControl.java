@@ -102,7 +102,7 @@ public class MapControl{
                 }
                 o.setSelection(true);
 
-
+                //System.out.println(o.getGeometry().);
                 map_model.setSelected(o);
 
                 map_model.checkHovering(e.getPoint(), map_view.getAffineTransform());
