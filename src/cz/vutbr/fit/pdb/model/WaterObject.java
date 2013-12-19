@@ -27,7 +27,7 @@ public class WaterObject extends SpatialObject {
     @Override
     public String getUpdateSQL() {
         String query = "UPDATE water"
-                + " SET geometry = '" + this.geometry + "'"
+                + " SET geometry = " + this.geometry
                 + " WHERE id = " + this.id;
 
         return query;

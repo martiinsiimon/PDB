@@ -44,7 +44,7 @@ public class SoilObject extends SpatialObject {
     public String getUpdateSQL() {
         String query;
         query = "UPDATE soil"
-                + " SET geometry = '" + this.geometry + "'"
+                + " SET geometry = " + this.geometry
                 + " SET soil_type = " + this.soilType
                 + " WHERE id = " + this.id;
 

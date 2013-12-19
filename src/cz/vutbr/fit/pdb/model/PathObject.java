@@ -27,7 +27,7 @@ public class PathObject extends SpatialObject {
     @Override
     public String getUpdateSQL() {
         String query = "UPDATE paths"
-                + " SET geometry = '" + this.geometry + "'"
+                + " SET geometry = " + this.geometry
                 + " WHERE id = " + this.id;
 
         return query;

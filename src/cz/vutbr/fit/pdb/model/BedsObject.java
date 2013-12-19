@@ -49,7 +49,7 @@ public class BedsObject extends SpatialObject {
         String query = "INSERT INTO beds VALUES ("
                 + this.id + ", "
                 + "(SELECT id FROM layers WHERE name = 'beds')" + ", "
-                + "'" + this.geometry + "'" + ", "
+                + this.geometry + ", "
                 + this.plant + ", "
                 + "(SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual)" + ", "
                 + "TO_DATE('12-31-9999','MM-DD-YYYY'))";
