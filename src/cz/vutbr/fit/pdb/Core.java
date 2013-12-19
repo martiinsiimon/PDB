@@ -22,8 +22,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -133,7 +138,19 @@ public class Core {
                getSmallestBedDialog();
            } else if ("m_find_similar".equals(e.getActionCommand())) {
                getSimilarDialog();           
-           } else if("a_help".equals(e.getActionCommand())){
+           } else if ("t_sign_desc".equals(e.getActionCommand())) {
+               getSignDescDialog();
+           } else if ("t_plant_names".equals(e.getActionCommand())) {
+               getPlantNamesDialog();
+           } else if ("t_sign_desc_for_plants".equals(e.getActionCommand())) {
+               getSignDescForPlantsDialog();
+           } else if ("t_change_desc_of_sign".equals(e.getActionCommand())) {
+               changeDescOfSignDialog();
+           } else if ("t_remove_fences".equals(e.getActionCommand())) {
+               removeFencesDialog();
+           }
+           
+           else if("a_help".equals(e.getActionCommand())){
                
            }else if("a_about".equals(e.getActionCommand())){
                JOptionPane.showMessageDialog(mainWindow, "PDB Projekt 2013 - Botanická zahrada \nJan Jeřábek - xjerab13\nMartin Šimon - xsimon14\nMilan Bárta - xbarta32");
@@ -286,10 +303,102 @@ public class Core {
                sim_plant_name
                // TODO: Pridat do outputs obrazek podobne rostliny
            };
-           JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Similar plant", JOptionPane.OK_OPTION);
+           JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Similar plant", JOptionPane.INFORMATION_MESSAGE);
         }
    }
+   
+    public void getSignDescDialog() {
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date date_from = new Date();
+        Date date_to = new Date();
+        Calendar cal = Calendar.getInstance();
+        
+        JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
+        JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
+        
+        final JComponent[] inputs = new JComponent[]{
+            new JLabel("From (MM-DD-YYYY)"), textdate_from,
+            new JLabel("To (MM-DD-YYYY)"), textdate_to
+        };
+        
+        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
+        if (a == JOptionPane.OK_OPTION) {
+            // TODO: implement
+            final JComponent[] outputs = new JComponent[]{
+            };
+            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
+    public void getPlantNamesDialog() {
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date date_from = new Date();
+        Date date_to = new Date();
+        Calendar cal = Calendar.getInstance();
+        
+        JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
+        JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
+        
+        final JComponent[] inputs = new JComponent[]{
+            new JLabel("From (MM-DD-YYYY)"), textdate_from,
+            new JLabel("To (MM-DD-YYYY)"), textdate_to
+        };
+        
+        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
+        if (a == JOptionPane.OK_OPTION) {
+            // TODO: implement
+            final JComponent[] outputs = new JComponent[]{
+            };
+            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    public void getSignDescForPlantsDialog() {
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date date_from = new Date();
+        Date date_to = new Date();
+        Calendar cal = Calendar.getInstance();
+        
+        JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
+        JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
+        
+        final JComponent[] inputs = new JComponent[]{
+            new JLabel("From (MM-DD-YYYY)"), textdate_from,
+            new JLabel("To (MM-DD-YYYY)"), textdate_to
+        };
+        
+        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
+        if (a == JOptionPane.OK_OPTION) {
+            // TODO: implement
+            final JComponent[] outputs = new JComponent[]{
+            };
+            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Result", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    public void changeDescOfSignDialog() {
+        // TODO: implement
+    }
+
+    public void removeFencesDialog() {
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date date_from = new Date();
+        Date date_to = new Date();
+        Calendar cal = Calendar.getInstance();
+        
+        JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
+        JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
+        
+        final JComponent[] inputs = new JComponent[]{
+            new JLabel("From (MM-DD-YYYY)"), textdate_from,
+            new JLabel("To (MM-DD-YYYY)"), textdate_to
+        };
+        
+        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
+        if (a == JOptionPane.OK_OPTION) {
+            // TODO: implement
+        }
+    }
     public static void main(String[] args){
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
 
