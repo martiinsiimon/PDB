@@ -66,24 +66,17 @@ public abstract class SpatialObject extends Table {
     public void setHovering(boolean hb) {
         this.hovered = hb;
     }
-    
+
     public boolean isMouseOver(Point mousePosition, AffineTransform at){
         Shape s = this.geometry.createShape(at);
         if(this.geometry.isPoint()){
             Point2D p =this.geometry.getJavaPoint();
             at.transform(p, p);
-            if(p.distance(mousePosition) <= 10){
-                return true;
-            }else{
-                return false;
-            }
+            return p.distance(mousePosition) <= 10;
         }
-        if(s.contains(mousePosition)){
-            return true;
-        }
-        return false;
+        return s.contains(mousePosition);
     }
-    
+
     public boolean hoverIfMouseOver(Point mousePosition, AffineTransform at){
         this.hovered = this.isMouseOver(mousePosition, at);
         return this.hovered;

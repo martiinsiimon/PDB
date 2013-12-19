@@ -17,15 +17,15 @@ import javax.swing.JMenuItem;
  * @author casey
  */
 public class MainMenu extends JMenuBar{
-    
+
     private JMenu mFile, mAbout, mEdit, mDatabase, mSpatial, mMultimedial, mTemporal;
     private JMenuItem mF_quit, mD_Connect, mD_Init, mA_Help, mA_About;
     private JMenuItem mS_BedBySoil, mS_BedsWithFences, mS_DistBtwBeds, mS_BiggestBed, mS_SmallestBed;
     private JMenuItem mM_FindSimilar;
-    private JMenuItem mT_SignDesc, mT_PlantNames, mT_SignDescForPlants, mT_ChangeDescOfSign, mT_RemoveFences;
+    private JMenuItem mT_SignDesc, mT_PlantNames, mT_SignDescForPlants, mT_ChangeDate, mT_RemoveFences ;
     private JCheckBoxMenuItem mE_cbEdit;
-    
-    
+
+
     public MainMenu(){
         super();
         mFile = new JMenu("File");
@@ -35,18 +35,18 @@ public class MainMenu extends JMenuBar{
         mSpatial = new JMenu("Spatial operations");
         mMultimedial = new JMenu("Multimedial operations");
         mTemporal = new JMenu("Temporal operations");
-        
+
         mF_quit = new JMenuItem("Quit");
         mF_quit.setActionCommand("f_quit");
-       
+
         mE_cbEdit = new JCheckBoxMenuItem("Enable");
-        
+
         mD_Connect = new JMenuItem("Connect To");
         mD_Connect.setActionCommand("db_connect");
-        
+
         mD_Init = new JMenuItem("Init");
         mD_Init.setActionCommand("db_init");
-        
+
         mS_BedBySoil = new JMenuItem("Show beds on given soil");
         mS_BedBySoil.setActionCommand("s_bed_by_soil");
         mS_BedsWithFences = new JMenuItem("Show beds bordered by fences");
@@ -57,51 +57,53 @@ public class MainMenu extends JMenuBar{
         mS_BiggestBed.setActionCommand("s_biggest_bed");
         mS_SmallestBed = new JMenuItem("Show smallest beds");
         mS_SmallestBed.setActionCommand("s_smallest_bed");
-        
+
         mM_FindSimilar = new JMenuItem("Find the most similar by picture");
         mM_FindSimilar.setActionCommand("m_find_similar");
-        
+
         mT_SignDesc = new JMenuItem("List description of signs from ... to ...");
         mT_SignDesc.setActionCommand("t_sign_desc");
         mT_PlantNames = new JMenuItem("List plant names from ... to ...");
         mT_PlantNames.setActionCommand("t_plant_names");
         mT_SignDescForPlants = new JMenuItem("List description on signs of plants from ... to ...");
         mT_SignDescForPlants.setActionCommand("t_sign_desc_for_plants");
-        mT_ChangeDescOfSign = new JMenuItem("Change description on sign");
-        mT_ChangeDescOfSign.setActionCommand("t_change_desc_of_sign");
+        mT_ChangeDate = new JMenuItem("Change date");
+        mT_ChangeDate.setActionCommand("t_change_date");
         mT_RemoveFences = new JMenuItem("Remove fences installed from ... to ...");
         mT_RemoveFences.setActionCommand("t_remove_fences");
-        
+
         mA_Help = new JMenuItem("Help");
         mA_Help.setActionCommand("a_help");
-        
+
         mA_About = new JMenuItem("About");
         mA_About.setActionCommand("a_about");
-        
+
         mFile.add(mF_quit);
-        
+
         mEdit.add(mE_cbEdit);
-        
+
         mDatabase.add(mD_Connect);
         mDatabase.add(mD_Init);
-        
+
         mSpatial.add(mS_BedBySoil);
         mSpatial.add(mS_BedsWithFences);
         mSpatial.add(mS_DistBtwBeds);
         mSpatial.add(mS_BiggestBed);
         mSpatial.add(mS_SmallestBed);
-        
+
         mMultimedial.add(mM_FindSimilar);
-        
+
+        mTemporal.add(mT_ChangeDate);
+        mTemporal.addSeparator();
         mTemporal.add(mT_SignDesc);
         mTemporal.add(mT_PlantNames);
         mTemporal.add(mT_SignDescForPlants);
-        mTemporal.add(mT_ChangeDescOfSign);
+
         mTemporal.add(mT_RemoveFences);
-        
+
         mAbout.add(mA_Help);
         mAbout.add(mA_About);
-        
+
         add(mFile);
         add(mEdit);
         add(mDatabase);
@@ -110,14 +112,14 @@ public class MainMenu extends JMenuBar{
         add(mTemporal);
         add(mAbout);
     }
-    
-    
-    
+
+
+
     public void registerItemListener(ItemListener controler){
         this.mE_cbEdit.addItemListener(controler);
-        
+
     }
-    
+
     public void registerActionListener(ActionListener controler){
         this.mE_cbEdit.addActionListener(controler);
         this.mF_quit.addActionListener(controler);
@@ -132,10 +134,10 @@ public class MainMenu extends JMenuBar{
         this.mT_SignDesc.addActionListener(controler);
         this.mT_PlantNames.addActionListener(controler);
         this.mT_SignDescForPlants.addActionListener(controler);
-        this.mT_ChangeDescOfSign.addActionListener(controler);
+        this.mT_ChangeDate.addActionListener(controler);
         this.mT_RemoveFences.addActionListener(controler);
         this.mA_About.addActionListener(controler);
         this.mA_Help.addActionListener(controler);
     }
-    
+
 }

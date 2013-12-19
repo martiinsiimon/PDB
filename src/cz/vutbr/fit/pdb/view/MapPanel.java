@@ -29,37 +29,49 @@ import oracle.spatial.geometry.JGeometry;
  * @author casey
  */
 public class MapPanel extends JPanel{
-    
+
     private SpatialContainer sc;
     private AffineTransform at = new AffineTransform();
+    private AffineTransform ate;
     private Rectangle most_big_object = new Rectangle(0, 0);
-    
+
+    private Shape editBox;
+
     public MapPanel(){
         super();
-    
+
     }
-    
+
     public MapPanel(SpatialContainer sc){
         super();
         this.sc = sc;
         this.most_big_object = sc.getBiggestObjectBoundaries();
     }
-    
+
     public void registerListener(MouseInputListener ml){
         this.addMouseListener(ml);
         this.addMouseMotionListener(ml);
-    
+
     }
-    
+
+
+    public void setEditShape(Shape r){
+        this.editBox = r;
+    }
+
     public void registerSpatialContainer(SpatialContainer sc){
         this.sc = sc;
         this.most_big_object = sc.getBiggestObjectBoundaries();
     }
-    
+
+    public SpatialContainer getSpatialContainer(){
+        return this.sc;
+    }
+
     public AffineTransform getAffineTransform(){
         return this.at;
     }
-    
+
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -69,42 +81,46 @@ public class MapPanel extends JPanel{
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         this.setBackground(Color.WHITE);
-        
+
         this.calculateResize();
         if(sc != null){
             drawMap(g2);
         }
     }
-    
+
     public void calculateResize() {
         Dimension screen = this.getSize();
-        System.out.println(screen);
-        System.out.println(most_big_object);
         this.at = new AffineTransform();
         float a = (float) (screen.width - 50) / most_big_object.width;
         float b = (float) (screen.height - 50) / most_big_object.height;
         float translate_x = Math.abs((screen.width) - most_big_object.width)/2;
         float translate_y = Math.abs((screen.height) - most_big_object.height)/2;
         float c = (a < b) ? a : b;
-        System.out.println(c);
+
         at.translate(translate_x, 20);
         at.scale(c, c);
-
     }
-    
+
     private void drawMap(Graphics2D g2){
         int layers = sc.countLayers();
-        
+
         for(int a = 1; a <= layers; a++){
             drawMapLayer(g2, a);
-        } 
-            
+
+        }
+
+        if(editBox != null){
+            g2.setStroke(new BasicStroke(3));
+            g2.setColor(new Color(135, 249, 255));
+            g2.draw(at.createTransformedShape(editBox));
+            //g2.draw(editBox);
+        }
     }
-    
+
     private void drawMapLayer(Graphics2D g2, int layer){
          //SpatialObject list[] = (SpatialObject[])sc.getGeometries();
          ArrayList<SpatialObject> actLayer = sc.getGeometries(layer);
-         System.out.println(actLayer.size());
+
          for(SpatialObject o : actLayer){
                 g2.setStroke(new BasicStroke(1));
                 boolean to_be_filled = true;
@@ -120,9 +136,6 @@ public class MapPanel extends JPanel{
                                 break;
                             case 3:
                                 g2.setColor(new Color(255, 207, 13));
-                                break;
-                            default:
-                                g2.setColor(new Color(160, 90, 44));
                                 break;
                         }
                         break;
@@ -144,9 +157,6 @@ public class MapPanel extends JPanel{
                     case 6: // signs
                         g2.setColor(new Color(193, 34, 0));
                         break;
-                    default:
-                        g2.setColor(new Color(200, 171, 55));
-                        break;
                 }
                 JGeometry geo = o.getGeometry();
                 if (o.isSelected()) {
@@ -155,7 +165,7 @@ public class MapPanel extends JPanel{
                 } else if (o.isHovered()) {
                     g2.setColor(g2.getColor().darker());
                 }
-                
+
                 if (geo.isPoint()) {
                     Point2D points = geo.getJavaPoint();
                     Shape s = at.createTransformedShape(new Ellipse2D.Double((int) points.getX() - 5, (int) points.getY() - 5, 10, 10));
@@ -163,7 +173,7 @@ public class MapPanel extends JPanel{
                     g2.setColor(Color.BLACK);
                     g2.draw(s);
                 }
-                
+
                 if (to_be_filled) {
                     g2.fill(geo.createShape(at));
                 }
@@ -172,6 +182,7 @@ public class MapPanel extends JPanel{
                 }
                 g2.draw(geo.createShape(at));
 
-         } 
+
+         }
     }
 }

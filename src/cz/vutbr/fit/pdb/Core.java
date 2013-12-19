@@ -6,12 +6,14 @@ package cz.vutbr.fit.pdb;
 
 import cz.vutbr.fit.pdb.containers.DataContainer;
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
+import cz.vutbr.fit.pdb.control.EditControl;
 import cz.vutbr.fit.pdb.control.MapControl;
 import cz.vutbr.fit.pdb.control.RootControl;
 import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.PlantsObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
+import cz.vutbr.fit.pdb.view.EditPanel;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MainMenu;
 import cz.vutbr.fit.pdb.view.MapPanel;
@@ -23,11 +25,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -50,9 +55,12 @@ public class Core {
     private RootControl rootControl;
     private MapControl mapControl;
     private MapPanel mp;
+    private InfoPanel ip;
+    private EditPanel ep;
+    private EditControl ec;
 
     private DatabaseAPI dbAPI;
-    
+
     private DataContainer dc;
     private SpatialContainer sc;
 
@@ -65,35 +73,36 @@ public class Core {
     }
 
     public void initGui(){
-        
-        
+
+
         MenuControl mc = new MenuControl();
         mainMenu.registerActionListener(mc);
         mainMenu.registerItemListener(mc);
-        
+
         mainWindow.setJMenuBar(mainMenu);
-        
+
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setSize(800, 600);
     }
-    
+
     public void initMainPanel(){
         sc = new SpatialContainer(dbAPI);
         sc.initialize();
         dc = new DataContainer(dbAPI);
         dc.initialize();
 
-        InfoPanel ip = new InfoPanel();
+        ip = new InfoPanel();
         mp = new MapPanel(sc);
-       
-        rootPanel = new RootPanel(mp, ip);
+        ep = new EditPanel();
+
+        rootPanel = new RootPanel(mp, ip, ep);
         rootControl = new RootControl(rootPanel);
         mapControl = new MapControl(mp, ip, sc, dc);
         rootPanel.rebake();
         mainWindow.add(rootPanel);
         mainWindow.invalidate();
-        
-    
+
+
     }
 
     public void showGui(){
@@ -109,14 +118,14 @@ public class Core {
     }
 
     class MenuControl implements ActionListener,ItemListener{
-    
+
         @Override
         public void actionPerformed(ActionEvent e) {
            if("f_quit".equals(e.getActionCommand())){
-               
+               System.exit(0);
            }else if("db_connect".equals(e.getActionCommand())){
                dbSetUp();
-               
+
            }else if("db_init".equals(e.getActionCommand())){
                if(dbAPI == null){
                    dbSetUp();
@@ -124,7 +133,7 @@ public class Core {
                if(dbAPI != null){
                    JOptionPane.showMessageDialog(mainWindow, "Inicializace Databaze, prosim cekejte.");
                    dbAPI.resetDBData();
-                   
+
                }
            } else if ("s_bed_by_soil".equals(e.getActionCommand())) {
                getBedBySoilDialog();
@@ -137,32 +146,32 @@ public class Core {
            } else if ("s_smallest_bed".equals(e.getActionCommand())) {
                getSmallestBedDialog();
            } else if ("m_find_similar".equals(e.getActionCommand())) {
-               getSimilarDialog();           
+               getSimilarDialog();
            } else if ("t_sign_desc".equals(e.getActionCommand())) {
                getSignDescDialog();
            } else if ("t_plant_names".equals(e.getActionCommand())) {
                getPlantNamesDialog();
            } else if ("t_sign_desc_for_plants".equals(e.getActionCommand())) {
                getSignDescForPlantsDialog();
-           } else if ("t_change_desc_of_sign".equals(e.getActionCommand())) {
-               changeDescOfSignDialog();
+           } else if ("t_change_date".equals(e.getActionCommand())) {
+               changeDateDialog();
            } else if ("t_remove_fences".equals(e.getActionCommand())) {
                removeFencesDialog();
            }
-           
+
            else if("a_help".equals(e.getActionCommand())){
-               
+
            }else if("a_about".equals(e.getActionCommand())){
                JOptionPane.showMessageDialog(mainWindow, "PDB Projekt 2013 - Botanická zahrada \nJan Jeřábek - xjerab13\nMartin Šimon - xsimon14\nMilan Bárta - xbarta32");
-               
+
            }else if("a".equals(e.getActionCommand())){
-               
+
            }else if("b".equals(e.getActionCommand())){
-               
+
            }else if("c".equals(e.getActionCommand())){
-               
+
            }else if("d".equals(e.getActionCommand())){
-               
+
            }
         }
 
@@ -170,13 +179,15 @@ public class Core {
         public void itemStateChanged(ItemEvent e) {
             if(((JMenuItem)(e.getSource())).isSelected()){
                 rootControl.enableEdit();
+                ec = new EditControl(ep, mp, sc);
+                mapControl.enableEdit(ec);
             }else{
                 rootControl.disableEdit();
             }
 
         }
     }
-    
+
    public void dbSetUp() {
         JTextField username = new JTextField("xjerab13");
         JPasswordField password = new JPasswordField("w0z7dnrt");
@@ -196,13 +207,16 @@ public class Core {
             serviceName,};
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Connect to...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
-           dbAPI = new DatabaseAPI(username.getText(), password.getText());
-           initMainPanel(); 
+            dbAPI = new DatabaseAPI(username.getText(), password.getText());
+           initMainPanel();
         }
 
-    } 
-   
-   public void getBedBySoilDialog() {
+    }
+
+    public void getBedBySoilDialog() {
+        if (dc == null) {
+            return;
+        }
        ArrayList<String> plant_types = new ArrayList<String>();
        for (DataObject o: dc.getPlantType()) {
            plant_types.add(o.getName());
@@ -211,7 +225,7 @@ public class Core {
        for (DataObject o: dc.getSoilType()) {
            soil_types.add(o.getName());
        }
-       
+
        JList soil_type_list = new JList(soil_types.toArray());
        soil_type_list.setSelectedIndex(0);
        JList plant_type_list = new JList(plant_types.toArray());
@@ -230,9 +244,12 @@ public class Core {
            sc.setTheseAsSelected(bedsSpatial);
            mp.updateUI();
         }
-    } 
-   
-   public void getBedsWithFencesDialog() {
+    }
+
+    public void getBedsWithFencesDialog() {
+        if (sc == null || dbAPI == null) {
+            return;
+        }
        ArrayList<Integer> bedsID = dbAPI.getBedsBorderedWithFence();
        ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
        for (Integer i : bedsID) {
@@ -241,7 +258,7 @@ public class Core {
        sc.setTheseAsSelected(bedsSpatial);
        mp.updateUI();
    }
-   
+
    public void getDistBtwBedsDialog() {
 //       final JComponent[] inputs = new JComponent[]{
 //           new JLabel("?? TODO")
@@ -257,8 +274,11 @@ public class Core {
 //           mp.updateUI();
         //}
    }
-   
-   public void getBiggestBedDialog() {
+
+    public void getBiggestBedDialog() {
+        if (sc == null || dbAPI == null) {
+            return;
+        }
        ArrayList<Integer> bedsID = dbAPI.getBiggestBed();
        ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
        for (Integer i : bedsID) {
@@ -268,7 +288,10 @@ public class Core {
        mp.updateUI();
    }
 
-   public void getSmallestBedDialog() {
+    public void getSmallestBedDialog() {
+        if (sc == null || dbAPI == null) {
+            return;
+        }
        ArrayList<Integer> bedsID = dbAPI.getSmallestBed();
        ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
        for (Integer i : bedsID) {
@@ -277,8 +300,11 @@ public class Core {
        sc.setTheseAsSelected(bedsSpatial);
        mp.updateUI();
    }
-   
-   public void getSimilarDialog() {
+
+    public void getSimilarDialog() {
+        if (dc == null || dbAPI == null) {
+            return;
+        }
        ArrayList<String> plant_names = new ArrayList<String>();
        for (DataObject o: dc.getPlants()) {
            plant_names.add(o.getName());
@@ -294,7 +320,7 @@ public class Core {
        if (a == JOptionPane.OK_OPTION) {
            String selected_plant_name = (String) plant_name_list.getSelectedValue();
            DataObject selected_plant = dc.getPlants(selected_plant_name);
-           
+
            Integer similarPlantID = dbAPI.getMostSimilar((PlantsObject)selected_plant);
 
            DataObject similar_plant = dc.getPlants(similarPlantID);
@@ -306,21 +332,21 @@ public class Core {
            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Similar plant", JOptionPane.INFORMATION_MESSAGE);
         }
    }
-   
+
     public void getSignDescDialog() {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date_from = new Date();
         Date date_to = new Date();
         Calendar cal = Calendar.getInstance();
-        
+
         JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
         JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
-        
+
         final JComponent[] inputs = new JComponent[]{
             new JLabel("From (MM-DD-YYYY)"), textdate_from,
             new JLabel("To (MM-DD-YYYY)"), textdate_to
         };
-        
+
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
             // TODO: implement
@@ -335,15 +361,15 @@ public class Core {
         Date date_from = new Date();
         Date date_to = new Date();
         Calendar cal = Calendar.getInstance();
-        
+
         JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
         JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
-        
+
         final JComponent[] inputs = new JComponent[]{
             new JLabel("From (MM-DD-YYYY)"), textdate_from,
             new JLabel("To (MM-DD-YYYY)"), textdate_to
         };
-        
+
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
             // TODO: implement
@@ -358,15 +384,15 @@ public class Core {
         Date date_from = new Date();
         Date date_to = new Date();
         Calendar cal = Calendar.getInstance();
-        
+
         JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
         JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
-        
+
         final JComponent[] inputs = new JComponent[]{
             new JLabel("From (MM-DD-YYYY)"), textdate_from,
             new JLabel("To (MM-DD-YYYY)"), textdate_to
         };
-        
+
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
             // TODO: implement
@@ -376,8 +402,33 @@ public class Core {
         }
     }
 
-    public void changeDescOfSignDialog() {
-        // TODO: implement
+    public void changeDateDialog() {
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+
+        JTextField textdate = new JTextField(dateFormat.format(cal.getTime()));
+
+        final JComponent[] inputs = new JComponent[]{
+            new JLabel("From (MM-DD-YYYY)"), textdate,
+        };
+
+        int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select actual date (MM-DD-YYYY)", JOptionPane.OK_CANCEL_OPTION);
+        if (a == JOptionPane.OK_OPTION) {
+            //TODO add check
+            dateFormat.setLenient(false);
+            try {
+                dateFormat.parse(textdate.getText());
+                sc.setDate(textdate.getText());
+                System.out.println(textdate.getText());
+                mp.updateUI();
+                final JComponent[] result = new JComponent[]{new JLabel("The date has been set.")};
+                JOptionPane.showInternalMessageDialog(mainMenu, result, "Date has been set.", JOptionPane.INFORMATION_MESSAGE);
+            } catch (ParseException ex) {
+                final JComponent[] result = new JComponent[]{new JLabel("The date you have entered is invalid!")};
+                JOptionPane.showInternalMessageDialog(mainMenu, result, "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public void removeFencesDialog() {
@@ -385,15 +436,15 @@ public class Core {
         Date date_from = new Date();
         Date date_to = new Date();
         Calendar cal = Calendar.getInstance();
-        
+
         JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));
         JTextField textdate_to = new JTextField(dateFormat.format(cal.getTime()));
-        
+
         final JComponent[] inputs = new JComponent[]{
             new JLabel("From (MM-DD-YYYY)"), textdate_from,
             new JLabel("To (MM-DD-YYYY)"), textdate_to
         };
-        
+
         int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select from ... to ...", JOptionPane.OK_CANCEL_OPTION);
         if (a == JOptionPane.OK_OPTION) {
             // TODO: implement
