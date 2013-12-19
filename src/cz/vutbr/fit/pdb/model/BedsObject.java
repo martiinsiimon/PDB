@@ -58,7 +58,7 @@ public class BedsObject extends SpatialObject {
 
     @Override
     public String getDeleteSQL() {
-        String query = "UPDATE bed"
+        String query = "UPDATE beds"
                 + " SET date_to = (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual)"
                 + " WHERE id = " + this.id;
         return query;
