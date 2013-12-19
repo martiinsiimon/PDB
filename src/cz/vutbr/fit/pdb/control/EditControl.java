@@ -6,6 +6,7 @@ package cz.vutbr.fit.pdb.control;
 
 import cz.vutbr.fit.pdb.containers.DataContainer;
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
+import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.BedsObject;
 import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.PlantsObject;
@@ -44,9 +45,10 @@ public class EditControl {
     InfoPanel ip;
     AffineTransform at;
     EditMapControl chl;
+    DatabaseAPI dapi;
     
     
-    public EditControl(EditPanel ep, MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc){
+    public EditControl(EditPanel ep, MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc, DatabaseAPI api){
         this.ep = ep;
         this.mp = mp;
         this.sc = sc;
@@ -54,6 +56,7 @@ public class EditControl {
         this.ip = ip;
         this.chl = new EditMapControl();
         this.ep.registerActionListener(chl);
+        this.dapi = api;
     }
     
     public void moveTo(Point p){
@@ -155,15 +158,19 @@ public class EditControl {
             }else if("update".equals(e.getActionCommand())){
             
             }else if("load_new_image".equals(e.getActionCommand())){
-                JFileChooser fc = new JFileChooser("C:/workspace/skola/pdb");
+                JFileChooser fc = new JFileChooser("./");
                 int returnVal = fc.showOpenDialog(mp);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
-             
+                    dapi.insertImage((PlantsObject)selectedData, file.getAbsolutePath());
+                    ip.setImage(dc.getImageThumbnail((PlantsObject)selectedData));
+                    ip.updateUI();
                 }
                 
             }else if("delete_image".equals(e.getActionCommand())){
-                
+                dapi.deleteImage((PlantsObject)selectedData);
+                ip.setImage(dc.getImageThumbnail((PlantsObject)selectedData));
+                ip.updateUI();
             }
         }
 

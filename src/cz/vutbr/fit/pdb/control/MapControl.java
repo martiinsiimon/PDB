@@ -79,6 +79,11 @@ public class MapControl{
         this.editControl = ec;
     
     }
+    public void disableEdit(){
+        this.editControl = null;
+        this.map_view.setEditShape(null);
+    
+    }
 
     class MapMouseControl implements MouseInputListener{
 
