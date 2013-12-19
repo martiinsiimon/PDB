@@ -100,7 +100,7 @@ public class MainMenu extends JMenuBar{
         mTemporal.add(mT_SignDescForPlants);
 
 
-        mAbout.add(mA_Help);
+        //mAbout.add(mA_Help);
         mAbout.add(mA_About);
 
         add(mFile);
@@ -141,7 +141,7 @@ public class MainMenu extends JMenuBar{
         this.mT_SignDescForPlants.addActionListener(controler);
         this.mT_ChangeDate.addActionListener(controler);
         this.mA_About.addActionListener(controler);
-        this.mA_Help.addActionListener(controler);
+        //this.mA_Help.addActionListener(controler);
     }
 
 }
