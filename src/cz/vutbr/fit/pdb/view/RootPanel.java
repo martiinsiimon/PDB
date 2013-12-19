@@ -21,17 +21,17 @@ public class RootPanel extends JPanel{
     private GridBagConstraints gbc;
     private MapPanel mPanel;
     private InfoPanel iPanel;
-    private EditPanel ePanel = new EditPanel();
+    private EditPanel ePanel;
     private boolean editMode = false;
     
-    public RootPanel(MapPanel mp, InfoPanel ip){
+    public RootPanel(MapPanel mp, InfoPanel ip, EditPanel ep){
     gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.BOTH;
     gbc.weightx = 1.0;
     gbc.weighty = 1.0;
     mPanel = mp;
     iPanel = ip;
-        
+    ePanel = ep;
     }
     
     public void rebake(){
@@ -81,9 +81,8 @@ public class RootPanel extends JPanel{
     
     }
     
-    public void registerMenuListener(ActionListener al){
-    
-    
+    public EditPanel getEPanel(){
+        return this.ePanel;
     }
           
     

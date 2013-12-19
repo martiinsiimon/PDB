@@ -397,6 +397,11 @@ public class DatabaseAPI {
         this.addQuery(_obj.getDeleteSQL());
     }
 
+    public void deleteImage(PlantsObject _obj) {
+        this.connector.deleteImage(_obj);
+        _obj.delImage();
+    }
+
     /**
      * Commit all update/insert/delete queries in the stack to the database.
      */
@@ -881,5 +886,5 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     // Advanced temporal queries                                             //
     ///////////////////////////////////////////////////////////////////////////
-    public 
+    //public
 }

@@ -32,7 +32,10 @@ public class MapPanel extends JPanel{
 
     private SpatialContainer sc;
     private AffineTransform at = new AffineTransform();
+    private AffineTransform ate;
     private Rectangle most_big_object = new Rectangle(0, 0);
+
+    private Shape editBox;
 
     public MapPanel(){
         super();
@@ -51,9 +54,18 @@ public class MapPanel extends JPanel{
 
     }
 
+
+    public void setEditShape(Shape r){
+        this.editBox = r;
+    }
+
     public void registerSpatialContainer(SpatialContainer sc){
         this.sc = sc;
         this.most_big_object = sc.getBiggestObjectBoundaries();
+    }
+
+    public SpatialContainer getSpatialContainer(){
+        return this.sc;
     }
 
     public AffineTransform getAffineTransform(){
@@ -84,9 +96,9 @@ public class MapPanel extends JPanel{
         float translate_x = Math.abs((screen.width) - most_big_object.width)/2;
         float translate_y = Math.abs((screen.height) - most_big_object.height)/2;
         float c = (a < b) ? a : b;
+
         at.translate(translate_x, 20);
         at.scale(c, c);
-
     }
 
     private void drawMap(Graphics2D g2){
@@ -94,13 +106,21 @@ public class MapPanel extends JPanel{
 
         for(int a = 1; a <= layers; a++){
             drawMapLayer(g2, a);
+
         }
 
+        if(editBox != null){
+            g2.setStroke(new BasicStroke(3));
+            g2.setColor(new Color(135, 249, 255));
+            g2.draw(at.createTransformedShape(editBox));
+            //g2.draw(editBox);
+        }
     }
 
     private void drawMapLayer(Graphics2D g2, int layer){
          //SpatialObject list[] = (SpatialObject[])sc.getGeometries();
          ArrayList<SpatialObject> actLayer = sc.getGeometries(layer);
+
          for(SpatialObject o : actLayer){
                 g2.setStroke(new BasicStroke(1));
                 boolean to_be_filled = true;
@@ -161,6 +181,7 @@ public class MapPanel extends JPanel{
                     g2.setColor(Color.BLACK);
                 }
                 g2.draw(geo.createShape(at));
+
 
          }
     }
