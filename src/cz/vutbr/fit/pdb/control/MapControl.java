@@ -126,6 +126,7 @@ public class MapControl{
                 map_model.deselectAll();
                 o.setSelection(true);
 
+
                 map_model.setSelected(o);
 
                 map_model.checkHovering(e.getPoint(), map_view.getAffineTransform());
