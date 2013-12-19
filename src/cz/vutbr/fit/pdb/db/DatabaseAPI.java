@@ -163,9 +163,9 @@ public class DatabaseAPI {
     public void update(PlantsObject _obj) {
         this.addQuery(_obj.getUpdateSQL());
 
-        if (_obj.isImgChanged()) {
-            this.connector.updateImage(_obj);
-        }
+//        if (_obj.isImgChanged()) {
+//            this.connector.updateImage(_obj);
+//        }
     }
 
     /**
@@ -292,10 +292,11 @@ public class DatabaseAPI {
         _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
 
-        if (_obj.isImgChanged()) {
-            this.commit();
-            this.connector.updateImage(_obj);
-        }
+        //this.commit();
+//        if (_obj.isImgChanged()) {
+//            this.commit();
+//            this.connector.updateImage(_obj);
+//        }
     }
 
     /**
@@ -314,9 +315,9 @@ public class DatabaseAPI {
         this.addQuery(_obj.getInsertSQL());
     }
 
-    public void insertImage(PlantsObject _obj) {
-        this.connector.updateImage(_obj);
-    }
+//    public void insertImage(PlantsObject _obj) {
+//        this.connector.updateImage(_obj);
+//    }
 
     public void insertImage(PlantsObject _obj, String path) {
         this.connector.insertImage(_obj, path);

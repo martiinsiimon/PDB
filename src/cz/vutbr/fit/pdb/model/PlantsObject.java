@@ -7,9 +7,14 @@ package cz.vutbr.fit.pdb.model;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import oracle.ord.im.OrdImage;
@@ -157,12 +162,9 @@ public class PlantsObject extends DataObject {
                 return;
             }
 
-            if (filename == null) {
-                //TODO store image from cache to imgProxy
-            } else {
                 System.out.println("File " + filename);
                 imgProxy.loadDataFromFile(filename);
-            }
+            
 
             imgProxy.processCopy("maxScale =" + PlantsObject.THRES, thProxy);
             imgProxy.setProperties();
