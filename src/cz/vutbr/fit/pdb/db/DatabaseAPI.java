@@ -316,10 +316,13 @@ public class DatabaseAPI {
         this.addQuery(_obj.getInsertSQL());
     }
 
-//    public void insertImage(PlantsObject _obj) {
-//        this.connector.updateImage(_obj);
-//    }
-
+    /**
+     * Execute query to insert given image to DB. The image is determined by its
+     * path and if null, it tries to insert and image from object cache.
+     *
+     * @param _obj Object where the image should be stored by
+     * @param path Path to the file to upload
+     */
     public void insertImage(PlantsObject _obj, String path) {
         this.connector.insertImage(_obj, path);
     }
@@ -397,6 +400,11 @@ public class DatabaseAPI {
         this.addQuery(_obj.getDeleteSQL());
     }
 
+    /**
+     * Execute query to delete image from db and gien object as well
+     *
+     * @param _obj Object to delete image from
+     */
     public void deleteImage(PlantsObject _obj) {
         this.connector.deleteImage(_obj);
         _obj.delImage();
@@ -886,5 +894,58 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     // Advanced temporal queries                                             //
     ///////////////////////////////////////////////////////////////////////////
-    //public
+    /**
+     * Get SpatialObject array of signs that were in database in given period
+     *
+     * @param dateFrom Start of the period in string formatted MM-DD-YYYY
+     * @param dateTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of SpatialnObject
+     */
+    public ArrayList<SpatialObject> getSignsInTimePeriod(String dateFrom, String dateTo) {
+        String query
+                = "SELECT *"
+                + " FROM signs"
+                + " WHERE date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY') AND"
+                + " date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY')";
+        return this.connector.executeQueryWithResultsSign(query);
+    }
+
+    /**
+     * Get DataObject array of plants that were in database on any bed in     * given period
+     *
+     * @param dateFrom Start of the period in string formatted MM-DD-YYYY
+     * @param dateTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of DataObject
+     */
+    public ArrayList<DataObject> getPlantsInTimePeriod(String dateFrom, String dateTo) {
+        String query
+                = "SELECT *"
+                + " FROM plants"
+                + " WHERE EXISTS("
+                + " SELECT 1 FROM beds WHERE beds.plant = plants.id"
+                + " AND date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY')"
+                + " AND date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY'))";
+        return this.connector.executeQueryWithResultsPlants(query);
+    }
+
+    /**
+     * Get SpatialObject array of signs that were by beds that were in database
+     * in given period
+     *
+     * @param dateFrom Start of the period in string formatted MM-DD-YYYY
+     * @param dateTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of SpatialnObject
+     */
+    public ArrayList<SpatialObject> getSignsByPlantsInTimePeriod(String dateFrom, String dateTo) {
+        String query
+                = "SELECT *"
+                + " FROM signs s"
+                + " WHERE s.date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY')"
+                + " AND s.date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY')"
+                + " AND EXISTS("
+                + " SELECT 1 FROM beds b WHERE b.plant=s.plant"
+                + " AND b.date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY')"
+                + " AND b.date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY'))";
+        return this.connector.executeQueryWithResultsSign(query);
+    }
 }

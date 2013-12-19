@@ -22,115 +22,119 @@
 \paragraph*{Zobrazení informací o rostlinách na cedulích v zahradě v roce 2013}
 \begin{itemize}
 
-	\item
-	TSQL2:
-		\begin{verbatim}
-		VALIDTIME PERIOD[2013-2014) SELECT description FROM signs;
-		\end{verbatim}
-	\item
-	SQL
-		\begin{verbatim}
-		SELECT description FROM signs
-			WHERE date_to >= TO_DATE('12-31-2013', 'MM-DD-YYYY') AND
-			date_from <= TO_DATE('01-01-2013', 'MM-DD-YYYY');
-		\end{verbatim}
+    \item
+    TSQL2:
+        \begin{verbatim}
+        VALIDTIME PERIOD[2013-2014) SELECT description FROM signs;
+        \end{verbatim}
+    \item
+    SQL
+        \begin{verbatim}
+        SELECT description FROM signs
+            WHERE date_to >= TO_DATE('12-31-2013', 'MM-DD-YYYY') AND
+            date_from <= TO_DATE('01-01-2013', 'MM-DD-YYYY');
+        \end{verbatim}
 
 \end{itemize}
 
 \paragraph*{Zobrazení názvů všech rostlin rostoucích v zahradě v roce 2012}
 \begin{itemize}
 
-	\item
-	TSQL2:
-		\begin{verbatim}
-		SELECT plants.name FROM plants 
-			WHERE EXISTS(VALIDTIME PERIOD[2012-2013) SELECT 1 FROM beds 
-			WHERE beds.plant=plants.id)
-		\end{verbatim}
-	\item
-	SQL
-		\begin{verbatim}
-		SELECT plants.name FROM plants
-			WHERE EXISTS(
-    		SELECT 1 FROM beds WHERE beds.plant=plants.id AND
-    		date_to >= TO_DATE('12-31-2012', 'MM-DD-YYYY') AND
-    		date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY'));
-		\end{verbatim}
+    \item
+    TSQL2:
+        \begin{verbatim}
+        SELECT plants.name FROM plants
+            WHERE EXISTS(VALIDTIME PERIOD[2012-2013) SELECT 1 FROM beds
+            WHERE beds.plant=plants.id)
+        \end{verbatim}
+    \item
+    SQL
+        \begin{verbatim}
+        SELECT plants.name FROM plants
+            WHERE EXISTS(
+            SELECT 1 FROM beds WHERE beds.plant=plants.id AND
+            date_to >= TO_DATE('12-31-2012', 'MM-DD-YYYY') AND
+            date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY'));
+        \end{verbatim}
 
 \end{itemize}
 
 \paragraph*{Zobrazí informace o rostlinách na cedulích u všech rostlin rostoucích \\ v zahradě v 1. polovině roku 2012}
 \begin{itemize}
 
-	\item
-	TSQL2:
-		\begin{verbatim}
-		SELECT sings.description FROM signs 
-			WHERE EXISTS(VALIDTIME PERIOD[2012/01-2012/07) SELECT 1 from beds 
-			WHERE beds.plant=signs.plant);
-		\end{verbatim}
-	\item
-	SQL
-		\begin{verbatim}
-		SELECT signs.description FROM signs
-			WHERE EXISTS(
-    		SELECT 1 FROM beds WHERE beds.plant=signs.plant AND
-    		date_to >= TO_DATE('06-30-2012', 'MM-DD-YYYY') AND
-    		date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY'));
-		\end{verbatim}
+    \item
+    TSQL2:
+        \begin{verbatim}
+        SELECT sings.description FROM signs
+            WHERE EXISTS(VALIDTIME PERIOD[2012/01-2012/07) SELECT 1 from beds
+            WHERE beds.plant=signs.plant);
+        \end{verbatim}
+    \newpage
+    \item
+    SQL
+        \begin{verbatim}
+        SELECT signs.description FROM signs s
+        WHERE s.date_to >= TO_DATE('06-30-2012', 'MM-DD-YYYY')
+        AND s.date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY')
+        AND EXISTS(
+            SELECT 1 FROM beds b WHERE beds.plant=signs.plant AND
+            b.date_to >= TO_DATE('06-30-2012', 'MM-DD-YYYY') AND
+            b.date_from <= TO_DATE('01-01-2012', 'MM-DD-YYYY'));
+        \end{verbatim}
 
 \end{itemize}
 
 \paragraph*{Změň informace o rostlinách na ceduli s ID=1 na Země původu: Neznámá}
 \begin{itemize}
 
-	\item
-	TSQL2:
-		\begin{verbatim}
-		UPDATE signs SET description='Země původu: Neznámá' WHERE id = 1;
-		\end{verbatim}
-	\item
-	SQL
-		\begin{verbatim}
-		-- ukončení původního záznamu (date_to = dnešní datum)
-		UPDATE signs SET date_to = 
-		(SELECT TO_DATE((SELECT to_char(trunc(sysdate), 'MM-DD-YYYY') 
-		FROM dual), 'MM-DD-YYYY') FROM dual)
-		WHERE date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY') AND signs.id = 1;
-		
-		-- zapsání nového záznamu (date_from = dnešní datum)		
-		INSERT INTO signs (id, layer, geometry, description, plant, 
-			date_from, date_to)
-    	SELECT id_signs_seq.nextval,
+    \item
+    TSQL2:
+        \begin{verbatim}
+        UPDATE signs SET description='Země původu: Neznámá' WHERE id = 1;
+        \end{verbatim}
+    \item
+    SQL
+        \begin{verbatim}
+        -- ukončení původního záznamu (date_to = dnešní datum)
+        UPDATE signs SET date_to =
+        (SELECT TO_DATE((SELECT to_char(trunc(sysdate), 'MM-DD-YYYY')
+        FROM dual), 'MM-DD-YYYY') FROM dual)
+        WHERE date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY') AND signs.id = 1;
+
+        -- zapsání nového záznamu (date_from = dnešní datum)
+        INSERT INTO signs (id, layer, geometry, description, plant,
+            date_from, date_to)
+        SELECT id_signs_seq.nextval,
            layer,
            geometry,
            'Země původu: Neznámá',
            plant,
-           (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') 
-           			FROM dual), 'MM-DD-YYYY') FROM dual),
+           (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY')
+                    FROM dual), 'MM-DD-YYYY') FROM dual),
            TO_DATE('12-31-9999', 'MM-DD-YYYY')
-    	FROM signs WHERE id = 1;
-		\end{verbatim}
+        FROM signs WHERE id = 1;
+        \end{verbatim}
 
 \end{itemize}
 
 \paragraph*{Odstraň ploty, které byly do zahrady instalovány 8.4.2011}
 \begin{itemize}
 
-	\item
-	TSQL2:
-		\begin{verbatim}
-		VALIDTIME PERIOD[2013/04/08-2013/04/09) DELETE FROM fences;
-		\end{verbatim}
-	\item
-	SQL
-		\begin{verbatim}
-		UPDATE fences SET date_to = 
-		(SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') 
-		FROM dual), 'MM-DD-YYYY') FROM dual)
-		WHERE date_from = TO_DATE('04-08-2011', 'MM-DD-YYYY') AND
-		date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY');
-		\end{verbatim}
+    \item
+    TSQL2:
+        \begin{verbatim}
+        VALIDTIME PERIOD[2013/04/08-2013/04/09) DELETE FROM fences;
+        \end{verbatim}
+    \newpage
+    \item
+    SQL
+        \begin{verbatim}
+        UPDATE fences SET date_to =
+        (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY')
+        FROM dual), 'MM-DD-YYYY') FROM dual)
+        WHERE date_from = TO_DATE('04-08-2011', 'MM-DD-YYYY') AND
+        date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY');
+        \end{verbatim}
 
 \end{itemize}
 

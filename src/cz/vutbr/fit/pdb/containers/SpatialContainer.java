@@ -173,6 +173,23 @@ public class SpatialContainer {
     }
 
     /**
+     * Add object to list (local)
+     *
+     * @param obj Object to add
+     */
+    public void addObject(SpatialObject obj) {
+        if (obj instanceof SignObject) {
+            this.spatialSignsList.put(obj.getId(), obj);
+        }
+    }
+
+    public void delObject(SpatialObject obj) {
+        if (obj instanceof SignObject) {
+            this.spatialSignsList.remove(obj.getId());
+        }
+    }
+
+    /**
      * Return BedObject with given id
      *
      * @param id Id (in database) of BedObject
@@ -308,6 +325,10 @@ public class SpatialContainer {
         return this.layers.size();
     }
 
+    /**
+     * Returns a bounding rectangle of biggest object.
+     * @return rectangle of biggest object on map
+     */
     public Rectangle getBiggestObjectBoundaries() {
 
         ArrayList<SpatialObject> allLayers = getGeometries();
@@ -488,20 +509,10 @@ public class SpatialContainer {
     }
 
     /**
-     * Mark the object on given coordinates as selected and return object type.
-     *
-     * @return Type of selected object or -1 if no object on given coordinates
-     */
-    public Integer selectObject(/*coordinates of object*/) {
-        //TODO determine what object is at the given coordinates and set its "selected" flag
-        return -1;
-    }
-
-    /**
      * Clear the selected flag from all the objects.
      */
     public void deselectAll() {
-        this.selected = null;
+//      this.selected = null;
 
         for (Integer i : this.spatialBedsList.keySet()) {
             this.spatialBedsList.get(i).setSelection(false);
@@ -565,14 +576,26 @@ public class SpatialContainer {
         return this.selected;
     }
 
+    /**
+     * Returns a SpatialObject that a mouse has hovered over.
+     * @return SpatialObject hovered over
+     */
     public SpatialObject getHovered() {
         return this.hovered;
     }
 
+    /**
+     * Sets object as selected.
+     * @param so SpatialObject to be selected
+     */
     public void setSelected(SpatialObject so) {
         this.selected = so;
     }
 
+    /**
+     * Sets object as hovered over.
+     * @param so SpatialObject to be set as hovered over
+     */
     public void setHovered(SpatialObject so) {
         this.hovered = so;
     }
@@ -754,6 +777,11 @@ public class SpatialContainer {
         }
     }
 
+    /**
+     *
+     * @param p
+     * @param at
+     */
     public void checkHovering(Point p, AffineTransform at) {
         ArrayList<SpatialObject> allItems = getGeometries();
         boolean haveSelected = false;

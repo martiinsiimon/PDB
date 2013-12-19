@@ -44,7 +44,7 @@ public class WaterObject extends SpatialObject {
 
     @Override
     public String getDeleteSQL() {
-        String query = "DELETE * FROM water WHERE id = " + this.id;
+        String query = "DELETE FROM water WHERE id = " + this.id;
         return query;
     }
 

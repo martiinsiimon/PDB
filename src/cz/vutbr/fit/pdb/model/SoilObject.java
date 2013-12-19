@@ -64,7 +64,7 @@ public class SoilObject extends SpatialObject {
 
     @Override
     public String getDeleteSQL() {
-        String query = "DELETE * FROM soil WHERE id = " + this.id;
+        String query = "DELETE FROM soil WHERE id = " + this.id;
         return query;
     }
 
