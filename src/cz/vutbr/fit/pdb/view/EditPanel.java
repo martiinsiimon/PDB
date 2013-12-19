@@ -40,11 +40,11 @@ public class EditPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        //jButton3 = new javax.swing.JButton();
+        //jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        // jButton6 = new javax.swing.JButton();
+        //jButton7 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -71,32 +71,39 @@ public class EditPanel extends javax.swing.JPanel {
         jPanel1.setLayout(null);
 
         jButton1.setText("Bed");
+        jButton1.setActionCommand("add_bed_object");
         jPanel1.add(jButton1);
         jButton1.setBounds(17, 32, 78, 25);
 
         jButton2.setText("Fence");
+        jButton2.setActionCommand("add_fence_object");
         jPanel1.add(jButton2);
-        jButton2.setBounds(101, 63, 78, 25);
-
-        jButton3.setText("Path");
-        jPanel1.add(jButton3);
-        jButton3.setBounds(101, 32, 78, 25);
-
-        jButton4.setText("Plant");
-        jPanel1.add(jButton4);
-        jButton4.setBounds(101, 94, 78, 25);
+        jButton2.setBounds(101, 32, 78, 25);
 
         jButton5.setText("Sign");
+        jButton5.setActionCommand("add_sign_object");
         jPanel1.add(jButton5);
-        jButton5.setBounds(17, 63, 78, 25);
+        jButton5.setBounds(185, 32, 78, 25);
 
-        jButton6.setText("Soil");
-        jPanel1.add(jButton6);
-        jButton6.setBounds(17, 94, 78, 25);
+//        jButton3.setText("Path");
+//        jButton3.setActionCommand("add_path_object");
+//        jPanel1.add(jButton3);
+//        jButton3.setBounds(101, 32, 78, 25);
 
-        jButton7.setText("Water");
-        jPanel1.add(jButton7);
-        jButton7.setBounds(185, 32, 78, 25);
+//        jButton4.setText("Plant");
+//        jButton4.setActionCommand("add_plant_object");
+//        jPanel1.add(jButton4);
+//        jButton4.setBounds(101, 94, 78, 25);
+
+
+//        jButton6.setText("Soil");
+//        jButton1.setActionCommand("add_bed_object");
+//        jPanel1.add(jButton6);
+//        jButton6.setBounds(17, 94, 78, 25);
+//
+//        jButton7.setText("Water");
+//        jPanel1.add(jButton7);
+//        jButton7.setBounds(185, 32, 78, 25);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
@@ -238,11 +245,11 @@ public class EditPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    //private javax.swing.JButton jButton3;
+    //private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    //private javax.swing.JButton jButton6;
+    //private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox jComboBox1;
@@ -286,7 +293,7 @@ public int getRotate(){
 
 public void setNameField(String name){
     this.jTextField1.setText(name);
-    
+
 }
 
 public void nameFieldEnableState(boolean b){
@@ -297,7 +304,7 @@ public void resetRest(){
     this.jSpinner3.setValue(new Double(1.0));
     this.jSpinner4.setValue(new Double(1.0));
     this.jSpinner5.setValue(0);
-    
+
 }
 
 public void registerChangeListener(ChangeListener chl){
@@ -321,11 +328,11 @@ public void removeChangeListener(ChangeListener chl){
 public void registerActionListener(ActionListener al){
     this.jButton1.addActionListener(al);
     this.jButton2.addActionListener(al);
-    this.jButton3.addActionListener(al);
-    this.jButton4.addActionListener(al);
+    //this.jButton3.addActionListener(al);
+    //this.jButton4.addActionListener(al);
     this.jButton5.addActionListener(al);
-    this.jButton6.addActionListener(al);
-    this.jButton7.addActionListener(al);
+    //this.jButton6.addActionListener(al);
+    //this.jButton7.addActionListener(al);
     this.jButton8.addActionListener(al);
     this.jButton9.addActionListener(al);
     this.jButton10.addActionListener(al);
