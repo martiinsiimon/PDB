@@ -172,16 +172,16 @@ public class MapPanel extends JPanel{
                     g2.fill(s);
                     g2.setColor(Color.BLACK);
                     g2.draw(s);
-                }
+                }else{
 
-                if (to_be_filled) {
-                    g2.fill(geo.createShape(at));
+                    if (to_be_filled) {
+                        g2.fill(geo.createShape(at));
+                    }
+                    if (to_draw_black_border) {
+                        g2.setColor(Color.BLACK);
+                    }
+                    g2.draw(geo.createShape(at));
                 }
-                if (to_draw_black_border) {
-                    g2.setColor(Color.BLACK);
-                }
-                g2.draw(geo.createShape(at));
-
 
          }
     }
