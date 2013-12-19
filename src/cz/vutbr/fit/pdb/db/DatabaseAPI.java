@@ -886,5 +886,56 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     // Advanced temporal queries                                             //
     ///////////////////////////////////////////////////////////////////////////
-    //public
+    /**
+     * Get SpatialObject array of signs that were in database in given period
+     *
+     * @param dateFrom Start of the period in string formatted MM-DD-YYYY
+     * @param dateTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of SpatialnObject
+     */
+    public ArrayList<SpatialObject> getSignsInTimePeriod(String dateFrom, String dateTo) {
+        String query
+                = "SELECT *"
+                + " FROM signs"
+                + " WHERE date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY') AND"
+                + " date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY')";
+        return this.connector.executeQueryWithResultsSign(query);
+    }
+
+    /**
+     * Get DataObject array of plants that were in database on any bed in     * given period
+     *
+     * @param dateFrom Start of the period in string formatted MM-DD-YYYY
+     * @param dateTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of DataObject
+     */
+    public ArrayList<DataObject> getPlantsInTimePeriod(String dateFrom, String dateTo) {
+        String query
+                = "SELECT *"
+                + " FROM plants"
+                + " WHERE EXISTS("
+                + " SELECT 1 FROM beds WHERE beds.plant = plants.id"
+                + " AND date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY')"
+                + " AND date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY'))";
+        return this.connector.executeQueryWithResultsPlants(query);
+    }
+
+    /**
+     * Get SpatialObject array of signs that were by beds that were in database
+     * in given period
+     *
+     * @param dateFrom Start of the period in string formatted MM-DD-YYYY
+     * @param dateTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of SpatialnObject
+     */
+    public ArrayList<SpatialObject> getSignsByPlantsInTimePeriod(String dateFrom, String dateTo) {
+        String query
+                = "SELECT *"
+                + " FROM signs"
+                + " WHERE EXISTS("
+                + " SELECT 1 FROM beds WHERE beds.plant=signs.plant"
+                + " AND date_to >= TO_DATE('" + dateTo + "', 'MM-DD-YYYY')"
+                + " AND date_from <= TO_DATE('" + dateFrom + "', 'MM-DD-YYYY'))";
+        return this.connector.executeQueryWithResultsSign(query);
+    }
 }

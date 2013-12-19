@@ -404,6 +404,9 @@ public class Core {
     }
 
     public void changeDateDialog() {
+        if (sc == null) {
+            return;
+        }
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
