@@ -20,12 +20,14 @@ import cz.vutbr.fit.pdb.view.ImagePanel;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MapPanel;
 import java.awt.Dimension;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
@@ -43,6 +45,7 @@ public class MapControl{
     private DataContainer info_model;
     private EditControl editControl;
     private MapMouseControl mmc;
+    private SpatialObject so2;
 
     public MapControl(MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc){
         this.mmc = new MapMouseControl();
@@ -52,6 +55,7 @@ public class MapControl{
         this.info_model = dc;
         this.info_view = ip;
         this.info_view.registerMouseListener(this.mmc);
+        this.so2 = null;
     }
     
     
@@ -84,6 +88,10 @@ public class MapControl{
         this.map_view.setEditShape(null);
     
     }
+    
+    public SpatialObject getSecondSelected() {
+        return so2;
+    }
 
     class MapMouseControl implements MouseInputListener{
 
@@ -95,13 +103,28 @@ public class MapControl{
         @Override
         public void mousePressed(MouseEvent e) {
             if(e.getSource() == map_view){
-                map_model.deselectAll();
+
                 SpatialObject o = map_model.getHovered();
                 if (o == null) {
+                    map_model.setSelected(null);
                     return;
                 }
+                
+                int maskCtrl = InputEvent.CTRL_MASK | InputEvent.BUTTON1_MASK;
+                if (map_model.getSelected() != null && (e.getModifiers() & maskCtrl) == maskCtrl) {
+                    so2 = o;
+                    ArrayList<SpatialObject> lst = new ArrayList<SpatialObject>();
+                    lst.add(so2);
+                    lst.add(map_model.getSelected());
+                    map_model.setTheseAsSelected(lst);
+                    map_view.updateUI();
+                    return;
+                } else {
+                    so2 = null;
+                }
+                
+                map_model.deselectAll();
                 o.setSelection(true);
-
 
                 map_model.setSelected(o);
 
