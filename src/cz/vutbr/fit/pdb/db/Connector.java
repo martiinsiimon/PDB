@@ -32,6 +32,8 @@ import oracle.jdbc.OracleResultSet;
 
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.ord.im.OrdImage;
+import oracle.spatial.geometry.JGeometry;
+import oracle.sql.STRUCT;
 
 /**
  * Class representing connection to the database and git-like system.
@@ -930,4 +932,47 @@ public class Connector {
         /* Return result */
         return result;
     }
+
+    /**
+     * Get geometry from database (only single one in a time)
+     *
+     * @param query SQL query to get geometry
+     * @return JGeometry object or null if no such an object
+     */
+    public JGeometry getGeometry(String query) {
+        JGeometry geo = null;
+        OracleResultSet rs;
+        try {
+            /* Connect to the database */
+            Connection conn = this.getConnection();
+            try {
+                Statement stm = conn.createStatement();
+
+                /* Execute query */
+                rs = (OracleResultSet) stm.executeQuery(query);
+
+                /* Get result */
+                if (rs.next()) {
+                    STRUCT st = (STRUCT) rs.getObject("geometry");
+                    geo = JGeometry.load(st);
+                }
+
+                /* Close statement */
+                stm.close();
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("SQLException: " + e.getMessage());
+            } finally {
+                /* Close connection */
+                conn.close();
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
+
+        /* Return result */
+        return geo;
+    }
+
 }

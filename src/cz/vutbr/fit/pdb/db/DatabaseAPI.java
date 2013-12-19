@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import oracle.spatial.geometry.JGeometry;
 
 /**
  * Database application program interface. Contains methods to access the DB and
@@ -689,6 +690,46 @@ public class DatabaseAPI {
     public Integer getMostSimilar(PlantsObject o) {
         return this.connector.getImageSimilar(o.getImageSimilarSQL());
     }
+
+    /**
+     * Compute and get JGeometry from db, based on given object
+     * (especialy its geometry) and string of affine transformations. The string
+     * should follow format in description of SDO_UTIL.AFFINETRANSFORMS
+     * beggining with "translation..." and ending with "bigD...".
+     *
+     * @param o Object to transform
+     * @param transformation The string of transformations should follow format
+     * in description of SDO_UTIL.AFFINETRANSFORMS beggining with
+     * "translation..." and ending with "bigD...".
+     * @return New transformed JGeometry
+     */
+    public JGeometry getGeometryTransformed(SpatialObject o, String transformation) {
+        if (o == null || o.getId() == -1) {
+            return null;
+        }
+        return this.getGeometryTransformed(o.getGeometry(), transformation);
+    }
+
+    /**
+     * Compute and get JGeometry from db, based on given JGeometry and string of
+     * affine transformations. The string should follow format in description of
+     * SDO_UTIL.AFFINETRANSFORMS beggining with "translation..." and ending with
+     * "bigD...".
+     *
+     * @param g JGeometry to transform
+     * @param transformation The string of transformations should follow format
+     * in description of SDO_UTIL.AFFINETRANSFORMS beggining with
+     * "translation..." and ending with "bigD...".
+     * @return New transformed JGeometry
+     */
+    public JGeometry getGeometryTransformed(JGeometry g, String transformation) {
+        String query
+                = "SELECT SDO_UTIL.AFFINETRANSFORMS("
+                + " geometry => " + g + ","
+                + transformation + ") FROM DUAL";
+        return this.connector.getGeometry(query);
+    }
+
 
     ///////////////////////////////////////////////////////////////////////////
     // Advanced spatial queries                                              //
