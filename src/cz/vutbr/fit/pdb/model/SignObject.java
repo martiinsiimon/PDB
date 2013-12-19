@@ -60,7 +60,7 @@ public class SignObject extends SpatialObject {
         query = "INSERT INTO signs VALUES ("
                 + this.id + ", "
                 + "(SELECT id FROM layers WHERE name = 'signs')" + ", "
-                + "'" + this.geometry + "'" + ", "
+                 + this.geometry + ", "
                 + "'" + this.description + "'" + ", "
                 + this.plant + ", "
                 + "(SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual), "
