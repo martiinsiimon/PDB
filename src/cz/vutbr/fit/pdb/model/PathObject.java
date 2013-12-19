@@ -44,7 +44,7 @@ public class PathObject extends SpatialObject {
 
     @Override
     public String getDeleteSQL() {
-        String query = "DELETE * FROM path WHERE id = " + this.id;
+        String query = "DELETE FROM path WHERE id = " + this.id;
         return query;
     }
 
