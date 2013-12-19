@@ -7,6 +7,7 @@ package cz.vutbr.fit.pdb.control;
 import cz.vutbr.fit.pdb.containers.DataContainer;
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
 import cz.vutbr.fit.pdb.model.BedsObject;
+import cz.vutbr.fit.pdb.model.DataObject;
 import cz.vutbr.fit.pdb.model.FencesObject;
 import cz.vutbr.fit.pdb.model.PathObject;
 import cz.vutbr.fit.pdb.model.PlantTypeObject;
@@ -17,15 +18,16 @@ import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.model.WaterObject;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MapPanel;
+import cz.vutbr.fit.pdb30.gui.ImagePanel;
+import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import oracle.ord.im.OrdImage;
 
@@ -40,14 +42,16 @@ public class MapControl{
     private InfoPanel info_view;
     private DataContainer info_model;
     private EditControl editControl;
-    
+    private MapMouseControl mmc;
 
     public MapControl(MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc){
+        this.mmc = new MapMouseControl();
         this.map_view = mp;
         this.map_model = sc;
-        this.map_view.registerListener(new MapMouseControl());
+        this.map_view.registerListener(this.mmc);
         this.info_model = dc;
         this.info_view = ip;
+        this.info_view.registerMouseListener(this.mmc);
     }
     
     
@@ -85,56 +89,75 @@ public class MapControl{
 
         @Override
         public void mousePressed(MouseEvent e) {
-            map_model.deselectAll();
-            SpatialObject o = map_model.getHovered();
-            if (o == null) {
-                return;
-            }
-            o.setSelection(true);
-            
-            
-            map_model.setSelected(o);
+            if(e.getSource() == map_view){
+                map_model.deselectAll();
+                SpatialObject o = map_model.getHovered();
+                if (o == null) {
+                    return;
+                }
+                o.setSelection(true);
 
-            map_model.checkHovering(e.getPoint(), map_view.getAffineTransform());
-            
-             if(editControl != null){
-                editControl.setSelected(o);
-            }
-           
-            
-            info_view.setNameField("");
-            info_view.setTypeField("");
-            info_view.setImage(null);
-            
-            if (o instanceof BedsObject) {
-                int plantid = ((BedsObject)o).getPlant();
-                PlantsObject po = info_model.getPlants(plantid);
-                PlantTypeObject pto = info_model.getPlantType(po.getPlantType());
-                info_view.setNameField(po.getName());
-                info_view.setTypeField(pto.getName());
 
-                //info_view.setImage(info_model.getImageThumbnail(plantid));
+                map_model.setSelected(o);
 
-                info_view.setImage(info_model.getImageThumbnail(po));
+                map_model.checkHovering(e.getPoint(), map_view.getAffineTransform());
 
-            } else if (o instanceof FencesObject) {
-                info_view.setTypeField("Fence");
-            } else if (o instanceof PathObject) {
-                info_view.setTypeField("Path");
-            } else if (o instanceof SignObject) {
-                info_view.setTypeField("Sign");
+                PlantsObject po = new PlantsObject();
+                po.setName("");
+
+
+                info_view.setNameField("");
+                info_view.setTypeField("");
+                info_view.setImage(null);
+
+                if (o instanceof BedsObject) {
+                    int plantid = ((BedsObject)o).getPlant();
+                    po = info_model.getPlants(plantid);
+                    PlantTypeObject pto = info_model.getPlantType(po.getPlantType());
+                    info_view.setNameField(po.getName());
+                    info_view.setTypeField(pto.getName());
+
+                    //info_view.setImage(info_model.getImageThumbnail(plantid));
+
+                    info_view.setImage(info_model.getImageThumbnail(po));
+
+                } else if (o instanceof FencesObject) {
+                    info_view.setTypeField("Fence");
+                } else if (o instanceof PathObject) {
+                    info_view.setTypeField("Path");
+                } else if (o instanceof SignObject) {
+                    info_view.setTypeField("Sign");
+
+                } else if (o instanceof SoilObject) {
+                    info_view.setTypeField("Soil");
+                } else if (o instanceof WaterObject) {
+                    info_view.setTypeField("Water");
+                }
                 
-            } else if (o instanceof SoilObject) {
-                info_view.setTypeField("Soil");
-            } else if (o instanceof WaterObject) {
-                info_view.setTypeField("Water");
+                if(editControl != null){
+                    editControl.setSelected(o,(DataObject)po);
+                }
+                //map_view.setEditShape(null);
+                map_view.updateUI();
+                info_view.updateUI();
             }
-             
-            //map_view.setEditShape(null);
-            map_view.updateUI();
-            info_view.updateUI();
-            
-
+            else if(e.getSource() instanceof ImagePanel){
+                SpatialObject o = map_model.getSelected();
+                if(o != null && o instanceof BedsObject){
+                    int plantid = ((BedsObject)o).getPlant();
+                    PlantsObject po = info_model.getPlants(plantid);
+                    BufferedImage image = info_model.getImage(po);
+                    if (image != null) {
+                        JFrame f = new JFrame();
+                        ImagePanel im = new ImagePanel(image);
+                        im.setResize(false);
+                        f.add(im);
+                        f.setPreferredSize(new Dimension(image.getWidth()+20, image.getHeight() +20));
+                        f.pack();
+                        f.setVisible(true);
+                    }
+                }
+            }
             
         }
 

@@ -11,6 +11,7 @@
 package cz.vutbr.fit.pdb.view;
 
 import cz.vutbr.fit.pdb30.gui.ImagePanel;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
 
@@ -47,7 +48,11 @@ public class InfoPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Type: ");
 
+        jTextFieldType.setEditable(false);
+
         jLabel2.setText("Name: ");
+
+        jTextFieldName.setEditable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -108,6 +113,15 @@ public class InfoPanel extends javax.swing.JPanel {
     
     public void setImage(BufferedImage img){
         this.photoPanel.setImage(img);
+    }
+    
+    public void registerMouseListener(MouseListener ml){
+        this.photoPanel.addMouseListener(ml);
+    }
+    
+    public void unregisterMouseListener(MouseListener ml){
+    
+    
     }
 
 }

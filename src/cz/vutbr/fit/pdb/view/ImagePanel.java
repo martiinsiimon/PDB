@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 public class ImagePanel extends JPanel implements MouseListener {
 
     private BufferedImage image = null;
-    private boolean resize = true;
+    private boolean resize = false;
 
     public ImagePanel(BufferedImage image) {
         super();

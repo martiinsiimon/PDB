@@ -4,11 +4,15 @@
  */
 package cz.vutbr.fit.pdb.control;
 
+import cz.vutbr.fit.pdb.containers.DataContainer;
 import cz.vutbr.fit.pdb.containers.SpatialContainer;
+import cz.vutbr.fit.pdb.model.BedsObject;
+import cz.vutbr.fit.pdb.model.DataObject;
+import cz.vutbr.fit.pdb.model.PlantsObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.view.EditPanel;
+import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MapPanel;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -17,8 +21,10 @@ import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -30,17 +36,24 @@ public class EditControl {
     
    
     SpatialObject selected;
+    DataObject selectedData;
     SpatialContainer sc;
+    DataContainer dc;
     EditPanel ep;
     MapPanel mp;
+    InfoPanel ip;
     AffineTransform at;
-    ChangeListener chl;
+    EditMapControl chl;
     
-    public EditControl(EditPanel ep, MapPanel mp, SpatialContainer sc){
+    
+    public EditControl(EditPanel ep, MapPanel mp, InfoPanel ip, SpatialContainer sc, DataContainer dc){
         this.ep = ep;
         this.mp = mp;
         this.sc = sc;
+        this.dc = dc;
+        this.ip = ip;
         this.chl = new EditMapControl();
+        this.ep.registerActionListener(chl);
     }
     
     public void moveTo(Point p){
@@ -58,8 +71,9 @@ public class EditControl {
         }
     }
     
-    public void setSelected(SpatialObject so){
+    public void setSelected(SpatialObject so, DataObject od){
         this.selected = so;
+        this.selectedData = od;
         this.ep.removeChangeListener(this.chl);
         if(this.selected != null){
             Rectangle r;
@@ -72,7 +86,13 @@ public class EditControl {
             }
             this.at = new AffineTransform();
             this.ep.updateXY(r.x,r.y);
-            System.out.println(r);
+            if(this.selected instanceof BedsObject){
+                this.ep.nameFieldEnableState(true);
+                this.ep.setNameField(((PlantsObject)od).getName());
+            }else{
+                this.ep.setNameField("");
+                this.ep.nameFieldEnableState(false);
+            }
             this.ep.updateLayer(this.selected.getLayer());
             this.mp.setEditShape(at.createTransformedShape(r));
             this.ep.registerChangeListener(this.chl);
@@ -132,6 +152,18 @@ public class EditControl {
         public void actionPerformed(ActionEvent e) {
             if("update".equals(e.getActionCommand())){
                 //TODO - store that shit
+            }else if("update".equals(e.getActionCommand())){
+            
+            }else if("load_new_image".equals(e.getActionCommand())){
+                JFileChooser fc = new JFileChooser("C:/workspace/skola/pdb");
+                int returnVal = fc.showOpenDialog(mp);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = fc.getSelectedFile();
+             
+                }
+                
+            }else if("delete_image".equals(e.getActionCommand())){
+                
             }
         }
 
