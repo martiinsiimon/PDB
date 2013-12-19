@@ -18,7 +18,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +45,7 @@ public class SpatialContainer {
     private SpatialObject hovered;
     private ArrayList<DataObject> layers;
     private Boolean initialized;
+    private String date;
 
     /**
      * Constructor of SpatialContainer.
@@ -62,6 +66,9 @@ public class SpatialContainer {
         this.hovered = null;
         this.initialized = false;
 
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date d = new Date();
+        this.date = dateFormat.format(d);
         this.db = new DatabaseAPI(login, password);
     }
 
@@ -84,6 +91,29 @@ public class SpatialContainer {
         this.initialized = false;
 
         this.db = _db;
+
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        Date d = new Date();
+        this.date = dateFormat.format(d);
+    }
+
+    /**
+     * Set date of od map to new one
+     *
+     * @param _date Date in format MM-DD-YYYY
+     */
+    public void setDate(String _date) {
+        this.date = _date;
+        this.initialize();
+    }
+
+    /**
+     * Return current date set.
+     *
+     * @return Date in format MM-DD-YYYY
+     */
+    public String getDate() {
+        return this.date;
     }
 
     /**
@@ -108,12 +138,12 @@ public class SpatialContainer {
 
         /* For every type of object get all of occurences from db and store them
          * under appropriate integer into spatialObjectList */
-        ArrayList<SpatialObject> tmp = this.db.getBedsAll();
+        ArrayList<SpatialObject> tmp = this.db.getBedsAll(this.date);
         for (SpatialObject o : tmp) {
             this.spatialBedsList.put(o.getId(), o);
         }
 
-        tmp = this.db.getFencesAll();
+        tmp = this.db.getFencesAll(this.date);
         for (SpatialObject o : tmp) {
             this.spatialFencesList.put(o.getId(), o);
         }
@@ -124,7 +154,7 @@ public class SpatialContainer {
             this.spatialPathsList.put(o.getId(), o);
         }
 
-        tmp = this.db.getSignAll();
+        tmp = this.db.getSignAll(this.date);
         for (SpatialObject o : tmp) {
             this.spatialSignsList.put(o.getId(), o);
         }

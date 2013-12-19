@@ -550,14 +550,16 @@ public class DatabaseAPI {
     /* Set of select all queries                                             */
     ///////////////////////////////////////////////////////////////////////////
     /**
-     * Get all the beds objects from DB and return a list of their Java
+     * Get all the valid beds objects from DB and return a list of their Java
      * representatives
      *
+     * @param date String of date in format MM-DD-YYYY
      * @return List of BedsObject objects
      */
-    public ArrayList<SpatialObject> getBedsAll() {
-        return this.connector.executeQueryWithResultsBeds(new BedsObject().getAllSQL());
+    public ArrayList<SpatialObject> getBedsAll(String date) {
+        return this.connector.executeQueryWithResultsBeds(new BedsObject().getAllSQL(date));
     }
+
 
     /**
      * Get all the soil objects from DB and return a list of their Java
@@ -593,20 +595,22 @@ public class DatabaseAPI {
      * Get all the fences objects from DB and return a list of their Java
      * representatives
      *
+     * @param date String of date in format MM-DD-YYYY
      * @return List of SpatialObject objects
      */
-    public ArrayList<SpatialObject> getFencesAll() {
-        return this.connector.executeQueryWithResultsFences(new FencesObject().getAllSQL());
+    public ArrayList<SpatialObject> getFencesAll(String date) {
+        return this.connector.executeQueryWithResultsFences(new FencesObject().getAllSQL(date));
     }
 
     /**
      * Get all the sign objects from DB and return a list of their Java
      * representatives
      *
+     * @param date String of date in format MM-DD-YYYY
      * @return List of SpatialObject objects
      */
-    public ArrayList<SpatialObject> getSignAll() {
-        return this.connector.executeQueryWithResultsSign(new SignObject().getAllSQL());
+    public ArrayList<SpatialObject> getSignAll(String date) {
+        return this.connector.executeQueryWithResultsSign(new SignObject().getAllSQL(date));
     }
 
     /**
@@ -877,4 +881,5 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     // Advanced temporal queries                                             //
     ///////////////////////////////////////////////////////////////////////////
+    public 
 }
