@@ -886,5 +886,18 @@ public class DatabaseAPI {
     ///////////////////////////////////////////////////////////////////////////
     // Advanced temporal queries                                             //
     ///////////////////////////////////////////////////////////////////////////
-    //public
+    /**
+     * Get SignObject array of signs that were in database in given period
+     *
+     * @param timeFrom Start of the period in string formatted MM-DD-YYYY
+     * @param timeTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of SignObject
+     */
+    public ArrayList<SpatialObject> selectSignsInTimePeriod(String timeFrom, String timeTo) {
+        String query
+                = "SELECT * FROM signs"
+                + " WHERE date_to >= TO_DATE('" + timeTo + "', 'MM-DD-YYYY') AND"
+                + " date_from <= TO_DATE('" + timeFrom + "', 'MM-DD-YYYY');";
+        return this.connector.executeQueryWithResultsSign(query);
+    }
 }
