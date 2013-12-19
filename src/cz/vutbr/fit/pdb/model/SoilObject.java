@@ -58,7 +58,7 @@ public class SoilObject extends SpatialObject {
                 + this.id + ", "
                 + "(SELECT id FROM layers WHERE name = 'soil')" + ", "
                 + this.soilType + ", "
-                + "'" + this.geometry + "')";
+                + "?)";
         return query;
     }
 

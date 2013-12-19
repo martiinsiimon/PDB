@@ -25,8 +25,10 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 
 import oracle.jdbc.pool.OracleDataSource;
@@ -62,6 +64,38 @@ public class Connector {
      */
     public void addQuery(String query) {
         this.queries.push(query);
+    }
+
+    /**
+     * Execute query immediately.
+     *
+     * @param query Query to be added to the queue
+     * @param geo Geometry to add
+     */
+    public void executeQuery(String query, JGeometry geo) {
+
+        try {
+            Connection conn = this.getConnection();
+            // ziskame proxy
+            OraclePreparedStatement pstmtSelect
+                    = (OraclePreparedStatement) conn.prepareStatement(query);
+            try {
+
+                pstmtSelect.setObject(1, JGeometry.store(geo, conn));
+
+                pstmtSelect.executeQuery();
+            } catch (SQLException e) {
+                Logger.getLogger(e.getMessage());
+                System.out.println("SQLException: " + e.getMessage());
+            } finally {
+                pstmtSelect.close();
+                conn.close();
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(e.getMessage());
+            System.out.println("SQLException: " + e.getMessage());
+        }
     }
 
     /**
@@ -105,7 +139,7 @@ public class Connector {
                 Statement stm = conn.createStatement();
                 /* Execute every query in stack */
                 for (String query : this.queries) {
-                    System.out.println(query);
+                    //System.out.println(query);
                     stm.addBatch(query);
                 }
 
