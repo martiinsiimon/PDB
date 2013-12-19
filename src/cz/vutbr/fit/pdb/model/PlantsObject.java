@@ -29,7 +29,7 @@ public class PlantsObject extends DataObject {
     private Boolean imgChanged;
     private BufferedImage image;
     private int plant_type;
-    private static final String THRES = "100 100";
+    private static final String THRES = "200 200";
 
 
     public PlantsObject() {
@@ -114,7 +114,7 @@ public class PlantsObject extends DataObject {
     }
 
     public String getImageThumbSQL() {
-        return "SELECT photo_thumb FROM " + this.tableName + " WHERE id = " + this.id;
+        return "SELECT photo_thumb photo FROM " + this.tableName + " WHERE id = " + this.id;
     }
 
 
