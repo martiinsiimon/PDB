@@ -44,7 +44,11 @@ public abstract class Table {
         String query = "SELECT * FROM " + this.tableName;
         return query;
     }
-}
 
+    public String getHighestIDSQL() {
+        String query = "SELECT id FROM " + this.tableName + " WHERE id = (SELECT MAX(id) FROM " + this.tableName + ")";
+        return query;
+    }
+}
 
 

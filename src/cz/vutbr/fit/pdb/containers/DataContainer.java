@@ -351,21 +351,6 @@ public class DataContainer {
             return;
         }
         if (_obj.getId() == -1) {
-            /* New object without ID */
-            ArrayList<DataObject> lst = this.dataObjectList.get(id);
-            Integer lastId = -1;
-            for (DataObject obj : lst) {
-                if (lastId < obj.getId()) {
-                    lastId = obj.getId();
-                }
-            }
-
-            /* Set the new ID */
-            _obj.setId(lastId++);
-
-            /* Store the object to the container */
-            this.dataObjectList.get(id).add(_obj);
-
             /* Append SQL query to DB queue */
             if (_obj instanceof LayersObject) {
                 this.db.insert((LayersObject) _obj);
@@ -376,6 +361,9 @@ public class DataContainer {
             } else if (_obj instanceof PlantTypeObject) {
                 this.db.insert((PlantTypeObject) _obj);
             }
+
+            /* Store the object to the container */
+            this.dataObjectList.get(id).add(_obj);
         } else {
             ArrayList<DataObject> lst = this.dataObjectList.get(id);
             for (DataObject obj : lst) {

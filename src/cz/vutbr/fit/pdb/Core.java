@@ -11,6 +11,7 @@ import cz.vutbr.fit.pdb.control.MapControl;
 import cz.vutbr.fit.pdb.control.RootControl;
 import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.DataObject;
+import cz.vutbr.fit.pdb.model.PlantsObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
 import cz.vutbr.fit.pdb.view.EditPanel;
 import cz.vutbr.fit.pdb.view.InfoPanel;
@@ -24,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -135,6 +137,8 @@ public class Core {
                getBiggestBedDialog();
            } else if ("s_smallest_bed".equals(e.getActionCommand())) {
                getSmallestBedDialog();
+           } else if ("m_find_similar".equals(e.getActionCommand())) {
+               getSimilarDialog();           
            } else if("a_help".equals(e.getActionCommand())){
                
            }else if("a_about".equals(e.getActionCommand())){
@@ -263,6 +267,35 @@ public class Core {
        }
        sc.setTheseAsSelected(bedsSpatial);
        mp.updateUI();
+   }
+   
+   public void getSimilarDialog() {
+       ArrayList<String> plant_names = new ArrayList<String>();
+       for (DataObject o: dc.getPlants()) {
+           plant_names.add(o.getName());
+       }
+       Collections.sort(plant_names);
+
+       JList plant_name_list = new JList(plant_names.toArray());
+       plant_name_list.setSelectedIndex(0);
+       final JComponent[] inputs = new JComponent[]{
+           new JLabel("Plant name"), plant_name_list
+       };
+       int a = JOptionPane.showInternalConfirmDialog(mainMenu, inputs, "Select plant name", JOptionPane.OK_CANCEL_OPTION);
+       if (a == JOptionPane.OK_OPTION) {
+           String selected_plant_name = (String) plant_name_list.getSelectedValue();
+           DataObject selected_plant = dc.getPlants(selected_plant_name);
+           
+           Integer similarPlantID = dbAPI.getMostSimilar((PlantsObject)selected_plant);
+
+           DataObject similar_plant = dc.getPlants(similarPlantID);
+           JLabel sim_plant_name = new JLabel(similar_plant.getName());
+           final JComponent[] outputs = new JComponent[]{
+               sim_plant_name
+               // TODO: Pridat do outputs obrazek podobne rostliny
+           };
+           JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Similar plant", JOptionPane.OK_OPTION);
+        }
    }
 
     public static void main(String[] args){

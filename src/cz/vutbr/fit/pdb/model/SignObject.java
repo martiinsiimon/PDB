@@ -49,10 +49,8 @@ public class SignObject extends SpatialObject {
     @Override
     public String getUpdateSQL() {
         String query = "UPDATE signs"
-                + " SET geometry = '" + this.geometry + "'"
-                + " SET description = '" + this.description + "'"
-                + " SET plant = " + this.plant
-                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+                + " SET date_to = (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual)"
+                + " WHERE id = " + this.id;
         return query;
     }
 
@@ -65,7 +63,7 @@ public class SignObject extends SpatialObject {
                 + "'" + this.geometry + "'" + ", "
                 + "'" + this.description + "'" + ", "
                 + this.plant + ", "
-                + "TO_DATE('11-11-2013','MM-DD-YYYY')" + ", " //TODO recent date!!
+                + "(SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual), "
                 + "TO_DATE('12-31-9999','MM-DD-YYYY')" + ")";
         return query;
     }
@@ -73,8 +71,8 @@ public class SignObject extends SpatialObject {
     @Override
     public String getDeleteSQL() {
         String query = "UPDATE signs"
-                + " SET date_to = TO_DATE('11-11-2013', 'MM-DD-YYYY')" //TODO recent date
-                + " WHERE id = " + this.id + " AND date_to = TO_DATE('12-31-9999', 'MM-DD-YYYY')";
+                + " SET date_to = (SELECT TO_DATE((SELECT to_char(trunc(sysdate),'MM-DD-YYYY') FROM dual), 'MM-DD-YYYY') FROM dual)"
+                + " WHERE id = " + this.id;
         return query;
     }
 

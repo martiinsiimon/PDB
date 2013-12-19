@@ -26,6 +26,7 @@ import oracle.ord.im.OrdImage;
 public class DatabaseAPI {
 
     Connector connector;
+    Integer highestID;
 
     /**
      * Constructor of DatabaseAPI.
@@ -35,6 +36,7 @@ public class DatabaseAPI {
      */
     public DatabaseAPI(String login, String password) {
         this.connector = new Connector(login, password);
+        this.highestID = -1;
     }
 
     /**
@@ -46,12 +48,6 @@ public class DatabaseAPI {
         this.connector.addQuery(query);
     }
 
-    /**
-     * Delete last query in query queue - step back.
-     */
-    public void deleteLastQuery() {
-        this.connector.delCommit();
-    }
 
     /**
      * Reset database (remote) data to the initial state. Use default sql script
@@ -192,6 +188,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(BedsObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
     }
 
@@ -202,6 +204,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(SoilObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
     }
 
@@ -212,6 +220,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(PathObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
     }
 
@@ -222,6 +236,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(WaterObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
     }
 
@@ -232,6 +252,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(FencesObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
     }
 
@@ -242,6 +268,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(SignObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
     }
 
@@ -252,6 +284,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(PlantsObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
 
         if (_obj.isImgChanged()) {
@@ -266,6 +304,12 @@ public class DatabaseAPI {
      * @param _obj Object to insert
      */
     public void insert(DataObject _obj) {
+        if (this.highestID == -1) {
+            Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+            //id++;
+            this.highestID = id;
+        }
+        _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
     }
 
@@ -346,6 +390,7 @@ public class DatabaseAPI {
      * Commit all update/insert/delete queries in the stack to the database.
      */
     public void commit() {
+        this.highestID = -1;
         this.connector.executeQueries();
     }
 
@@ -777,4 +822,8 @@ public class DatabaseAPI {
                 + " AND SDO_RELATE(b2.geometry, s2.geometry,'mask=ANYINTERACT') = 'TRUE')";
         return this.connector.executeQueryWithResultsInteger(query);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Advanced temporal queries                                             //
+    ///////////////////////////////////////////////////////////////////////////
 }
