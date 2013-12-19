@@ -887,17 +887,38 @@ public class DatabaseAPI {
     // Advanced temporal queries                                             //
     ///////////////////////////////////////////////////////////////////////////
     /**
-     * Get SignObject array of signs that were in database in given period
+     * Get SpatialObject array of signs that were in database in given period
      *
      * @param timeFrom Start of the period in string formatted MM-DD-YYYY
      * @param timeTo End of the period in string formatted MM-DD-YYYY
-     * @return ArrayList of SignObject
+     * @return ArrayList of SpatialnObject
      */
     public ArrayList<SpatialObject> selectSignsInTimePeriod(String timeFrom, String timeTo) {
         String query
-                = "SELECT * FROM signs"
+                = "SELECT *"
+                + " FROM signs"
                 + " WHERE date_to >= TO_DATE('" + timeTo + "', 'MM-DD-YYYY') AND"
                 + " date_from <= TO_DATE('" + timeFrom + "', 'MM-DD-YYYY');";
         return this.connector.executeQueryWithResultsSign(query);
     }
+
+    /**
+     * Get SpatialObject array of plants that were in database on any bed in
+     * given period
+     *
+     * @param timeFrom Start of the period in string formatted MM-DD-YYYY
+     * @param timeTo End of the period in string formatted MM-DD-YYYY
+     * @return ArrayList of SpatialObject
+     */
+    public ArrayList<SpatialObject> selectPlantsInTimePeriod(String timeFrom, String timeTo) {
+        String query
+                = "SELECT *"
+                + " FROM plants"
+                + " WHERE EXISTS("
+                + " SELECT 1 FROM beds WHERE beds.plant = plants.id"
+                + " AND date_to >= TO_DATE('" + timeTo + "', 'MM-DD-YYYY')"
+                + " AND date_from <= TO_DATE('" + timeFrom + "', 'MM-DD-YYYY'))";
+        return this.connector.executeQueryWithResultsSign(query);
+    }
+
 }
