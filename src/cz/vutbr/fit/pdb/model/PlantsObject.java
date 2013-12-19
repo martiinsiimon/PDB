@@ -29,8 +29,7 @@ public class PlantsObject extends DataObject {
     private Boolean imgChanged;
     private BufferedImage image;
     private int plant_type;
-    private static final String THRES = "200 200";
-    //private BufferedImage OrdImage;
+    private static final String THRES = "100 100";
 
 
     public PlantsObject() {
@@ -164,7 +163,7 @@ public class PlantsObject extends DataObject {
 
                 System.out.println("File " + filename);
                 imgProxy.loadDataFromFile(filename);
-            
+
 
             imgProxy.processCopy("maxScale =" + PlantsObject.THRES, thProxy);
             imgProxy.setProperties();

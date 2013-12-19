@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import oracle.ord.im.OrdImage;
 
 /**
  * Container of data objects
