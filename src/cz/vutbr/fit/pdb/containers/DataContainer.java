@@ -319,7 +319,7 @@ public class DataContainer {
         }
 
         /* Get the object from db */
-        BufferedImage img = db.getPlantsImage((PlantsObject) obj);
+        BufferedImage img = this.db.getPlantsImageThumb((PlantsObject) obj);
 
         /* Return result */
         return img;
