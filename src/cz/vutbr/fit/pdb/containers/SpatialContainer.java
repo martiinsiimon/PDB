@@ -173,6 +173,23 @@ public class SpatialContainer {
     }
 
     /**
+     * Add object to list (local)
+     *
+     * @param obj Object to add
+     */
+    public void addObject(SpatialObject obj) {
+        if (obj instanceof SignObject) {
+            this.spatialSignsList.put(obj.getId(), obj);
+        }
+    }
+
+    public void delObject(SpatialObject obj) {
+        if (obj instanceof SignObject) {
+            this.spatialSignsList.remove(obj.getId());
+        }
+    }
+
+    /**
      * Return BedObject with given id
      *
      * @param id Id (in database) of BedObject
@@ -489,16 +506,6 @@ public class SpatialContainer {
         } else {
             return new ArrayList<SpatialObject>();
         }
-    }
-
-    /**
-     * Mark the object on given coordinates as selected and return object type.
-     *
-     * @return Type of selected object or -1 if no object on given coordinates
-     */
-    public Integer selectObject(/*coordinates of object*/) {
-        //TODO determine what object is at the given coordinates and set its "selected" flag
-        return -1;
     }
 
     /**

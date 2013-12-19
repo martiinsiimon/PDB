@@ -62,7 +62,7 @@ public class SoilObject extends SpatialObject {
     public String getUpdateSQL() {
         String query;
         query = "UPDATE soil"
-                + " SET geometry = '" + this.geometry + "'"
+                + " SET geometry = " + this.geometry
                 + " SET soil_type = " + this.soilType
                 + " WHERE id = " + this.id;
 
@@ -80,7 +80,7 @@ public class SoilObject extends SpatialObject {
                 + this.id + ", "
                 + "(SELECT id FROM layers WHERE name = 'soil')" + ", "
                 + this.soilType + ", "
-                + "'" + this.geometry + "')";
+                + "?)";
         return query;
     }
 
@@ -90,7 +90,7 @@ public class SoilObject extends SpatialObject {
      */
     @Override
     public String getDeleteSQL() {
-        String query = "DELETE * FROM soil WHERE id = " + this.id;
+        String query = "DELETE FROM soil WHERE id = " + this.id;
         return query;
     }
 

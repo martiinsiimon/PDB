@@ -448,8 +448,6 @@ public class Core {
      */
     public void getSignDescForPlantsDialog() {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-        Date date_from = new Date();
-        Date date_to = new Date();
         Calendar cal = Calendar.getInstance();
 
         JTextField textdate_from = new JTextField(dateFormat.format(cal.getTime()));

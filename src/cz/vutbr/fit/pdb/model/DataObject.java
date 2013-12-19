@@ -84,7 +84,7 @@ public class DataObject extends Table {
      */
     @Override
     public String getDeleteSQL() {
-        String query = "DELETE * FROM " + this.tableName + " WHERE id = " + this.id;
+        String query = "DELETE FROM " + this.tableName + " WHERE id = " + this.id;
         return query;
     }
 

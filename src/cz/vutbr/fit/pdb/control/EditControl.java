@@ -9,33 +9,37 @@ import cz.vutbr.fit.pdb.containers.SpatialContainer;
 import cz.vutbr.fit.pdb.db.DatabaseAPI;
 import cz.vutbr.fit.pdb.model.BedsObject;
 import cz.vutbr.fit.pdb.model.DataObject;
+import cz.vutbr.fit.pdb.model.FencesObject;
+import cz.vutbr.fit.pdb.model.PathObject;
 import cz.vutbr.fit.pdb.model.PlantsObject;
+import cz.vutbr.fit.pdb.model.SignObject;
+
+import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
+import cz.vutbr.fit.pdb.model.WaterObject;
 import cz.vutbr.fit.pdb.view.EditPanel;
 import cz.vutbr.fit.pdb.view.InfoPanel;
 import cz.vutbr.fit.pdb.view.MapPanel;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import oracle.spatial.geometry.JGeometry;
 
 /**
  * Class for controlling of editing part of application.
  * @author casey
  */
 public class EditControl {
-    
-   
+
+
     SpatialObject selected;
     DataObject selectedData;
     SpatialContainer sc;
@@ -79,10 +83,10 @@ public class EditControl {
                 atmp.inverseTransform(p, pa);
                 this.ep.updateXY(pa.x,pa.y);
             } catch (NoninvertibleTransformException ex) {
-                
+
             }
             //System.out.println(pa);
-            
+
         }
     }
     
@@ -114,75 +118,132 @@ public class EditControl {
                 this.ep.nameFieldEnableState(false);
             }
             this.ep.updateLayer(this.selected.getLayer());
-            this.mp.setEditShape(at.createTransformedShape(r));
+            //this.mp.setEditShape(at.createTransformedShape(r));
             this.ep.registerChangeListener(this.chl);
-            
+
         }
         this.mp.updateUI();
     }
-    
+
     /**
      * Function ensures that the bounding rectangle is updated on change of
      * coordinates in GUI.
      */
     public void updateOnChange(){
         Rectangle r;
+        this.ep.removeChangeListener(this.chl);
          if(this.selected.getGeometry().isPoint()){
                 Point2D p= this.selected.getGeometry().getJavaPoint();
                 r = new Rectangle((int)p.getX()-10, (int)p.getY()-10, 20, 20);
             }else{
                 r = this.selected.getGeometry().createShape().getBounds();
             }
-        Shape editBox ;
-        r.setLocation(new Point(0, 0));
+
+        //r.setLocation(new Point(0, 0));
+        //AffineTransform af = this.mp.getAffineTransform();
         Point p = this.ep.getXY();
+        Point pchange = new Point(p.x - r.x, p.y - r.y);
         Point2D.Double s = this.ep.getScale();
         int rotate = this.ep.getRotate();
         this.at = new AffineTransform();
-        
+
+        try {
+        JGeometry  qq= this.selected.getGeometry();
         if(rotate != 0){
-            at.rotate(Math.toRadians(rotate));
+            //at.rotate(Math.toRadians(rotate));
+            System.out.println("rotate");
+            double[] d = {(double)r.x, (double)r.y};
+            qq = qq.affineTransforms(false, 0.0, 0.0, 0.0, false, null, 0, 0, 0, true, JGeometry.createPoint(d,2,0), null, Math.toRadians(rotate), -1, false, 0, 0, 0, 0, 0, 0, false, null, null, 0, false, null, null);
         }
-        
-        if(s.x != 0 || s.y != 0){
-            at.scale(s.x, s.y);
+
+        if(s.x != 1 || s.y != 1){
+            //at.scale(s.x, s.y);
+            System.out.println("scale");
+            qq = qq.affineTransforms(false, 0, 0, 0, true, new JGeometry((double)r.x+(r.width/2), (double)r.y + (r.height/2), 0), s.x, s.y, 0, false, null, null, 0, 0, false, 0, 0, 0, 0, 0, 0, false, null, null, 0, false, null, null);
         }
-        
-        editBox = at.createTransformedShape(r);
-        at = new AffineTransform();
-        at.translate(p.x, p.y);
-        editBox = at.createTransformedShape(editBox);
-        //editBox.setLocation(p);
-        this.mp.setEditShape(editBox);
+
+
+        if(p.x - r.x != 0 || p.y - r.y != 0){
+            System.out.println("move");
+            qq = qq.affineTransforms(true, pchange.x, pchange.y, 0.0, false, null, 0, 0, 0, false, null, null, 0, 0, false, 0, 0, 0, 0, 0, 0, false, null, null, 0, false, null, null);
+
+        }
+        //editBox = at.createTransformedShape(r);
+        //at = new AffineTransform();
+        //at.translate(p.x, p.y);
+
+//            editBox = (this.selected.getGeometry().affineTransforms(true, p.x, p.y, 0, false, null, 0, 0, 0, false, null, null, 0, 0, false, 0, 0, 0, 0, 0, 0, false, null, null, 0, true, null, null).createShape());
+
+
+            this.selected.setGeometry(qq);
+            System.out.println(qq.createShape().getBounds());
+        } catch (Exception ex) {
+            System.out.println(ex.toString());
+        }
+
+
+                //editBox.setLocation(p);
+        this.ep.resetRest();
+        this.ep.registerChangeListener(this.chl);
+        this.mp.setEditShape(null);
         this.mp.updateUI();
-        
+
     }
 
     /**
      * Enables editing mode.
      */
     public void editEnable(){
-    
+
     }
     
     /**
      * Disables editing mode.
      */
     public void editDisable(){
-    
-    }
-    
-    
-    
-    
-    class EditMapControl implements ActionListener, ChangeListener{
 
+    }
+
+
+
+
+    class EditMapControl implements ActionListener, ChangeListener{
+        private Integer lastId = -1;
         @Override
         public void actionPerformed(ActionEvent e) {
-            if("update".equals(e.getActionCommand())){
-                //TODO - store that shit
-            }else if("update".equals(e.getActionCommand())){
-            
+
+            if("save_item".equals(e.getActionCommand())){
+                if (selected instanceof BedsObject) {
+                    sc.store((BedsObject)selected);
+                } else if (selected instanceof FencesObject) {
+                    sc.store((FencesObject)selected);
+                } else if (selected instanceof PathObject) {
+                    sc.store((PathObject)selected);
+                } else if (selected instanceof SignObject) {
+                    sc.store((SignObject)selected);
+                } else if (selected instanceof SoilObject) {
+                    sc.store((SoilObject)selected);
+                } else if (selected instanceof WaterObject) {
+                   sc.store((WaterObject)selected);
+                }
+                sc.commitToDB();
+            }else if("delete_item".equals(e.getActionCommand())){
+
+                if (selected instanceof BedsObject) {
+                    sc.delete((BedsObject)selected);
+                } else if (selected instanceof FencesObject) {
+                    sc.delete((FencesObject)selected);
+                } else if (selected instanceof PathObject) {
+                    sc.delete((PathObject)selected);
+                } else if (selected instanceof SignObject) {
+                    sc.delete((SignObject)selected);
+                } else if (selected instanceof SoilObject) {
+                    sc.delete((SoilObject)selected);
+                } else if (selected instanceof WaterObject) {
+                   sc.delete((WaterObject)selected);
+                }
+                sc.commitToDB();
+
             }else if("load_new_image".equals(e.getActionCommand())){
                 JFileChooser fc = new JFileChooser("./");
                 int returnVal = fc.showOpenDialog(mp);
@@ -192,11 +253,27 @@ public class EditControl {
                     ip.setImage(dc.getImageThumbnail((PlantsObject)selectedData));
                     ip.updateUI();
                 }
-                
+
             }else if("delete_image".equals(e.getActionCommand())){
                 dapi.deleteImage((PlantsObject)selectedData);
                 ip.setImage(dc.getImageThumbnail((PlantsObject)selectedData));
                 ip.updateUI();
+            } else if ("add_bed_object".equals(e.getActionCommand())) {
+                System.out.println("add bed object");
+            } else if ("add_sign_object".equals(e.getActionCommand())) {
+                System.out.println("add sign object");
+                SignObject obj = new SignObject();
+                obj.setId(dapi.getHighestId(obj) + 1);
+                this.lastId = obj.getId();
+                double coord[] = {10.0, 10.0};
+                obj.setGeometry(JGeometry.createPoint(coord, 5, 1));
+                sc.addObject(obj);
+                sc.setSelected(obj);
+                selected = obj;
+                //ip.updateUI();
+                mp.updateUI();
+            } else if ("add_fence_object".equals(e.getActionCommand())) {
+                System.out.println("add fence object");
             }
         }
 
@@ -205,7 +282,7 @@ public class EditControl {
             updateOnChange();
             //System.out.println("le update");
         }
-    
+
     }
-    
+
 }

@@ -11,6 +11,7 @@ import cz.vutbr.fit.pdb.model.PlantsObject;
 import cz.vutbr.fit.pdb.model.SoilObject;
 import cz.vutbr.fit.pdb.model.SoilTypeObject;
 import cz.vutbr.fit.pdb.model.SpatialObject;
+import cz.vutbr.fit.pdb.model.Table;
 import cz.vutbr.fit.pdb.model.WaterObject;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -195,7 +196,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -211,7 +212,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -227,7 +228,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -243,7 +244,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -259,7 +260,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -275,7 +276,7 @@ public class DatabaseAPI {
             this.highestID = id;
         }
         _obj.setId(++this.highestID);
-        this.addQuery(_obj.getInsertSQL());
+        this.connector.executeQuery(_obj.getInsertSQL(), _obj.getGeometry());
     }
 
     /**
@@ -292,12 +293,6 @@ public class DatabaseAPI {
         }
         _obj.setId(++this.highestID);
         this.addQuery(_obj.getInsertSQL());
-
-        //this.commit();
-//        if (_obj.isImgChanged()) {
-//            this.commit();
-//            this.connector.updateImage(_obj);
-//        }
     }
 
     /**
@@ -664,6 +659,11 @@ public class DatabaseAPI {
      */
     public ArrayList<DataObject> getPlantsAll() {
         return this.connector.executeQueryWithResultsPlants(new PlantsObject().getAllSQL());
+    }
+
+    public Integer getHighestId(Table _obj) {
+        Integer id = this.connector.executeQueryWithResultsInteger(_obj.getHighestIDSQL()).get(0);
+        return id;
     }
 
     ///////////////////////////////////////////////////////////////////////////

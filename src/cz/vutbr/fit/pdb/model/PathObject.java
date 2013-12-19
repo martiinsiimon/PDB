@@ -39,8 +39,8 @@ public class PathObject extends SpatialObject {
      */
     @Override
     public String getUpdateSQL() {
-        String query = "UPDATE path"
-                + " SET geometry = '" + this.geometry + "'"
+        String query = "UPDATE paths"
+                + " SET geometry = " + this.geometry
                 + " WHERE id = " + this.id;
 
         return query;
@@ -52,7 +52,7 @@ public class PathObject extends SpatialObject {
      */
     @Override
     public String getInsertSQL() {
-        String query = "INSERT INTO path VALUES ("
+        String query = "INSERT INTO paths VALUES ("
                 + this.id + ", "
                 + "(SELECT id FROM layers WHERE name = 'path')" + ", "
                 + "'" + this.geometry + "')";
@@ -65,7 +65,7 @@ public class PathObject extends SpatialObject {
      */
     @Override
     public String getDeleteSQL() {
-        String query = "DELETE * FROM path WHERE id = " + this.id;
+        String query = "DELETE FROM paths WHERE id = " + this.id;
         return query;
     }
 
@@ -76,7 +76,7 @@ public class PathObject extends SpatialObject {
      */
     @Override
     public String getSelectSQL(int id) {
-        String query = "SELECT * FROM path WHERE id = " + id;
+        String query = "SELECT * FROM paths WHERE id = " + id;
         return query;
     }
 }

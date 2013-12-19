@@ -40,7 +40,7 @@ public class WaterObject extends SpatialObject {
     @Override
     public String getUpdateSQL() {
         String query = "UPDATE water"
-                + " SET geometry = '" + this.geometry + "'"
+                + " SET geometry = ?"
                 + " WHERE id = " + this.id;
 
         return query;
@@ -55,7 +55,7 @@ public class WaterObject extends SpatialObject {
         String query = "INSERT INTO water VALUES ("
                 + this.id + ", "
                 + "(SELECT id FROM layers WHERE name = 'water')" + ", "
-                + "'" + this.geometry + "')";
+                + "?)";
         return query;
     }
 
@@ -65,7 +65,7 @@ public class WaterObject extends SpatialObject {
      */
     @Override
     public String getDeleteSQL() {
-        String query = "DELETE * FROM water WHERE id = " + this.id;
+        String query = "DELETE FROM water WHERE id = " + this.id;
         return query;
     }
 
