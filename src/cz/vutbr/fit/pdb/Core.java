@@ -45,7 +45,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /**
- *
+ * The core class of Application.
+ * Takes care of GUI and connected functions.
  * @author casey
  */
 public class Core {
@@ -65,6 +66,9 @@ public class Core {
     private DataContainer dc;
     private SpatialContainer sc;
 
+    /**
+     * Initialization function of Core class.
+     */
     public Core(){
         mainWindow = new JFrame("PDB 2013");
         mainMenu = new MainMenu();
@@ -73,9 +77,10 @@ public class Core {
         mp = null;
     }
 
+    /**
+     * Initializes the GUI.
+     */
     public void initGui(){
-
-
         MenuControl mc = new MenuControl();
         mainMenu.registerActionListener(mc);
         mainMenu.registerItemListener(mc);
@@ -86,6 +91,9 @@ public class Core {
         mainWindow.setSize(800, 600);
     }
 
+    /**
+     * Initializes the Main Panel of window.
+     */
     public void initMainPanel(){
         sc = new SpatialContainer(dbAPI);
         sc.initialize();
@@ -106,6 +114,9 @@ public class Core {
 
     }
 
+    /**
+     * Sets GUI elements visible.
+     */
     public void showGui(){
         mainWindow.setVisible(true);
         mainWindow.setExtendedState(mainWindow.getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -188,7 +199,10 @@ public class Core {
         }
     }
 
-   public void dbSetUp() {
+    /**
+     * Function displays dialog window with DB credentials.
+     */
+    public void dbSetUp() {
         JTextField username = new JTextField("xjerab13");
         JPasswordField password = new JPasswordField("w0z7dnrt");
         JTextField url = new JTextField("berta.fit.vutbr.cz");
@@ -213,6 +227,9 @@ public class Core {
 
     }
 
+    /**
+     * Shows dialog window for getting beds on given soil.
+     */
     public void getBedBySoilDialog() {
         if (dc == null) {
             return;
@@ -246,6 +263,9 @@ public class Core {
         }
     }
 
+    /**
+     * Shows dialog window for getting Beds with Fences.
+     */
     public void getBedsWithFencesDialog() {
         if (sc == null || dbAPI == null) {
             return;
@@ -259,7 +279,10 @@ public class Core {
        mp.updateUI();
    }
 
-   public void getDistBtwBedsDialog() {
+    /**
+     * Shows dialog window for getting distance between given Beds.
+     */
+    public void getDistBtwBedsDialog() {
        if (mapControl.getSecondSelected() == null) {
             final JComponent[] result = new JComponent[]{new JLabel("You have to select two objects on map! (Use Ctrl to select the second one.)")};
             JOptionPane.showInternalMessageDialog(mainMenu, result, "Error!", JOptionPane.ERROR_MESSAGE);
@@ -274,6 +297,9 @@ public class Core {
        }
    }
 
+    /**
+     * Shows dialog window for getting the biggest bed on map.
+     */
     public void getBiggestBedDialog() {
         if (sc == null || dbAPI == null) {
             return;
@@ -287,6 +313,9 @@ public class Core {
        mp.updateUI();
    }
 
+    /**
+     * Shows dialog window for getting smallest bed on map.
+     */
     public void getSmallestBedDialog() {
         if (sc == null || dbAPI == null) {
             return;
@@ -300,6 +329,9 @@ public class Core {
        mp.updateUI();
    }
 
+    /**
+     * Shows dialog window for searching for similar plant by picture.
+     */
     public void getSimilarDialog() {
         if (dc == null || dbAPI == null) {
             return;
@@ -326,12 +358,14 @@ public class Core {
            JLabel sim_plant_name = new JLabel(similar_plant.getName());
            final JComponent[] outputs = new JComponent[]{
                sim_plant_name
-               // TODO: Pridat do outputs obrazek podobne rostliny
            };
            JOptionPane.showInternalMessageDialog(mainMenu, outputs, "Similar plant", JOptionPane.INFORMATION_MESSAGE);
         }
    }
 
+    /**
+     * Shows dialog window for getting signature description for signs on map.
+     */
     public void getSignDescDialog() {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Calendar cal = Calendar.getInstance();
@@ -369,6 +403,9 @@ public class Core {
         }
     }
 
+    /**
+     * Shows dialog window for getting plant names on map.
+     */
     public void getPlantNamesDialog() {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Calendar cal = Calendar.getInstance();
@@ -406,6 +443,9 @@ public class Core {
         }
     }
 
+    /**
+     * Shows dialog window for getting description for plants on map.
+     */
     public void getSignDescForPlantsDialog() {
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         Date date_from = new Date();
@@ -445,6 +485,9 @@ public class Core {
         }
     }
 
+    /**
+     * Shows dialog window for changing the date.
+     */
     public void changeDateDialog() {
         if (sc == null) {
             return;
@@ -474,6 +517,10 @@ public class Core {
         }
     }
 
+    /**
+     * Main function of the application.
+     * @param args
+     */
     public static void main(String[] args){
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
 

@@ -308,6 +308,10 @@ public class SpatialContainer {
         return this.layers.size();
     }
 
+    /**
+     * Returns a bounding rectangle of biggest object.
+     * @return rectangle of biggest object on map
+     */
     public Rectangle getBiggestObjectBoundaries() {
 
         ArrayList<SpatialObject> allLayers = getGeometries();
@@ -565,14 +569,26 @@ public class SpatialContainer {
         return this.selected;
     }
 
+    /**
+     * Returns a SpatialObject that a mouse has hovered over.
+     * @return SpatialObject hovered over
+     */
     public SpatialObject getHovered() {
         return this.hovered;
     }
 
+    /**
+     * Sets object as selected.
+     * @param so SpatialObject to be selected
+     */
     public void setSelected(SpatialObject so) {
         this.selected = so;
     }
 
+    /**
+     * Sets object as hovered over.
+     * @param so SpatialObject to be set as hovered over
+     */
     public void setHovered(SpatialObject so) {
         this.hovered = so;
     }
@@ -754,6 +770,11 @@ public class SpatialContainer {
         }
     }
 
+    /**
+     *
+     * @param p
+     * @param at
+     */
     public void checkHovering(Point p, AffineTransform at) {
         ArrayList<SpatialObject> allItems = getGeometries();
         boolean haveSelected = false;
