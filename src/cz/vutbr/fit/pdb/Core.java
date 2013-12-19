@@ -260,19 +260,18 @@ public class Core {
    }
 
    public void getDistBtwBedsDialog() {
-//       final JComponent[] inputs = new JComponent[]{
-//           new JLabel("?? TODO")
-//       };
-       //int a = JOptionPane.showConfirmDialog(mainMenu, inputs, "Select beds to measure distance between", JOptionPane.OK_CANCEL_OPTION);
-       //if (a == JOptionPane.OK_OPTION) {
-//           ArrayList<Integer> bedsID = dbAPI.getBedsBySoil(plant_type_list.getSelectedIndex()+1, soil_type_list.getSelectedIndex()+1);
-//           ArrayList<SpatialObject> bedsSpatial = new ArrayList<SpatialObject>();
-//           for (Integer i: bedsID) {
-//               bedsSpatial.add(sc.getBed(i));
-//           }
-//           sc.setTheseAsSelected(bedsSpatial);
-//           mp.updateUI();
-        //}
+       if (mapControl.getSecondSelected() == null) {
+            final JComponent[] result = new JComponent[]{new JLabel("You have to select two objects on map! (Use Ctrl to select the second one.)")};
+            JOptionPane.showInternalMessageDialog(mainMenu, result, "Error!", JOptionPane.ERROR_MESSAGE);
+       } else {
+           int sel1 = sc.getSelected().getId();
+           int sel2 = mapControl.getSecondSelected().getId();
+           
+            final JComponent[] result = new JComponent[]{new JLabel("The distance is " + dbAPI.getDistance(sel1, sel2))};
+            JOptionPane.showInternalMessageDialog(mainMenu, result, "Distance of selected objects", JOptionPane.INFORMATION_MESSAGE);
+            sc.deselectAll();
+            mp.updateUI();
+       }
    }
 
     public void getBiggestBedDialog() {

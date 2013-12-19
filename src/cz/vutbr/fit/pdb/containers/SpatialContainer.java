@@ -501,7 +501,7 @@ public class SpatialContainer {
      * Clear the selected flag from all the objects.
      */
     public void deselectAll() {
-        this.selected = null;
+//      this.selected = null;
 
         for (Integer i : this.spatialBedsList.keySet()) {
             this.spatialBedsList.get(i).setSelection(false);
