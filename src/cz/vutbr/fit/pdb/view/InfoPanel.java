@@ -10,7 +10,7 @@
  */
 package cz.vutbr.fit.pdb.view;
 
-import cz.vutbr.fit.pdb30.gui.ImagePanel;
+import cz.vutbr.fit.pdb.view.ImagePanel;
 import java.awt.image.BufferedImage;
 import javax.swing.JLabel;
 
